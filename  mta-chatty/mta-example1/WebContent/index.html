@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="stylesheet" href="style.css">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1255">
+<title>Lesson2: Using Menu</title>
+</head>
+<body>
+<div id="toolbar">
+<h1>Yossi Naor</h1>
+<ul>
+<li><a href="web.html">Web</a></li>
+<li><a href="mobile.html">Mobile</a></li>
+<li><a href="big_data.html">Big Data</a></li>
+</ul>
+</div>
+
+<div id="nav">
+<ul>
+<li><a href="training.html">Training</a></li>
+<li><a href="consulting.html">Consulting</a></li>
+<li><a href="about.html">About</a></li>
+</ul>
+
+</div>
+
+<div id="shape">
+</div>
+
+<script type="text/javascript">
+
+var seconds=0
+function f(){
+	seconds+=1;
+	if(seconds==100){
+		clearInterval(inter);
+	}
+	console.log(seconds);
+	
+}
+
+var inter=setInterval(f, 1000);
+</script>
+
+</body>
+</html>
