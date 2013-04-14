@@ -22,7 +22,10 @@
  </div>
 </header>
 <div class="content" data-role="content">
-	<ul id="employeeList" data-role="listview" data-filter="true"></ul>
+	<ul id="buddyList" data-role="listview" data-filter="true">
+	<li><a href="#ChatRoom" data-role="buddy" id="foo">Foo</a></li>
+	<li><a href="#ChatRoom" data-role="buddy" id="bar">Bar</a></li>
+	</ul>
 </div>		
 
 <footer data-role="footer"><h1>YY Buddy</h1></footer>
@@ -43,6 +46,20 @@
 </div>		
 
 <footer data-role="footer"><h1>YY Group</h1></footer>
+</section>
+
+<section id="ChatRoom" data-role="page" data-add-back-btn="true">
+<header data-role="header">
+ <h1 class="room-title">TBD</h1>
+</header>
+<div class="content" data-role="content">
+	<ul id="messages" data-role="listview" data-filter="true">
+	<li>01/02/2013 12:02 message2</li>
+	<li>01/02/2013 12:01 message1</li>
+	</ul>
+</div>		
+
+<footer data-role="footer"><h1>YY Messages</h1></footer>
 </section>
 
 
