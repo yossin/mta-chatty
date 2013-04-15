@@ -44,6 +44,22 @@
 	bottom:0; right:0;
 }
 
+.messageErea {
+	display: inline;
+}
+
+.sendMessage {
+	float:right;
+}
+
+.textArea {
+	float:left;
+	input-text: 80%;
+	width: 80%;
+	resize: none;
+}
+
+
 /*
 [data-role="page"] {
 	
