@@ -36,6 +36,7 @@ $(document).ready(function(){
 });
 
 
+/* should be taken from server */
 function getImgLinkFromID(Id)
 {
 	switch(Id)
@@ -50,9 +51,42 @@ function getImgLinkFromID(Id)
 	return "image/PhotoUnavailable.jpg";
 }
 
+/* should be taken from server */
 function getNameFromID(Id)
 {
 	return Id;
+}
+
+/* should be taken from server */
+function getMessages(Id)
+{
+	var numMesseges = Math.floor((Math.random()*10)+1);
+	var arrMesseges = [];
+	for (var i=0; i<numMesseges; i++)
+	{
+		arrMesseges[i] = new Object();
+		arrMesseges[i].text = "Message " + (i+1);
+		var randDate = new Date(Math.floor(Math.random()*11));
+		arrMesseges[i].time = randDate;
+	}
+	return arrMesseges;
+}
+
+function setRoomMessages(Id)
+{
+	messages = getMessages(Id);
+
+	$("#ChatRoom .message").remove();
+	
+	for (var i = 0; i<messages.length; i++)
+	{
+		var e = $("<li class='message'><label class='messages-text'>" + 
+				messages[i].text + 
+				"</label><label class='messages-time'>" + 
+				messages[i].time + 
+				"</label></li>");
+		$("#ChatRoom .messages").append(e).listview('refresh');
+	}
 }
 
 function activateRoom(roomId)
@@ -63,6 +97,7 @@ function activateRoom(roomId)
 	var buddyImg = getImgLinkFromID(roomId);	
 	console.log("buddyName: "+ buddyName + ", buddyImg: "+ buddyImg);
 	$("#ChatRoom .room-image").attr("src", buddyImg);
+	setRoomMessages(roomId);
 }
 
 function changePage(page, args) 
