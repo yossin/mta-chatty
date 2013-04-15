@@ -22,22 +22,11 @@ $(document).ready(function(){
 	    });
 	});
 
-	/*
-	$("footer[class=messageEnter]").each(function () {
-	    var anchor = $(this);
-	    anchor.bind("click", function () {
-	    	$("messageErea").text("");
-	        });
-	        return false;
-	    });
-	});
-	*/
-
 	$("div[data-role=page]").bind("pagebeforeshow", function (e, data) {
 	    $.mobile.silentScroll(0);
 	    $.mobile.changePage.defaults.transition = 'slide';
 	});
-	
+
 	
 	// bind callback that will be triggered after a pageshow event
 	$("#ChatRoom").bind("callback", function(e, args) {
