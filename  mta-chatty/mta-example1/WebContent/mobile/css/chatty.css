@@ -1,0 +1,51 @@
+
+@CHARSET "windows-1255";
+
+.buddy {
+    height: 66px;
+}
+
+.group {
+    height: 66px;
+}
+
+.row-image {
+	width:  40px;   
+    height: 54px;
+	margin:auto;
+	padding-top: 5px;
+	padding-left:12px;
+}
+
+.row-label { 
+    padding-left:64px;
+    padding-bottom:28px;
+	position:absolute;
+	bottom:0; left:0;
+}
+
+.room-header {
+    height: 40px;
+}
+
+.room-image {
+	float:right;
+	margin-top: 4px;
+	width:  24px;   
+    height: 32px;
+	padding-right:9px;
+	
+}
+
+.room-label {
+    padding-right:45px;
+    padding-bottom:7px;
+	position:absolute;
+	bottom:0; right:0;
+}
+
+/*
+[data-role="page"] {
+	
+}
+*/
