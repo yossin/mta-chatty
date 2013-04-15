@@ -44,6 +44,15 @@
 	bottom:0; right:0;
 }
 
+.messages-time {
+	float: right;
+	font-size: small;
+	color: gray;
+	position: absolute;
+	bottom: 6px;right: 10px;
+}
+
+
 .messageErea {
 	display: inline;
 }
