@@ -66,8 +66,10 @@ function getMessages(Id)
 	{
 		arrMesseges[i] = new Object();
 		arrMesseges[i].text = "Message " + (i+1);
-		var randDate = new Date(Math.floor(Math.random()*11));
-		arrMesseges[i].time = randDate;
+        var from = new Date(2010, 0, 1).getTime();
+        var to   = new Date(2013, 0, 1).getTime();
+		var randDate = new Date(from + Math.random() * (to - from));
+		arrMesseges[i].time = randDate.toLocaleString();
 	}
 	return arrMesseges;
 }
@@ -76,8 +78,8 @@ function setRoomMessages(Id)
 {
 	messages = getMessages(Id);
 
-	$("#ChatRoom .message").remove();
-	
+    $("#ChatRoom .message").remove();
+    
 	for (var i = 0; i<messages.length; i++)
 	{
 		var e = $("<li class='message'><label class='messages-text'>" + 
