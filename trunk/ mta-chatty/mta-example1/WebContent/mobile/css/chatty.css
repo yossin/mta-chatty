@@ -1,4 +1,3 @@
-
 @CHARSET "windows-1255";
 
 .buddy {
@@ -53,21 +52,19 @@
 }
 
 
-.messageErea {
-	display: inline;
-}
-
 .sendMessage {
+    width: 77px;
+    margin-top: 9px;
+    height: 32px;
 	float:right;
 }
 
 .textArea {
 	float:left;
-	input-text: 80%;
-	width: 80%;
 	resize: none;
+    width: calc(100% - 85px) !important;
+    height: 38px !important;
 }
-
 
 /*
 [data-role="page"] {
