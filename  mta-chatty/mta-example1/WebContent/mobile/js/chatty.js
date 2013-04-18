@@ -32,7 +32,19 @@ $(document).ready(function(){
 	$("#ChatRoom").bind("callback", function(e, args) {
 		activateRoom(args.id);
 	});
-	
+ 
+    $(function() {
+        $("#ChatRoom .sendMessage").click(function(){
+            message = new Object();
+            textarea = $("#ChatRoom .textArea");
+            message.text = textarea.val();
+            textarea.val('');
+            message.time = (new Date()).toLocaleString();
+            addMessagesToChatRoom(message);
+            // Send message to server...
+        });
+}   );
+
 });
 
 
@@ -74,6 +86,16 @@ function getMessages(Id)
 	return arrMesseges;
 }
 
+function addMessagesToChatRoom(message)
+{
+    var e = $("<li class='message'><label class='messages-text'>" + 
+            message.text + 
+            "</label><label class='messages-time'>" + 
+            message.time + 
+            "</label></li>");
+    $("#ChatRoom .messages").append(e).listview('refresh');
+}
+
 function setRoomMessages(Id)
 {
 	messages = getMessages(Id);
@@ -82,12 +104,7 @@ function setRoomMessages(Id)
     
 	for (var i = 0; i<messages.length; i++)
 	{
-		var e = $("<li class='message'><label class='messages-text'>" + 
-				messages[i].text + 
-				"</label><label class='messages-time'>" + 
-				messages[i].time + 
-				"</label></li>");
-		$("#ChatRoom .messages").append(e).listview('refresh');
+        addMessagesToChatRoom(messages[i]);
 	}
 }
 
@@ -107,6 +124,4 @@ function changePage(page, args)
 		$.mobile.changePage(page, { changeHash: true });
         $(page).trigger("callback", args);
 }
-
-
 
