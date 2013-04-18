@@ -1,44 +1,58 @@
 @CHARSET "windows-1255";
 
 .buddy {
-    height: 66px;
+	height: 66px;
 }
 
 .group {
-    height: 66px;
+	height: 66px;
 }
+
+[href="#Buddies"] .ui-icon {
+	background: url(../image/Buddy.PNG) 50% 50% no-repeat;
+	background-size:22px 22px;
+}
+
+[href="#Groups"] .ui-icon {
+	background: url(../image/Group.PNG) 50% 50% no-repeat;
+	background-size:22px 22px;
+}
+
+.ui-btn-active .ui-btn-inner {
+    color: rgb(240,000,000) !important;
+ }
 
 .row-image {
 	width:  40px;   
-    height: 54px;
+	height: 54px;
 	margin:auto;
 	padding-top: 5px;
 	padding-left:12px;
 }
 
 .row-label { 
-    padding-left:64px;
-    padding-bottom:28px;
+	padding-left:64px;
+	padding-bottom:28px;
 	position:absolute;
 	bottom:0; left:0;
 }
 
 .room-header {
-    height: 40px;
+	height: 40px;
 }
 
 .room-image {
 	float:right;
 	margin-top: 4px;
 	width:  24px;   
-    height: 32px;
+	height: 32px;
 	padding-right:9px;
 	
 }
 
 .room-label {
-    padding-right:45px;
-    padding-bottom:7px;
+	padding-right:45px;
+	padding-bottom:7px;
 	position:absolute;
 	bottom:0; right:0;
 }
@@ -53,17 +67,17 @@
 
 
 .sendMessage {
-    width: 77px;
-    margin-top: 9px;
-    height: 32px;
+	width: 27px;
+	margin-top: 14px;
+	padding: 0px;
 	float:right;
 }
 
 .textArea {
 	float:left;
 	resize: none;
-    width: calc(100% - 85px) !important;
-    height: 38px !important;
+	width: calc(100% - 35px) !important;
+	height: 38px !important;
 }
 
 /*
