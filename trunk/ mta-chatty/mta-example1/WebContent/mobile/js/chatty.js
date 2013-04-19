@@ -116,6 +116,8 @@ function getMessages(Id)
 
 function addMessagesToChatRoom(message)
 {
+	if (message.text == "")
+		return;
     var e = $("<li class='message'><label class='messages-text'>" + 
             message.text + 
             "</label><label class='messages-time'>" + 
