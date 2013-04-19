@@ -9,14 +9,52 @@
 }
 
 [href="#Buddies"] .ui-icon {
-	background: url(../image/Buddy.PNG) 50% 50% no-repeat;
+	background: url(../image/Buddy.png) 50% 50% no-repeat;
 	background-size:22px 22px;
 }
 
 [href="#Groups"] .ui-icon {
-	background: url(../image/Group.PNG) 50% 50% no-repeat;
+	background: url(../image/Group.png) 50% 50% no-repeat;
 	background-size:22px 22px;
 }
+
+.room-header, .login-header, .register-header {
+	height: 40px;
+}
+
+.room-image, .login-image, .register-image {
+	float:right;
+	margin-top: 4px;
+	width:  24px;   
+	height: 32px;
+	padding-right:9px;
+}
+
+.login-image, .register-image{
+	width:  32px;
+}
+
+.room-label, .login-label, .register-label {
+	padding-right:45px;
+	padding-bottom:7px;
+	position:absolute;
+	bottom:0; right:0;
+}
+
+.btnLoginToChatty, .btnRegisterToChatty, .btnRegisterSubmit {
+	float: right;
+	width: 25%;
+}
+
+.colorRed {
+	color: red !important;
+}
+
+.registerUserPicInput {
+	padding-left: 6px !important;
+}
+
+
 
 .ui-btn-active .ui-btn-inner {
     color: rgb(240,000,000) !important;
@@ -35,26 +73,6 @@
 	padding-bottom:28px;
 	position:absolute;
 	bottom:0; left:0;
-}
-
-.room-header {
-	height: 40px;
-}
-
-.room-image {
-	float:right;
-	margin-top: 4px;
-	width:  24px;   
-	height: 32px;
-	padding-right:9px;
-	
-}
-
-.room-label {
-	padding-right:45px;
-	padding-bottom:7px;
-	position:absolute;
-	bottom:0; right:0;
 }
 
 .messages-time {

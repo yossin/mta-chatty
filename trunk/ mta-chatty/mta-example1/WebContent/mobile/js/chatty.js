@@ -43,7 +43,35 @@ $(document).ready(function(){
             addMessagesToChatRoom(message);
             // Send message to server...
         });
-}   );
+	});
+	
+	/* TBD
+	// Bind the register form.
+	$( "form#login" ).submit(
+		function( event ){
+			// Prevent the default submit.
+			event.preventDefault();
+
+			var  = form.find( "input.name" ).val()
+			form.find( "input.email" ).val(),
+
+			
+			// Save the student.
+			saveStudent(
+				form.find( "input.name" ).val(),form.find( "input.email" ).val(),
+				function(){
+					// Reset the form and focus the input.
+					form.find( "input.name" )
+						.val( "" )
+						form.find( "input.email" ).val("")
+						.focus()
+					;
+
+					// Refresh the student list.
+					getstudents( refreshstudents );
+				});
+		});
+	*/
 
 });
 
