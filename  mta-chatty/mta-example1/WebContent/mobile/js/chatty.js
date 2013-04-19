@@ -1,5 +1,11 @@
 
 $(document).ready(function(){
+
+	// Skip the login user incase there's a user that was previusly loaded
+//	if (getLogedUser() != null)
+//		document.location.href = "#Buddies";
+
+
 	$("a[data-role=tab]").each(function () {
 	    var anchor = $(this);
 	    anchor.bind("click", function () {
@@ -35,7 +41,7 @@ $(document).ready(function(){
  
     $(function() {
         $("#ChatRoom .sendMessage").click(function(){
-            message = new Object();
+            var message = new Object();
             textarea = $("#ChatRoom .textArea");
             message.text = textarea.val();
             textarea.val('');
@@ -45,33 +51,39 @@ $(document).ready(function(){
         });
 	});
 	
-	/* TBD
+	
+	// Bind the login form.
+	$("#Login .btnLoginToChatty").click(function( event ){
+		// Prevent the default submit.
+		event.preventDefault();
+		
+		var userLoginData = new Object();
+		userLoginData.mail = $("#Login .loginUserMailInput").val();
+		userLoginData.pass = $("#Login .loginUserPassInput").val();
+		// if (loginUser(userLoginData))
+			document.location.href = "#Buddies";
+//		else
+//			window.alert('Login failed, Please recheck your input');
+
+	});
+	
 	// Bind the register form.
-	$( "form#login" ).submit(
-		function( event ){
-			// Prevent the default submit.
-			event.preventDefault();
-
-			var  = form.find( "input.name" ).val()
-			form.find( "input.email" ).val(),
-
-			
-			// Save the student.
-			saveStudent(
-				form.find( "input.name" ).val(),form.find( "input.email" ).val(),
-				function(){
-					// Reset the form and focus the input.
-					form.find( "input.name" )
-						.val( "" )
-						form.find( "input.email" ).val("")
-						.focus()
-					;
-
-					// Refresh the student list.
-					getstudents( refreshstudents );
-				});
-		});
-	*/
+	$("#Register .btnRegisterSubmit").click(function( event ){
+		// Prevent the default submit.
+		event.preventDefault();
+		
+		var userRegisterData = new Object();
+		userRegisterData.name = $("#Login .registerUserNameInput").val();
+		userRegisterData.mail = $("#Login .registerUserMailInput").val();
+		userRegisterData.pass = $("#Login .registerUserPassInput").val();
+		userRegisterData.pic  = $("#Login .registerUserPicInput" ).val();
+		//if (!registerNewUser(userRegisterData))
+		{
+//			window.alert('Register failed, Please recheck your input');
+		}
+		//else if (loginUser(userLoginData))
+			document.location.href = "#Buddies";
+	});
 
 });
 
