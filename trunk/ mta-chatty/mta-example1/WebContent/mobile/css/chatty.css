@@ -1,5 +1,6 @@
 @CHARSET "windows-1255";
 
+  
 .buddy {
 	height: 66px;
 }
@@ -7,6 +8,29 @@
 .group {
 	height: 66px;
 }
+
+
+
+
+[data-role="page"] {
+    height:100% !important;
+}
+
+[data-role="header"] {
+   	height: 36px !important;
+}
+.room-header {
+	height: 40px !important;
+}
+
+
+[data-role="content"] {
+    height:calc(100% - 72px) !important;
+}
+.chatRoom {
+    height:calc(100% - 130px) !important;
+}
+
 
 [href="#Buddies"] .ui-icon {
 	background: url(../image/Buddy.png) 50% 50% no-repeat;
@@ -18,9 +42,9 @@
 	background-size:22px 22px;
 }
 
-.room-header, .login-header, .register-header {
-	height: 40px;
-}
+
+
+
 
 .room-image, .login-image, .register-image {
 	float:right;
@@ -41,13 +65,19 @@
 	bottom:0; right:0;
 }
 
-.btnLoginToChatty, .btnRegisterToChatty, .btnRegisterSubmit {
+.btnRegisterSubmit , .loginOrRegistrer{
 	float: right;
-	width: 25%;
 }
 
+
 .colorRed {
-	color: red !important;
+	color: red;
+}
+
+
+.requiredText {
+   	float: left;
+	color: red;
 }
 
 .registerUserPicInput {
@@ -98,6 +128,13 @@
 	height: 38px !important;
 }
 
+/*
+[data-role="content"]  {
+    overflow-x: initial;
+    border-width:1px !important;
+    border-style:solid !important;
+    border-color:red !important;
+}*/
 /*
 [data-role="page"] {
 	
