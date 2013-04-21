@@ -53,13 +53,13 @@ $(document).ready(function(){
 	
 	
 	// Bind the login form.
-	$("#Login .btnLoginToChatty").click(function( event ){
+	$("#LoginForm").submit(function( event ){
 		// Prevent the default submit.
 		event.preventDefault();
 		
 		var userLoginData = new Object();
-		userLoginData.mail = $("#Login .loginUserMailInput").val();
-		userLoginData.pass = $("#Login .loginUserPassInput").val();
+		userLoginData.mail = $("#LoginForm .loginUserMailInput").val();
+		userLoginData.pass = $("#LoginForm .loginUserPassInput").val();
 		// if (loginUser(userLoginData))
 			document.location.href = "#Buddies";
 //		else
@@ -67,16 +67,17 @@ $(document).ready(function(){
 
 	});
 	
+    
 	// Bind the register form.
-	$("#Register .btnRegisterSubmit").click(function( event ){
+	$("#RegisterForm").submit(function( event ){
 		// Prevent the default submit.
 		event.preventDefault();
 		
 		var userRegisterData = new Object();
-		userRegisterData.name = $("#Login .registerUserNameInput").val();
-		userRegisterData.mail = $("#Login .registerUserMailInput").val();
-		userRegisterData.pass = $("#Login .registerUserPassInput").val();
-		userRegisterData.pic  = $("#Login .registerUserPicInput" ).val();
+		userRegisterData.name = $("#RegisterForm .registerUserNameInput").val();
+		userRegisterData.mail = $("#RegisterForm .registerUserMailInput").val();
+		userRegisterData.pass = $("#RegisterForm .registerUserPassInput").val();
+		userRegisterData.pic  = $("#RegisterForm .registerUserPicInput" ).val();
 		//if (!registerNewUser(userRegisterData))
 		{
 //			window.alert('Register failed, Please recheck your input');

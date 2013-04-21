@@ -23,23 +23,30 @@
 			<label class="login-label">Please Login to Chatty</label>
 			<img   class="login-image" src="image/Login.png" />
 		</header>
-		<form id="login" div class="content" data-role="content">
+		<form id="LoginForm" class="content" data-role="content">
 			<div>
+				<span class="colorRed">*</span>
 				<label class="loginUserMailLable">Email:</label>
 				<input class="loginUserMailInput" type="email" required />    
 			</div>
 			<div>
+				<span class="colorRed">*</span>
 				<label class="loginUserPassLable">Password:</label>
 				<input class="loginUserPassInput" type="password" required />    
 			</div>
-		</form>		
-		
-		<footer data-role="footer">
-			<div class="loginOrRegistrer">
-				<a href="#"         class="btnLoginToChatty"    data-inline="true" data-role="button">Login</a>
-				<a href="#Register" class="btnRegisterToChatty" data-inline="true" data-role="button">Register</a>
+                
+			<div>
+				<span class="colorRed"><br><br>*Required</span>
 			</div>
-		</footer>
+              
+			<div class="loginOrRegistrer">
+				<a href="#Register" class="btnRegisterToChatty" data-inline="true" data-role="button">Register</a>
+				<button type="submit" class="btnLoginToChatty" data-inline="true">Login</button>
+			</div>
+            
+        </form>		
+		
+  
 	</section>
 	
 	<section id="Register" data-role="page" data-add-back-btn="true">
@@ -47,7 +54,7 @@
 			<label class="register-label">Please Register to Chatty</label>
 			<img   class="register-image" src="image/Register.png" />
 		</header>
-		<form id="login" div class="content" data-role="content">
+		<form id="RegisterForm" class="content" data-role="content">
 			<div>
 				<span class="colorRed">*</span>
 				<label class="registerUserNameLable">Name:</label>
@@ -68,13 +75,15 @@
 				<input class="registerUserPicInput" id="file" type="file"/>
 			</div>
 
+			<div>
+				<span class="colorRed"><br><br>*Required</span>
+			</div>
+				
+			<div class="loginOrRegistrer">
+				<button type="submit" class="btnRegisterSubmit" data-inline="true">Register</button>
+			</div>
 		</form>		
 		
-		<footer data-role="footer">
-			<div class="loginOrRegistrer">
-				<a href="#" class="btnRegisterSubmit" data-inline="true" data-role="button">Register</a>
-			</div>
-		</footer>
 	</section>
 	
 	<section id="Buddies" data-role="page" class="">
@@ -153,7 +162,7 @@
 			<label class="room-label">room title</label>
 			<img   class="room-image" src="" />
 		</header>
-		<div class="content" data-role="content">
+		<div data-role="content" class="chatRoom">
 			<ul class="messages" data-role="listview">
 				<li class="message">
 					<label class="messages-text">message</label>
