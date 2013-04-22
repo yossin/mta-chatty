@@ -17,7 +17,7 @@
 }
 
 [data-role="header"] {
-   	height: 36px !important;
+   	height: 35px !important;
 }
 .room-header {
 	height: 40px !important;
@@ -29,6 +29,12 @@
 }
 .chatRoom {
     height:calc(100% - 130px) !important;
+}
+
+.messages {
+    position:absolute;
+    bottom:73px;
+    width: 100%;
 }
 
 
@@ -87,7 +93,7 @@
 
 
 .ui-btn-active .ui-btn-inner {
-    color: rgb(240,000,000) !important;
+    color: rgb(240,000,000);
  }
 
 .row-image {
