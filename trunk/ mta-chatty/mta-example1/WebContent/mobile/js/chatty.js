@@ -60,10 +60,13 @@ $(document).ready(function(){
 		var userLoginData = new Object();
 		userLoginData.mail = $("#LoginForm .loginUserMailInput").val();
 		userLoginData.pass = $("#LoginForm .loginUserPassInput").val();
-		// if (loginUser(userLoginData))
-			document.location.href = "#Buddies";
+//		if (loginUser(userLoginData)){
+            document.location.href = "#Buddies";
+            window.location.reload();
+//        }
 //		else
 //			window.alert('Login failed, Please recheck your input');
+
 
 	});
 	
@@ -78,12 +81,12 @@ $(document).ready(function(){
 		userRegisterData.mail = $("#RegisterForm .registerUserMailInput").val();
 		userRegisterData.pass = $("#RegisterForm .registerUserPassInput").val();
 		userRegisterData.pic  = $("#RegisterForm .registerUserPicInput" ).val();
-		//if (!registerNewUser(userRegisterData))
-		{
-//			window.alert('Register failed, Please recheck your input');
-		}
+		//if (!registerNewUser(userRegisterData)){
+            document.location.href = "#Buddies";
+            window.location.reload();
+//		}
 		//else if (loginUser(userLoginData))
-			document.location.href = "#Buddies";
+//			window.alert('Register failed, Please recheck your input');
 	});
 
 });
