@@ -27,9 +27,10 @@
 [data-role="content"] {
     height:calc(100% - 72px) !important;
 }
-.chatRoom {
+.chatRoom, .buddiesContent, .groupsContent  {
     height:calc(100% - 130px) !important;
 }
+
 
 .messages {
     position:absolute;
@@ -52,7 +53,7 @@
 
 
 
-.room-image, .login-image, .register-image {
+.room-image, .login-image, .register-image, .edit-profile-image {
 	float:right;
 	margin-top: 4px;
 	width:  24px;   
@@ -60,11 +61,11 @@
 	padding-right:9px;
 }
 
-.login-image, .register-image{
+.login-image, .register-image, .edit-profile-image{
 	width:  32px;
 }
 
-.room-label, .login-label, .register-label {
+.room-label, .login-label, .register-label, .edit-profile-label  {
 	padding-right:45px;
 	padding-bottom:7px;
 	position:absolute;
@@ -86,7 +87,7 @@
 	color: red;
 }
 
-.registerUserPicInput {
+.registerUserPicInput, .editProfileUserPicInput {
 	padding-left: 6px !important;
 }
 
@@ -132,6 +133,18 @@
 	resize: none;
 	width: calc(100% - 35px) !important;
 	height: 38px !important;
+}
+
+.logoutBtn, .editProfileBtn, .addBuddyBtn, .addGroupBtn {
+	background-size:22px 22px;
+}
+
+.logoutBtn, .editProfileBtn{
+    float:left;
+}
+
+.searchBuddyBtn, .addGroupBtn, .searchGroupBtn {
+	float:right;
 }
 
 /*
