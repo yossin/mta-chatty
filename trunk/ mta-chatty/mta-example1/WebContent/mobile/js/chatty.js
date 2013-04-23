@@ -66,10 +66,7 @@ $(document).ready(function(){
 //        }
 //		else
 //			window.alert('Login failed, Please recheck your input');
-
-
 	});
-	
     
 	// Bind the register form.
 	$("#RegisterForm").submit(function( event ){
@@ -89,6 +86,24 @@ $(document).ready(function(){
 //			window.alert('Register failed, Please recheck your input');
 	});
 
+    $('.editProfileBtn').click(function(){
+
+        // get user profile deatails
+        //        userEdi	tProfileData = getUserProfile();
+        
+            var userEditProfileData  = new Object();
+            userEditProfileData.name = "user2";
+            userEditProfileData.mail = "user2@user.com";
+            userEditProfileData.pass = "user2";
+            userEditProfileData.pic  = "user2.tif";
+            
+            $("#EditProfileForm .editProfileUserNameInput").val(userEditProfileData.name);
+            $("#EditProfileForm .editProfileUserMailInput").val(userEditProfileData.mail);
+            $("#EditProfileForm .editProfileUserPassInput").val(userEditProfileData.pass);
+            $("#EditProfileForm .editProfileUserPicInput ").val(userEditProfileData.pic );
+    });
+
+    
 });
 
 
