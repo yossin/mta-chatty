@@ -22,10 +22,6 @@ function getGroupList(){
 	//id, name, picture
 }
 
-function getGroupList(){
-	//id, name, picture
-}
-
 function getGroupMessages(groupId){
 	// sender, ts, message
 }
