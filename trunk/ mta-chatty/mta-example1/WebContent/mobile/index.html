@@ -92,6 +92,8 @@
 		</header>
 		<div class="buddiesContent" data-role="content">
 			<ul id="buddyList" data-role="listview" data-filter="true">
+				
+                <!-- Examples -->
 				<li class="buddy"> 
 					<a href="#ChatRoom" data-role="buddy" id="bart">
 						<label class="row-label">Bart</label>
@@ -114,7 +116,7 @@
 				</li>	
 		
 				<li class="buddy"> 
-					<a href="#ChatRoom" data-role="buddy" id="lisa">
+					<a href="#ChatRoom" id="lisa">
 						<label class="row-label">Lisa</label>
 						<img   class="row-image" src="image/Lisa.jpg" />
 					</a>
@@ -144,9 +146,9 @@
 		</header>
 		<div class="groupsContent" data-role="content">
 			<ul id="groupList" data-role="listview" data-filter="true">
-			
+                <!-- Example -->
 				<li class="group"> 
-					<a href="#ChatRoom" data-role="group" id="simsons">
+					<a href="#ChatRoom" id="simsons">
 						<label class="row-label">Simsons</label>
 						<img   class="row-image" src="image/Simsons.jpg" />
 					</a>
@@ -183,7 +185,7 @@
 		<footer data-role="footer">
 			<div class="messageErea">
                 <textarea autofocus="autofocus" class="textArea" placeholder="Enter your message here"></textarea>
-                <a href="#SendMessage" class="sendMessage" data-role="button" data-icon="arrow-r" data-iconpos="notext">Send</a>
+                <a href="#" class="sendMessage" data-role="button" data-icon="arrow-r" data-iconpos="notext">Send</a>
 			</div>
 		</footer>
 	</section>
@@ -196,7 +198,6 @@
 		</header>
 		<form id="EditProfileForm" class="content" data-role="content">
 			<div>
-				<span class="colorRed">*</span>
 				<label class="editProfileUserMailLable">Email:</label>
 				<input class="editProfileUserMailInput" type="email" required disabled/>    
 			</div>
@@ -225,6 +226,37 @@
 		</form>				
 	</section>
     
+    <section id="SearchBuddyOrGroup" data-role="page" data-add-back-btn="true">
+		<header data-role="header" class="search-buddyOrGroup-header">
+			<label class="edit-profile-label">Search ...</label>
+			<img   class="edit-profile-image" src="image/Search.png" />
+		</header>
+        <div class="searchBuddyContent" data-role="content">
+   			<div class="searchBuddyOrGroupErea">
+                <textarea autofocus="autofocus" class="textArea" placeholder="Search ... by (mail address)/(Name)"></textarea>
+                <a href="#" class="searchBuddyOrGroupBtn" data-role="button" data-icon="search" data-iconpos="notext"></a>
+			</div>
+         
+            <ul id="searchResultBuddiesOrGroup" data-role="listview" data-filter="true">
+            
+                <!-- Example -->
+                <li class="searchResultBuddyOrGroup"> 
+                    <a href="#AddBuddyOrGroup" id="lisa">
+                        <label class="searchResultBuddyOrGroupLabel">Lisa, Lisa@Lisa.com</label>
+                        <img   class="searchResultBuddyOrGroupImg" src="image/Lisa.jpg" />
+                    </a>
+                </li>
+                <li class="searchResultBuddyOrGroup"> 
+                    <a href="#AddBuddyOrGroup" id="maggie">
+                        <label class="searchResultBuddyOrGroupLabel">Maggie, Maggie@Maggie.com</label>
+                        <img   class="searchResultBuddyOrGroupImg" src="image/Maggie.jpg" />
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        
+	</section>
 	
 </body>
 </html>
