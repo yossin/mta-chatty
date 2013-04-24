@@ -24,8 +24,10 @@ try {
 }
 
 function showError(transaction, error) {
-	//log.error(error.message + " error.code:" + error.code);
-	log.error(error);
+	if (error){
+		log.error(error);
+		//log.error(error.message + " error.code:" + error.code);
+	}
 	return true;
 }
 
@@ -34,27 +36,61 @@ function nullDataHandler(transaction, results) {
 }
 
 
-function createTables(){
+function createTables(insertTestData){
 	// Create table
-	var client = new XMLHttpRequest();
-	client.open('GET', 'db/create.1.sql');
-	client.onreadystatechange = function() {
-		database.transaction(function(transaction) {
-			debugger;
-			transaction.executeSql(client.responseText);
-			log.info("database has been refreshed");
+	var successCallback=nullDataHandler;
+	if (typeof insertTestData != 'undefined' && insertTestData){
+		successCallback=createTestData;
+	}
+	var statements=[];
+	ajaxCall('db/drop.1.sql', function(data){
+		statements = statements.concat(data.split(";"));
+		
+		ajaxCall('db/create.1.sql', function(data){
+			statements = statements.concat(data.split(";"));
+			database.transaction(function(transaction) {
+				statements.forEach( function(sql) { 
+					if (sql.trim()){
+						transaction.executeSql(sql,[],
+							function (tx,callback){
+								log.info("database has been refreshed: "+sql);
+							},
+							function (tx,error){
+								log.error("unable to refresh database: "+sql+ ". error message is: "+error.message);
+							}
+						);
+					}
+				});
+				
 
-		}, nullDataHandler, showError);
-	};
-	client.send();
+			}, showError, successCallback);
+			
+		});
+		
+	});
+
 }
 
-createTables();
+createTables(true);
 
 
-//TODO: implement
-registerNewUser(){
-	
+function selectBuddyList(userid){
+	database.transaction(function(transaction) {
+		transaction.executeSql("select * from bu");
+		log.info("database has been refreshed: "+sql);
+
+	}, nullDataHandler, showError);
 }
 
+function getGroupList(){
+	//id, name, picture
+}
+
+function getGroupMessages(groupId){
+	// sender, ts, message
+}
+
+function getBuddyMessages(buddyId){
+	// sender, ts, message
+}
 

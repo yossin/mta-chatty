@@ -211,6 +211,20 @@ CREATE  TABLE IF NOT EXISTS `sakila`.`group_membership` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 USE `sakila` ;
 
 -- -----------------------------------------------------
