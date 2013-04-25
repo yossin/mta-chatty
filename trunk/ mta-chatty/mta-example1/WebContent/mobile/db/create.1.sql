@@ -81,12 +81,12 @@ CREATE  TABLE IF NOT EXISTS buddy_list (
 
   
 CREATE  TABLE IF NOT EXISTS buddy_message (
-  insert_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+  send_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   sender_id TEXT NOT NULL ,
   receiver_id TEXT NOT NULL ,
   message TEXT NOT NULL ,
   is_attachment_path BOOLEAN NOT NULL DEFAULT FALSE ,
-  PRIMARY KEY (insert_date, receiver_id, sender_id) ,
+  PRIMARY KEY (send_date, receiver_id, sender_id) ,
   CONSTRAINT fk_buddy_message_sender
     FOREIGN KEY (sender_id)
     REFERENCES 'user' (email)
@@ -121,12 +121,12 @@ CREATE INDEX fk_user_has_group_user1_idx ON group_membership(member_email ASC);
 
 
 CREATE  TABLE IF NOT EXISTS group_message (
-  insert_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+  send_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   sender_id TEXT NOT NULL ,
   receiver_id BOOLEAN NOT NULL ,
   message TEXT NOT NULL ,
   attachment_path TEXT NULL ,
-  PRIMARY KEY (insert_date, sender_id, receiver_id) ,
+  PRIMARY KEY (send_date, sender_id, receiver_id) ,
   CONSTRAINT fk_group_message_sender
     FOREIGN KEY (sender_id )
     REFERENCES group_membership (user_id)
