@@ -74,23 +74,42 @@ function createTables(insertTestData){
 createTables(true);
 
 
-function selectBuddyList(userid){
+function genericSelectStatement(sql, params, onSuccess, onError){
 	database.transaction(function(transaction) {
-		transaction.executeSql("select * from bu");
-		log.info("database has been refreshed: "+sql);
+			transaction.executeSql(sql,params,
+			function (tx,result){
+				onSuccess(result);
+			},
+			function (tx,error){
+				log.error("unable to perform select statement"+sql+" \nparams: "+params+ "\n. error message is: "+error.message);
+				onError(error);
+			});
 
-	}, nullDataHandler, showError);
+	}, showError, nullDataHandler);	
 }
 
-function getGroupList(){
-	//id, name, picture
+
+
+function selectBuddyList(userId, onSuccess, onError){
+	var sql="select u.email, u.name, u.picture from user as u inner join buddy_list as bl on u.email==bl.buddy_id where bl.owner_email=?";
+	genericSelectStatement(sql, [userId], onSuccess, onError);
 }
 
-function getGroupMessages(groupId){
-	// sender, ts, message
+function selectGroupList(userId, onSuccess, onError){
+	//id, name, picture, description
+	var sql="select g.group_id, g.name, g.picture, g.description from 'group' as g inner join group_membership as gm on gm.group_id==g.group_id where gm.member_email==?";
+	genericSelectStatement(sql, [userId], onSuccess, onError);
 }
 
-function getBuddyMessages(buddyId){
-	// sender, ts, message
+function selectGroupMessages(groupId, onSuccess, onError){
+	// sender-id, sender-name, sender-pic, send-ts, message
+	var sql="select u.email, u.name, u.picture, gm.send_date, gm.message from user as u inner join group_message as gm on gm.sender_id==u.email where gm.receiver_id==?";
+	genericSelectStatement(sql, [groupId], onSuccess, onError);
+}
+
+function selectBuddyMessages(buddyId, onSuccess, onError){
+	// sender-id, sender-name, sender-pic, send-ts, message
+	var sql="select u.email, u.name, u.picture, bm.send_date, bm.message from user as u inner join buddy_message as bm on bm.sender_id==u.email where bm.receiver_id==?";
+	genericSelectStatement(sql, [buddyId], onSuccess, onError);
 }
 
