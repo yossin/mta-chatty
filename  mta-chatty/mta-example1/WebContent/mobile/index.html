@@ -10,6 +10,7 @@
 	<script	src="js/chatty-util.js"></script>
 	<script	src="js/chatty-test.js"></script>
 	<script	src="js/chatty-dal.js"></script>
+	<script	src="js/chatty-bl.js"></script>
 	<script	src="js/chatty.js"></script>
 	<script	src="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.js"></script>
 </head>
@@ -26,12 +27,12 @@
 			<div>
 				<span class="colorRed">*</span>
 				<label class="loginUserMailLable">Email:</label>
-				<input class="loginUserMailInput" type="email" required />    
+				<input class="loginUserMailInput" type="email" required  value="bart@mail.com"/>    
 			</div>
 			<div>
 				<span class="colorRed">*</span>
 				<label class="loginUserPassLable">Password:</label>
-				<input class="loginUserPassInput" type="password" required />    
+				<input class="loginUserPassInput" type="password" required value="123"/>    
 			</div>
                 
 			<div>
@@ -95,28 +96,28 @@
 				
                 <!-- Examples -->
 				<li class="buddy"> 
-					<a href="#ChatRoom" data-role="buddy" id="bart">
+					<a href="#ChatRoom" id="bart@mail.com">
 						<label class="row-label">Bart</label>
 						<img   class="row-image" src="image/Bart.jpg" />
 					</a>
 				</li>
 		
 				<li class="buddy"> 
-					<a href="#ChatRoom" data-role="buddy" id="homer">
+					<a href="#ChatRoom" id="homer@mail.com">
 						<label class="row-label">Homer</label>
 						<img   class="row-image" src="image/Homer.jpg" />
 					</a>
 				</li>	
 		
 				<li class="buddy"> 
-					<a href="#ChatRoom" data-role="buddy" id="maggie">
+					<a href="#ChatRoom" id="maggie@mail.com">
 						<label class="row-label">Maggie</label>
 						<img   class="row-image" src="image/Maggie.jpg" />
 					</a>
 				</li>	
 		
 				<li class="buddy"> 
-					<a href="#ChatRoom" id="lisa">
+					<a href="#ChatRoom" id="lisa@mail.com">
 						<label class="row-label">Lisa</label>
 						<img   class="row-image" src="image/Lisa.jpg" />
 					</a>

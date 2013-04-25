@@ -89,6 +89,15 @@ function genericSelectStatement(sql, params, onSuccess, onError){
 }
 
 
+function iterateResults(results,callback){
+    if (!results){
+		return;
+	}
+    for (var i=0; i<results.rows.length;i++){
+    	callback(results.rows.item(i));
+    }
+}
+
 
 function selectBuddyList(userId, onSuccess, onError){
 	var sql="select u.email, u.name, u.picture from user as u inner join buddy_list as bl on u.email==bl.buddy_id where bl.owner_email=?";
