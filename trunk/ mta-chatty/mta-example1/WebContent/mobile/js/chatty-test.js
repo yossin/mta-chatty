@@ -121,3 +121,28 @@ function createGroupMessagesTestData(list){
 }
 
 
+// dummy functions
+function dummyLoginUser(email, password, onSuccessLogin, onLoginError){
+	var sql="select u.email, u.name, u.picture from 'user' as u where u.email==?";
+	genericSelectStatement(sql, [email], 
+			function(result){
+				if (result.rows.length==1){
+					onSuccessLogin(result.rows.item(0));
+				} else {
+					onLoginError({message:'invalid username or password'});
+				}
+			}, 
+			onLoginError);
+}
+
+function dummyOnSuccess(res){
+	log.debug(res);
+}
+
+function dummyOnError(err){
+	log.error(err.message);
+}
+
+function dummyLoginUserTest(){
+	dummyLoginUser('bart@mail.com', 123, dummyOnSuccess, dummyOnError);
+}
