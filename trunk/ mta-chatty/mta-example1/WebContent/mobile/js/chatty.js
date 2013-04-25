@@ -150,23 +150,18 @@ function addMessagesToChatRoom(message)
 	if (message.text == "")
 		return;
     var e = $("<li class='message'><label class='messages-text'>" + 
-            message.text + 
+            message.message + 
             "</label><label class='messages-time'>" + 
-            message.time + 
+            message.send_date + 
             "</label></li>");
     $("#ChatRoom .messages").append(e).listview('refresh');
 }
 
-function setRoomMessages(Id)
+function setRoomMessages(results)
 {
-	messages = getMessages(Id);
-
     $("#ChatRoom .message").remove();
     
-	for (var i = 0; i<messages.length; i++)
-	{
-        addMessagesToChatRoom(messages[i]);
-	}
+    iterateResults(results,addMessagesToChatRoom);
 }
 
 function activateRoom(roomId)
@@ -177,7 +172,7 @@ function activateRoom(roomId)
 	var buddyImg = getImgLinkFromID(roomId);	
 	console.log("buddyName: "+ buddyName + ", buddyImg: "+ buddyImg);
 	$("#ChatRoom .room-image").attr("src", buddyImg);
-	setRoomMessages(roomId);
+	getBuddyMessages(roomId, setRoomMessages, printError);
 }
 
 function changePage(page, args) 

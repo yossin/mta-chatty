@@ -27,7 +27,8 @@ function getGroupMessages(groupId){
 	// sender, ts, message
 }
 
-function getBuddyMessages(buddyId){
+function getBuddyMessages(buddyId, onSuccess, onError){
 	// sender, ts, message
+	selectBuddyMessages(buddyId, onSuccess, onError);
 }
 

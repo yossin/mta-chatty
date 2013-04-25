@@ -21,3 +21,7 @@ function ajaxCall(url, action, method){
 	client.send();
 
 }
+
+function printError(error){
+	log.error(error.message);
+}
