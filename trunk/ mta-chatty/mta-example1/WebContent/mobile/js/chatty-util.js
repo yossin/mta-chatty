@@ -25,3 +25,27 @@ function ajaxCall(url, action, method){
 function printError(error){
 	log.error(error.message);
 }
+
+
+
+function showError(transaction, error) {
+	if (error){
+		log.error(error);
+		//log.error(error.message + " error.code:" + error.code);
+	}
+	return true;
+}
+
+function nullDataHandler(transaction, results) {
+	log.debug("nullDataHandler=" + this);
+}
+
+
+function iterateResults(results,callback){
+    if (!results){
+		return;
+	}
+    for (var i=0; i<results.rows.length;i++){
+    	callback(results.rows.item(i));
+    }
+}

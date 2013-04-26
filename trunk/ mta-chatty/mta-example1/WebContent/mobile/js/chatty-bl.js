@@ -1,34 +1,51 @@
 var loggedInUser={email:"bart@mail.com"};
 
-//TODO: implement
-function registerNewUser(user){
-	// validate and register user with server
-}
 
-function loginUser(user, password, onSuccess, onError){
+var bl={};
+
+
+//TODO: implement
+bl.registerNewUser = function (user){
+	// validate and register user with server
+};
+
+bl.loginUser=function(user, password, onSuccess, onError){
 	// validate user with server
 	// save in local DB
-}
+};
 
-function logoutUser(){
+bl.logoutUser=function(){
 	// delete from DB?
-}
+};
 
-function getBuddyList(onSuccess, onError){
+bl.getBuddyList=function(onSuccess, onError){
 	//email, name, picture
-	selectBuddyList(loggedInUser.email, onSuccess, onError);
-}
+	dal.selectBuddyList(loggedInUser.email, onSuccess, onError);
+};
 
-function getGroupList(){
+bl.getGroupList=function(onSuccess, onError){
 	//id, name, picture
-}
+	dal.selectGroupList(loggedInUser.email, onSuccess, onError);
+};
 
-function getGroupMessages(groupId){
+bl.getGroupMessages=function (groupId, onSuccess, onError){
 	// sender, ts, message
-}
+	dal.selectGroupMessages(loggedInUser.email, groupId, onSuccess, onError);
+};
 
-function getBuddyMessages(buddyId, onSuccess, onError){
+bl.getBuddyMessages=function (buddyId, onSuccess, onError){
 	// sender, ts, message
-	selectBuddyMessages(buddyId, onSuccess, onError);
-}
+	dal.selectBuddyMessages(loggedInUser.email, buddyId, onSuccess, onError);
+};
+
+bl.sendBuddyMessage=function (buddyId, message, onSuccess, onError){
+	// sender, ts, message
+	dal.insertBuddyMessages(loggedInUser.email, buddyId, message, onSuccess, onError);
+};
+
+bl.sendGroupMessage=function (groupId, message, onSuccess, onError){
+	// sender, ts, message
+	dal.insertBuddyMessages(loggedInUser.email, groupId, message, onSuccess, onError);
+};
+
 
