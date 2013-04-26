@@ -1,3 +1,4 @@
+var chatroom="buddyChatRoom";
 
 $(document).ready(function(){
 
@@ -49,11 +50,15 @@ $(document).ready(function(){
         $("#ChatRoom .sendMessage").click(function(){
             var message = new Object();
             var textarea = $("#ChatRoom .textArea");
-            message.text = textarea.val();
+            message.message = textarea.val();
             textarea.val('');
-            message.message = (new Date()).toLocaleString();
+            message.send_date = (new Date()).toLocaleString();
             //TODO: ui.saveTextMessage()
-            addMessagesToChatRoom(message);
+            if (chatroom=="buddyChatRoom")
+            	addBuddyMessageToChatRoom(message);
+            else
+            	addGroupMessageToChatRoom(message);
+            
             // Send message to server...
         });
 	});
@@ -68,7 +73,8 @@ $(document).ready(function(){
 		userLoginData.mail = $("#LoginForm .loginUserMailInput").val();
 		userLoginData.pass = $("#LoginForm .loginUserPassInput").val();
 //		if (loginUser(userLoginData)){
-            document.location.href = "#Buddies";
+			return true;
+//            document.location.href = "#Buddies";
 //		    updateTab({ "id": "BuddiesTab" });
 //		    updateTab({ "id": "GroupsTab" });
             
@@ -87,9 +93,10 @@ $(document).ready(function(){
 		userRegisterData.mail = $("#RegisterForm .registerUserMailInput").val();
 		userRegisterData.pass = $("#RegisterForm .registerUserPassInput").val();
 		userRegisterData.pic  = $("#RegisterForm .registerUserPicInput" ).val();
+        updateTab({ "id": "BuddiesTab" });
 		//if (!registerNewUser(userRegisterData)){
-            document.location.href = "#Buddies";
-            updateTab({ "id": "BuddiesTab" });
+        	return true;
+//            document.location.href = "#Buddies";
 //		}
 		//else if (loginUser(userLoginData))
 //			window.alert('Register failed, Please recheck your input');
@@ -153,7 +160,7 @@ function addBuddyToBuddiesList(buddy)
 			buddy.picture +
 			"'/></a></li>");
 				
-    $("#Buddies .buddyList").append(e);
+    $("#Buddies .buddyList").append(e).listview('refresh');;
 }
 
 function addGroupToGroupsList(group)
@@ -168,7 +175,7 @@ function addGroupToGroupsList(group)
 			group.picture +
 			"/></a></li>");
 				
-    $("#Buddies .groupList").append(e);
+    $("#Buddies .groupList").append(e).listview('refresh');;
 }
 
 
@@ -209,12 +216,14 @@ function setRoomHeader(result)
 
 function activateBuddyRoom(buddyId)
 {
+	chatRoom = "buddyChatRoom"; 
 	bl.getBuddyDetails(buddyId, setRoomHeader, printError);
 	bl.getBuddyMessages(buddyId, setBuddyRoomMessages, printError);
 }
 
 function activateGroupRoom(groupId)
 {
+	chatRoom = "groupChatRoom"; 
 	bl.getGroupDetails(groupId, setRoomHeader, printError);
 	bl.getGroupMessages(groupId, setGroupRoomMessages, printError);
 }
