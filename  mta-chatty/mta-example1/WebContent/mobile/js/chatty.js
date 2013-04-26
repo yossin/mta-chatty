@@ -13,6 +13,8 @@ $(document).ready(function(){
 	            transition: "none",
 	            changeHash: false
 	        });
+			var id = $(this).attr("id");
+		    updateTab({ "id": id });
 	        return false;
 	    });
 	});
@@ -36,7 +38,11 @@ $(document).ready(function(){
 	
 	// bind callback that will be triggered after a pageshow event
 	$("#ChatRoom").bind("callback", function(e, args) {
-		activateRoom(args.id);
+		if (args.id.indexOf("@") != -1)
+			activateBuddyRoom(args.id);
+		else
+			activateGroupRoom(args.id);
+			
 	});
  
     $(function() {
@@ -63,6 +69,7 @@ $(document).ready(function(){
 		userLoginData.pass = $("#LoginForm .loginUserPassInput").val();
 //		if (loginUser(userLoginData)){
             document.location.href = "#Buddies";
+		    updateTab({ "id": "BuddiesTab" });
             window.location.reload();
 //        }
 //		else
@@ -81,7 +88,8 @@ $(document).ready(function(){
 		userRegisterData.pic  = $("#RegisterForm .registerUserPicInput" ).val();
 		//if (!registerNewUser(userRegisterData)){
             document.location.href = "#Buddies";
-            window.location.reload();
+            updateTab({ "id": "BuddiesTab" });
+			window.location.reload();
 //		}
 		//else if (loginUser(userLoginData))
 //			window.alert('Register failed, Please recheck your input');
@@ -108,47 +116,9 @@ $(document).ready(function(){
 });
 
 
-/* should be taken from server */
-function getImgLinkFromID(Id)
+function addBuddyMessageToChatRoom(message)
 {
-	switch(Id)
-	{
-	case "bart":    return "image/Bart.jpg"    ; break;
-	case "homer":   return "image/Homer.jpg"   ; break;
-	case "maggie":  return "image/Maggie.jpg"  ; break;
-	case "lisa":    return "image/Lisa.jpg"    ; break;
-	case "marge":   return "image/Marge.jpg"   ; break;
-	case "simsons": return "image/Simsons.jpg" ; break;
-	}
-	return "image/PhotoUnavailable.jpg";
-}
-
-/* should be taken from server */
-function getNameFromID(Id)
-{
-	return Id;
-}
-
-/* should be taken from server */
-function getMessages(Id)
-{
-	var numMesseges = Math.floor((Math.random()*10)+1);
-	var arrMesseges = [];
-	for (var i=0; i<numMesseges; i++)
-	{
-		arrMesseges[i] = new Object();
-		arrMesseges[i].text = "Message " + (i+1);
-        var from = new Date(2010, 0, 1).getTime();
-        var to   = new Date(2013, 0, 1).getTime();
-		var randDate = new Date(from + Math.random() * (to - from));
-		arrMesseges[i].time = randDate.toLocaleString();
-	}
-	return arrMesseges;
-}
-
-function addMessagesToChatRoom(message)
-{
-	if (message.text == "")
+	if (message.message == "")
 		return;
     var e = $("<li class='message'><label class='messages-text'>" + 
             message.message + 
@@ -158,27 +128,110 @@ function addMessagesToChatRoom(message)
     $("#ChatRoom .messages").append(e).listview('refresh');
 }
 
-function setRoomMessages(results)
+function addGroupMessageToChatRoom(message)
 {
-    $("#ChatRoom .message").remove();
-    
-    iterateResults(results,addMessagesToChatRoom);
+	if (message.message == "")
+		return;
+	// TBD - change to group view (add picture/name of sender)
+    var e = $("<li class='message'><label class='messages-text'>" + 
+            message.message + 
+            "</label><label class='messages-time'>" + 
+            message.send_date + 
+            "</label></li>");
+    $("#ChatRoom .messages").append(e).listview('refresh');
 }
 
-function activateRoom(roomId)
+function addBuddyToBuddiesList(buddy)
 {
-	var buddyName = getNameFromID(roomId);
-	$("#ChatRoom .room-label").text(buddyName);
-	document.title = buddyName;
-	var buddyImg = getImgLinkFromID(roomId);	
-	console.log("buddyName: "+ buddyName + ", buddyImg: "+ buddyImg);
-	$("#ChatRoom .room-image").attr("src", buddyImg);
-	bl.getBuddyMessages(roomId, setRoomMessages, printError);
+	if (buddy.email == "")
+		return;
+    var e = $("<li class='buddy'><a href='ChatRoom' id=" + 
+            buddy.email + 
+			"><label class='row-label'>" +
+            buddy.name +
+			"</label><img class='row-image' src=" +
+			buddy.picture +
+			"/></a></li>");
+				
+    $("#Buddies .buddyList").append(e).listview('refresh');
 }
+
+function addGroupToGroupsList(group)
+{
+	if (group.email == "")
+		return;
+    var e = $("<li class='group'><a href='ChatRoom' id=" + 
+            group.group_id + 
+			"><label class='row-label'>" +
+            group.name +
+			"</label><img class='row-image' src=" +
+			group.picture +
+			"/></a></li>");
+				
+    $("#Buddies .groupList").append(e).listview('refresh');
+}
+
+
+function setBuddyRoomMessages(results)
+{
+    $("#ChatRoom .message").remove();
+    iterateResults(results,addBuddyMessageToChatRoom);
+}
+
+function setGroupRoomMessages(results)
+{
+    $("#ChatRoom .message").remove();
+    iterateResults(results, addGroupMessageToChatRoom);
+}
+
+function setUserBuddies(results)
+{
+	debugger;
+    $("#Buddies .buddy").remove();
+    iterateResults(results, addBuddyToBuddiesList);
+}
+
+function setUserGroups(results)
+{
+    $("#Buddies .group").remove();
+    iterateResults(results, addGroupToGroupsList);
+}
+
+
+function setRoomHeader(result)
+{
+	if (buddy.email == "")
+		return;
+	console.log("RoomHeader of " + buddy.email + " = Name: "+ result.name + ", buddyImg: "+ result.picture);
+	$("#ChatRoom .room-label").text(result.name);
+	document.title = "Chat with " +result.name;
+	$("#ChatRoom .room-image").attr("src", result.picture);
+}
+
+function activateBuddyRoom(buddyId)
+{
+	bl.getBuddyInfo(buddyId, setRoomHeader, printError);
+	bl.getBuddyMessages(buddyId, setBuddyRoomMessages, printError);
+}
+
+function activateGroupRoom(groupId)
+{
+	bl.getGroupInfo(groupId, setRoomHeader, printError);
+	bl.getGroupMessages(groupId, setGroupRoomMessages, printError);
+}
+
+function updateTab(args)
+{
+	if (args.id == "BuddiesTab")
+		bl.getBuddyList(setUserBuddies, printError);
+	else
+		bl.getGroupList(setUserGroups, printError);
+}
+
 
 function changePage(page, args) 
 {
-		$.mobile.changePage(page, { changeHash: true });
-        $(page).trigger("callback", args);
+	$.mobile.changePage(page, { changeHash: true });
+	$(page).trigger("callback", args);
 }
 
