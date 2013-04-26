@@ -210,7 +210,7 @@ function setRoomHeader(result)
 
 function activateBuddyRoom(buddyId)
 {
-	bl.getBuddyInfo(buddyId, setRoomHeader, printError);
+	bl.getBuddyDetails(buddyId, setRoomHeader, printError);
 	bl.getBuddyMessages(buddyId, setBuddyRoomMessages, printError);
 }
 
