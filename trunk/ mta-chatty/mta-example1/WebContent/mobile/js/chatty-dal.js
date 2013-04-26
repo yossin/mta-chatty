@@ -97,6 +97,14 @@ dal.selectBuddyList=function (userId, onSuccess, onError){
 	this.genericSqlStatement(sql, [userId], onSuccess, onError);
 };
 
+dal.selectBuddy=function (buddyId, onSuccess, onError){
+	var sql="select email, name, picture from user where email=?";
+	this.genericSqlStatement(sql, [buddyId], function(results){
+		getFirstResult(results, onSuccess);
+	}, onError);
+};
+
+
 dal.selectGroupList=function (userId, onSuccess, onError){
 	//id, name, picture, description
 	var sql="select g.group_id, g.name, g.picture, g.description from 'group' as g inner join group_membership as gm on gm.group_id==g.group_id where gm.member_email==?";
