@@ -119,7 +119,7 @@ dal.selectGroupMessages=function (groupId, onSuccess, onError){
 
 dal.selectBuddyMessages=function (userId, buddyId, onSuccess, onError){
 	// sender-id, sender-name, sender-pic, send-ts, message
-	var sql="select u.email, u.name, u.picture, bm.send_date, bm.message from user as u inner join buddy_message as bm on bm.sender_id==u.email where ((bm.sender_id==? and bm.receiver_id==?) or (bm.sender_id==? and bm.receiver_id==?)) order by bm.send_date";
+	var sql="select bm.send_date, bm.sender_id, bm.receiver_id, bm.message from buddy_message as bm where ((bm.sender_id==? and bm.receiver_id==?) or (bm.sender_id==? and bm.receiver_id==?)) order by bm.send_date";
 	this.genericSqlStatement(sql, [userId, buddyId, buddyId, userId], onSuccess, onError);
 };
 
