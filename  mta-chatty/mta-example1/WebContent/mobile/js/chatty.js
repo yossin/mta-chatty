@@ -1,7 +1,7 @@
 
 $(document).ready(function(){
 
-	// Skip the login user incase there's a user that was previusly loaded
+	// Skip the login user in case there's a user that was previusly loaded
 //	if (getLogedUser() != null)
 //		document.location.href = "#Buddies";
 
@@ -15,7 +15,7 @@ $(document).ready(function(){
 	        });
 			var id = $(this).attr("id");
 		    updateTab({ "id": id });
-	        return false;
+		    return false;
 	    });
 	});
 
@@ -36,7 +36,7 @@ $(document).ready(function(){
 	});
 
 	
-	// bind callback that will be triggered after a pageshow event
+	// bind callback that will be triggered after a page show event
 	$("#ChatRoom").bind("callback", function(e, args) {
 		if (args.id.indexOf("@") != -1)
 			activateBuddyRoom(args.id);
@@ -69,8 +69,9 @@ $(document).ready(function(){
 		userLoginData.pass = $("#LoginForm .loginUserPassInput").val();
 //		if (loginUser(userLoginData)){
             document.location.href = "#Buddies";
-		    updateTab({ "id": "BuddiesTab" });
-            window.location.reload();
+//		    updateTab({ "id": "BuddiesTab" });
+//		    updateTab({ "id": "GroupsTab" });
+            
 //        }
 //		else
 //			window.alert('Login failed, Please recheck your input');
@@ -89,7 +90,6 @@ $(document).ready(function(){
 		//if (!registerNewUser(userRegisterData)){
             document.location.href = "#Buddies";
             updateTab({ "id": "BuddiesTab" });
-			window.location.reload();
 //		}
 		//else if (loginUser(userLoginData))
 //			window.alert('Register failed, Please recheck your input');
@@ -97,7 +97,7 @@ $(document).ready(function(){
 
     $('.editProfileBtn').click(function(){
 
-        // get user profile deatails
+        // get user profile details
         //        userEdi	tProfileData = getUserProfile();
         
             var userEditProfileData  = new Object();
@@ -149,11 +149,11 @@ function addBuddyToBuddiesList(buddy)
             buddy.email + 
 			"><label class='row-label'>" +
             buddy.name +
-			"</label><img class='row-image' src=" +
+			"</label><img class='row-image' src='" +
 			buddy.picture +
-			"/></a></li>");
+			"'/></a></li>");
 				
-    $("#Buddies .buddyList").append(e).listview('refresh');
+    $("#Buddies .buddyList").append(e);
 }
 
 function addGroupToGroupsList(group)
@@ -168,7 +168,7 @@ function addGroupToGroupsList(group)
 			group.picture +
 			"/></a></li>");
 				
-    $("#Buddies .groupList").append(e).listview('refresh');
+    $("#Buddies .groupList").append(e);
 }
 
 
@@ -186,7 +186,6 @@ function setGroupRoomMessages(results)
 
 function setUserBuddies(results)
 {
-	debugger;
     $("#Buddies .buddy").remove();
     iterateResults(results, addBuddyToBuddiesList);
 }
@@ -216,7 +215,7 @@ function activateBuddyRoom(buddyId)
 
 function activateGroupRoom(groupId)
 {
-	bl.getGroupInfo(groupId, setRoomHeader, printError);
+	bl.getGroupDetails(groupId, setRoomHeader, printError);
 	bl.getGroupMessages(groupId, setGroupRoomMessages, printError);
 }
 
