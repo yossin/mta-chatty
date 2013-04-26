@@ -3,15 +3,17 @@
 <head>
 	<title>Chatty</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.css" />
-	<link rel="stylesheet" href="css/chatty.css">
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
+	<link rel="stylesheet" href="css/chattyPC.css">
 	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 	<script	src="js/imported/log4javascript.js"></script>
 	<script	src="js/chatty-util.js"></script>
+	<script	src="js/chatty-test.js"></script>
 	<script	src="js/chatty-dal.js"></script>
+	<script	src="js/chatty-bl.js"></script>
 	<script	src="js/chatty.js"></script>
 	<script	src="js/chattyPC.js"></script>
-	<script	src="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.js"></script>
+	<script	src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
 </head>
 
 
@@ -23,16 +25,16 @@
 			<label class="login-label">Please Login to Chatty</label>
 			<img   class="login-image" src="image/Login.png" />
 		</header>
-		<form id="LoginForm" class="content" data-role="content">
+		<form id="LoginFormPC" class="content" data-role="content">
 			<div>
 				<span class="colorRed">*</span>
 				<label class="loginUserMailLable">Email:</label>
-				<input class="loginUserMailInput" type="email" required />    
+				<input class="loginUserMailInput" type="email" required  value="bart@mail.com"/>    
 			</div>
 			<div>
 				<span class="colorRed">*</span>
 				<label class="loginUserPassLable">Password:</label>
-				<input class="loginUserPassInput" type="password" required />    
+				<input class="loginUserPassInput" type="password" required value="123"/>    
 			</div>
                 
 			<div>
@@ -51,21 +53,21 @@
 			<label class="register-label">Please Register to Chatty</label>
 			<img   class="register-image" src="image/Register.png" />
 		</header>
-		<form id="RegisterForm" class="content" data-role="content">
+		<form id="RegisterFormPC" class="content" data-role="content">
 			<div>
 				<span class="colorRed">*</span>
 				<label class="registerUserMailLable">Email:</label>
-				<input class="registerUserMailInput" type="email" required value="fds@fds"/>    
+				<input class="registerUserMailInput" type="email" required />    
 			</div>
 			<div>
 				<span class="colorRed">*</span>
 				<label class="registerUserNameLable">Name:</label>
-				<input class="registerUserNameInput" type="text" required value="fds@fds"/>    
+				<input class="registerUserNameInput" type="text" required />    
 			</div>
 			<div>
 				<span class="colorRed">*</span>
 				<label class="registerUserPassLable">Password:</label>
-				<input class="registerUserPassInput" type="password" required value="fds@fds"/>    
+				<input class="registerUserPassInput" type="password" required/>    
 			</div>
 			<div>
 				<label class="registerUserPicLable">Profile Image:</label>
@@ -83,17 +85,69 @@
 	</section>
 	
     <section id="Dashboard" data-role="page">
-        <header data-role="header" class="login-header">
-			<label class="login-label">Please Login to Chatty</label>
-			<img   class="login-image" src="image/Login.png" />
-		</header>
-        <content class="buddiesContent" data-role="content">
+        <header></header>
 
-                    <section  data-role="page"> 
-                        <div  data-role="header">.aaa..</div> 
-                        <div  data-role="content">.bbb..</div> 
-                        <div  data-role="footer">.ccc..</div> 
-                    </section>
+        <div class="dashboardContent" data-role="content">
+
+			<ul class="dashboardContentUL">
+				<li class="buddiesAndGroups">
+			
+					<div class="buddiesContent">
+						<ul class="buddyList" data-role="listview">
+
+							<li data-role="list-divider">Buddies</li>
+						
+							<!-- Example 
+							-->
+							<li class="buddy"> 
+								<a href="#ChatRoomUpdate" id="bart@mail.com">
+									<label class="row-label">Bart</label>
+									<img   class="row-image" src="image/Bart.jpg" />
+								</a>
+							</li>
+							
+						</ul>
+					</div>		
+					
+					<div class="groupsContent">
+						<ul class="groupList" data-role="listview">
+
+							<li data-role="list-divider">Groups</li>
+						
+							<!-- Example 
+							-->
+							<li class="group"> 
+								<a href="#ChatRoomUpdate" id="1">
+									<label class="row-label">Simsons</label>
+									<img   class="row-image" src="image/Simsons.jpg" />
+								</a>
+							</li>
+							
+						</ul>
+					</div>		
+
+				</li>		
+
+				<li class="divChatRoom">
+					<div class="chatRoom">
+						<ul class="messages" data-role="listview">
+							<li class="message">
+								<label class="messages-text">message</label>
+								<label class="messages-time">01/02/2013 12:02</label>    
+							</li>
+						</ul>
+					</div>		
+					
+					<div class="messageErea">
+						<textarea autofocus="autofocus" class="textArea" placeholder="Enter your message here"></textarea>
+						<a href="#" class="sendMessage" data-role="button" data-icon="arrow-r" data-iconpos="notext">Send</a>
+					</div>
+				</li>
+
+				 
+			</ul>
+		</div>		
+		
                 
              
         </content>		
