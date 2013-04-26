@@ -1,2 +1,36 @@
 @CHARSET "windows-1255";
 
+
+.logoutBtn, .editProfileBtn{
+    float:left;
+}
+
+.searchBuddyBtn, .addGroupBtn, .searchGroupBtn {
+	float:right;
+}
+
+.row-label { 
+	padding-left:64px;
+	padding-bottom:28px;
+	position:absolute;
+	bottom:0; left:0;
+}
+
+.row-image {
+	width:  40px;   
+	height: 54px;
+	margin:auto;
+	padding-top: 5px;
+	padding-left:12px;
+}
+
+
+.buddiesAndGroups {
+	float: left !important;
+	width: 30% !important;
+}
+
+.divChatRoom {
+	float: right !important;
+	width: 60% !important;
+}
