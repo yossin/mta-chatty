@@ -1,7 +1,6 @@
-var loggedInUser={email:"bart@mail.com"};
-
 
 var bl={};
+bl.loggedInUser={email:"bart@mail.com"};
 
 
 //TODO: implement
@@ -20,32 +19,36 @@ bl.logoutUser=function(){
 
 bl.getBuddyList=function(onSuccess, onError){
 	//email, name, picture
-	dal.selectBuddyList(loggedInUser.email, onSuccess, onError);
+	dal.selectBuddyList(this.loggedInUser.email, onSuccess, onError);
 };
 
 bl.getGroupList=function(onSuccess, onError){
 	//id, name, picture
-	dal.selectGroupList(loggedInUser.email, onSuccess, onError);
+	dal.selectGroupList(this.loggedInUser.email, onSuccess, onError);
 };
 
 bl.getGroupMessages=function (groupId, onSuccess, onError){
 	// sender, ts, message
-	dal.selectGroupMessages(loggedInUser.email, groupId, onSuccess, onError);
+	dal.selectGroupMessages(this.loggedInUser.email, groupId, onSuccess, onError);
 };
 
 bl.getBuddyMessages=function (buddyId, onSuccess, onError){
 	// sender, ts, message
-	dal.selectBuddyMessages(loggedInUser.email, buddyId, onSuccess, onError);
+	dal.selectBuddyMessages(this.loggedInUser.email, buddyId, onSuccess, onError);
 };
 
 bl.sendBuddyMessage=function (buddyId, message, onSuccess, onError){
 	// sender, ts, message
-	dal.insertBuddyMessages(loggedInUser.email, buddyId, message, onSuccess, onError);
+	dal.insertBuddyMessages(this.loggedInUser.email, buddyId, message, onSuccess, onError);
 };
 
 bl.sendGroupMessage=function (groupId, message, onSuccess, onError){
 	// sender, ts, message
-	dal.insertBuddyMessages(loggedInUser.email, groupId, message, onSuccess, onError);
+	dal.insertBuddyMessages(this.loggedInUser.email, groupId, message, onSuccess, onError);
 };
 
+bl.getBuddyDetails=function(buddyId, onSuccess, onError){
+	//email, name, picture
+	dal.selectBuddy(buddyId, onSuccess, onError);
+};
 

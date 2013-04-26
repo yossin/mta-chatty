@@ -49,3 +49,15 @@ function iterateResults(results,callback){
     	callback(results.rows.item(i));
     }
 }
+
+function getFirstResult(results,callback){
+    if (!results){
+    	callback();
+	}
+    if (results.rows.length>0){
+    	callback(results.rows.item(0));
+    } else{
+    	callback();
+    }
+}
+
