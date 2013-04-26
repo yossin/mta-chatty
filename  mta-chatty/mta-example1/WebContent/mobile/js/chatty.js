@@ -42,10 +42,11 @@ $(document).ready(function(){
     $(function() {
         $("#ChatRoom .sendMessage").click(function(){
             var message = new Object();
-            textarea = $("#ChatRoom .textArea");
+            var textarea = $("#ChatRoom .textArea");
             message.text = textarea.val();
             textarea.val('');
-            message.time = (new Date()).toLocaleString();
+            message.message = (new Date()).toLocaleString();
+            //TODO: ui.saveTextMessage()
             addMessagesToChatRoom(message);
             // Send message to server...
         });
@@ -172,7 +173,7 @@ function activateRoom(roomId)
 	var buddyImg = getImgLinkFromID(roomId);	
 	console.log("buddyName: "+ buddyName + ", buddyImg: "+ buddyImg);
 	$("#ChatRoom .room-image").attr("src", buddyImg);
-	getBuddyMessages(roomId, setRoomMessages, printError);
+	bl.getBuddyMessages(roomId, setRoomMessages, printError);
 }
 
 function changePage(page, args) 

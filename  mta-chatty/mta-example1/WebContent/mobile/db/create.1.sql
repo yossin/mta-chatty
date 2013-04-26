@@ -123,7 +123,7 @@ CREATE INDEX fk_user_has_group_user1_idx ON group_membership(member_email ASC);
 CREATE  TABLE IF NOT EXISTS group_message (
   send_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   sender_id TEXT NOT NULL ,
-  receiver_id BOOLEAN NOT NULL ,
+  receiver_id INTEGER NOT NULL ,
   message TEXT NOT NULL ,
   attachment_path TEXT NULL ,
   PRIMARY KEY (send_date, sender_id, receiver_id) ,

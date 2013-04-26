@@ -17,7 +17,7 @@ function createTestData(){
 
 
 function genericCreateTestData(insertSql, itemName, list, createParams){
-	database.transaction(function(transaction) {
+	dal.db.transaction(function(transaction) {
 		var inserted=0;
 		list.forEach( function(item) {
 			var params = createParams(item);
@@ -124,7 +124,7 @@ function createGroupMessagesTestData(list){
 // dummy functions
 function dummyLoginUser(email, password, onSuccessLogin, onLoginError){
 	var sql="select u.email, u.name, u.picture from 'user' as u where u.email==?";
-	genericSelectStatement(sql, [email], 
+	dal.genericSqlStatement(sql, [email], 
 			function(result){
 				if (result.rows.length==1){
 					onSuccessLogin(result.rows.item(0));
