@@ -1,5 +1,5 @@
 var ui={};
-ui.chatroom={buddy:false, id:"name@mail.com"};
+ui.chatroom={buddyRoom:false, id:"name@mail.com"};
 
 $(document).ready(function(){
 
@@ -29,9 +29,12 @@ $(document).ready(function(){
 	$("a[href=#ChatRoom]").each(function () {
 	    var anchor = $(this);
 		anchor.bind("click", function () {
-		      var id = $(this).attr("id");
-		      console.log("Going to change Chat room with id: " + id);
-		      changePage("#ChatRoom", { "id": id });
+			ui.chatroom.id = $(this).attr("id");
+			console.log("Going to change Chat room with id: " + ui.chatroom.id);
+			if (ui.chatroom.buddy)
+				activateBuddyRoom(ui.chatroom.id);
+			else
+				activateGroupRoom(ui.chatroom.id);
 	        return false;
 	    });
 	});
@@ -42,14 +45,6 @@ $(document).ready(function(){
 	});
 
 	
-	$("#Buddies .buddyhref", "#Groups .grouphref").click(function(){
-    	ui.chatroom.id = $(this);
-        if (ui.chatroom.buddy)
-    		activateBuddyRoom(ui.chatroom.id);
-		else
-			activateGroupRoom(ui.chatroom.id);
-	});
-	
  
     $(function() {
         $("#ChatRoom .sendMessage").click(function(){
@@ -59,7 +54,7 @@ $(document).ready(function(){
             textarea.val('');
             message.send_date = (new Date()).toLocaleString();
             //TODO: ui.saveTextMessage()
-            if (ui.buddychatroom)
+            if (ui.chatroom.buddyRoom)
             	addBuddyMessageToChatRoom(message);
             else
             	addGroupMessageToChatRoom(message);
@@ -158,7 +153,7 @@ function addBuddyToBuddiesList(buddy)
 {
 	if (buddy.email == "")
 		return;
-    var e = $("<li class='buddy'><a href='#ChatRoom' class='buddyhref' id=" + 
+    var e = $("<li class='buddy'><a href='#ChatRoom' id=" + 
             buddy.email + 
 			"><label class='row-label'>" +
             buddy.name +
@@ -173,7 +168,7 @@ function addGroupToGroupsList(group)
 {
 	if (group.email == "")
 		return;
-    var e = $("<li class='group'><a href='#ChatRoom' class='grouphref' id=" + 
+    var e = $("<li class='group'><a href='#ChatRoom' id=" + 
             group.group_id + 
 			"><label class='row-label'>" +
             group.name +
@@ -222,14 +217,14 @@ function setRoomHeader(result)
 
 function activateBuddyRoom(buddyId)
 {
-	ui.chatroom.buddy = true; 
+	ui.chatroom.buddyRoom = true; 
 	bl.getBuddyDetails(buddyId, setRoomHeader, printError);
 	bl.getBuddyMessages(buddyId, setBuddyRoomMessages, printError);
 }
 
 function activateGroupRoom(groupId)
 {
-	ui.chatroom.buddy = false; 
+	ui.chatroom.buddyRoom = false; 
 	bl.getGroupDetails(groupId, setRoomHeader, printError);
 	bl.getGroupMessages(groupId, setGroupRoomMessages, printError);
 }
@@ -240,12 +235,5 @@ function updateTab(args)
 		bl.getBuddyList(setUserBuddies, printError);
 	else
 		bl.getGroupList(setUserGroups, printError);
-}
-
-
-function changePage(page, args) 
-{
-	$.mobile.changePage(page, { changeHash: true });
-	$(page).trigger("callback", args);
 }
 
