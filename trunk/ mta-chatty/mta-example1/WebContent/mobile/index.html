@@ -23,7 +23,7 @@
 			<label class="login-label">Please Login to Chatty</label>
 			<img   class="login-image" src="image/Login.png" />
 		</header>
-		<form id="LoginForm" class="content" data-role="content" action="#Buddies">
+		<form id="LoginForm" class="content" data-role="content" action="Chatty.html">
 			<div>
 				<span class="colorRed">*</span>
 				<label class="loginUserMailLable">Email:</label>
@@ -46,12 +46,12 @@
         </form>		
 	</section>
 	
-	<section id="Register" data-role="page" data-add-back-btn="true" action="#Buddies">
+	<section id="Register" data-role="page" data-add-back-btn="true">
 		<header data-role="header" class="register-header">
 			<label class="register-label">Please Register to Chatty</label>
 			<img   class="register-image" src="image/Register.png" />
 		</header>
-		<form id="RegisterForm" class="content" data-role="content">
+		<form id="RegisterForm" class="content" data-role="content" action="Chatty.html">
 			<div>
 				<span class="colorRed">*</span>
 				<label class="registerUserMailLable">Email:</label>
@@ -81,103 +81,13 @@
 			</div>
 		</form>				
 	</section>
-	
-	<section id="Buddies" data-role="page">
-		<header data-role="header">
-		 <div data-role="navbar" data-iconpos="left">
-			 <ul>
-				 <li><a href="#Buddies" id="BuddiesTab" data-role="tab" data-icon="custom" class="ui-btn-active">Buddies</a></li>
-				 <li><a href="#Groups"  id="GroupsTab"  data-role="tab" data-icon="custom" >Groups</a></li>
-			 </ul>
-		 </div>
-		</header>
-		<div class="buddiesContent" data-role="content">
-			<ul class="buddyList" data-role="listview" data-filter="true">
-				
-                <!-- Example 
-				-->
-				<li class="buddy"> 
-					<a href="#ChatRoom" id="bart@mail.com">
-						<label class="row-label">Bart</label>
-						<img   class="row-image" src="image/Bart.jpg" />
-					</a>
-				</li>
-				
-			</ul>
-		</div>		
-		
-		<footer data-role="footer" class="ui-bar">
-            <div>
-                <a href="#Login"       class="logoutBtn"      data-role="button" data-icon="delete" data-iconpos="notext">Logout</a>
-                <a href="#EditProfile" class="editProfileBtn" data-role="button" data-icon="gear" data-iconpos="notext">Edit Profile</a>
-                <a href="#SearchBuddy" class="searchBuddyBtn"    data-role="button" data-icon="search" data-iconpos="notext">Search</a>
-            </div>
-        </footer>
-	</section>
 
-
-	<section id="Groups" data-role="page">
-		<header data-role="header">
-		 <div data-role="navbar" data-iconpos="left">
-			 <ul>
-				 <li><a href="#Buddies" id="BuddiesTab" data-role="tab" data-icon="custom" >Buddies</a></li>
-				 <li><a href="#Groups"  id="GroupsTab"  data-role="tab" data-icon="custom" class="ui-btn-active">Groups</a></li>
-			 </ul>
-		 </div>
-		</header>
-		<div class="groupsContent" data-role="content">
-			<ul id="groupList" data-role="listview" data-filter="true">
-                <!-- Example 
-				-->	
-				<li class="group"> 
-					<a href="#ChatRoom" id="1">
-						<label class="row-label">Simsons</label>
-						<img   class="row-image" src="image/Simsons.jpg" />
-					</a>
-				</li>
-			</ul>
-		</div>		
-		
-		<footer data-role="footer" class="ui-bar">
-            <div>
-                <a href="#Login"       class="logoutBtn"      data-role="button" data-icon="delete" data-iconpos="notext">Logout</a>
-                <a href="#EditProfile" class="editProfileBtn" data-role="button" data-icon="gear" data-iconpos="notext">Edit Profile</a>
-
-                <a href="#SearchGroup" class="searchGroupBtn" data-role="button" data-icon="search" data-iconpos="notext">Search</a>
-                <a href="#AddGroup"    class="addGroupBtn"    data-role="button" data-icon="plus" data-iconpos="notext">Add</a>
-            </div>
-        </footer>
-	</section>
-
-	<section id="ChatRoom" data-role="page" data-add-back-btn="true">
-		<header data-role="header" class="room-header">
-			<label class="room-label">room title</label>
-			<img   class="room-image" src="" />
-		</header>
-		<div data-role="content" class="chatRoom">
-			<ul class="messages" data-role="listview">
-				<li class="message">
-					<label class="messages-text">message</label>
-					<label class="messages-time">01/02/2013 12:02</label>    
-				</li>
-			</ul>
-		</div>		
-		
-		<footer data-role="footer">
-			<div class="messageErea">
-                <textarea autofocus="autofocus" class="textArea" placeholder="Enter your message here"></textarea>
-                <a href="#" class="sendMessage" data-role="button" data-icon="arrow-r" data-iconpos="notext">Send</a>
-			</div>
-		</footer>
-	</section>
-
-    
     <section id="EditProfile" data-role="page" data-add-back-btn="true">
 		<header data-role="header" class="edit-profile-header">
 			<label class="edit-profile-label">Edit Your Profile</label>
 			<img   class="edit-profile-image" src="image/Register.png" />
 		</header>
-		<form id="EditProfileForm" class="content" data-role="content">
+		<form id="EditProfileForm" class="content" data-role="content" action="Chatty.html">
 			<div>
 				<label class="editProfileUserMailLable">Email:</label>
 				<input class="editProfileUserMailInput" type="email" required disabled/>    
@@ -205,39 +115,6 @@
 				<button type="submit" class="btneditProfileSubmit" data-inline="true">Submit Changes</button>
 			</div>
 		</form>				
-	</section>
-    
-    <section id="SearchBuddyOrGroup" data-role="page" data-add-back-btn="true">
-		<header data-role="header" class="search-buddyOrGroup-header">
-			<label class="edit-profile-label">Search ...</label>
-			<img   class="edit-profile-image" src="image/Search.png" />
-		</header>
-        <div class="searchBuddyContent" data-role="content">
-   			<div class="searchBuddyOrGroupErea">
-                <textarea autofocus="autofocus" class="textArea" placeholder="Search ... by (mail address)/(Name)"></textarea>
-                <a href="#" class="searchBuddyOrGroupBtn" data-role="button" data-icon="search" data-iconpos="notext"></a>
-			</div>
-         
-            <ul id="searchResultBuddiesOrGroup" data-role="listview" data-filter="true">
-            
-                <!-- Example 
-				-->
-                <li class="searchResultBuddyOrGroup"> 
-                    <a href="#AddBuddyOrGroup" id="lisa">
-                        <label class="searchResultBuddyOrGroupLabel">Lisa, Lisa@Lisa.com</label>
-                        <img   class="searchResultBuddyOrGroupImg" src="image/Lisa.jpg" />
-                    </a>
-                </li>
-                <li class="searchResultBuddyOrGroup"> 
-                    <a href="#AddBuddyOrGroup" id="maggie">
-                        <label class="searchResultBuddyOrGroupLabel">Maggie, Maggie@Maggie.com</label>
-                        <img   class="searchResultBuddyOrGroupImg" src="image/Maggie.jpg" />
-                    </a>
-                </li>
-            </ul>
-        </div>
-        
-        
 	</section>
 	
 </body>
