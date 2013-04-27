@@ -65,13 +65,17 @@ $(document).ready(function(){
 	
 	
 	// Bind the login form.
-	$("#LoginForm").submit(function( event ){
+//	$("#LoginForm").submit(function( event ){
+	$("#LoginForm .btnLoginToChatty").click(function(){
 		// Prevent the default submit.
-		event.preventDefault();
+//		event.preventDefault();
 		
 		var userLoginData = new Object();
 		userLoginData.mail = $("#LoginForm .loginUserMailInput").val();
 		userLoginData.pass = $("#LoginForm .loginUserPassInput").val();
+		
+
+		
 //		if (loginUser(userLoginData)){
 			return true;
 //            document.location.href = "#Buddies";
