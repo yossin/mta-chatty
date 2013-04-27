@@ -157,7 +157,7 @@ function addBuddyToBuddiesList(buddy)
 {
 	if (buddy.email == "")
 		return;
-    var e = $("<li class='buddy'><a href='ChatRoom' id=" + 
+    var e = $("<li class='buddy'><a href='#ChatRoom' id=" + 
             buddy.email + 
 			"><label class='row-label'>" +
             buddy.name +
@@ -172,7 +172,7 @@ function addGroupToGroupsList(group)
 {
 	if (group.email == "")
 		return;
-    var e = $("<li class='group'><a href='ChatRoom' id=" + 
+    var e = $("<li class='group'><a href='#ChatRoom' id=" + 
             group.group_id + 
 			"><label class='row-label'>" +
             group.name +
