@@ -1,5 +1,5 @@
 var ui={};
-ui.chatroom={buddyRoom:false, id:"name@mail.com"};
+ui.chatroom={buddyRoom:true, id:"name@mail.com"};
 
 $(document).ready(function(){
 
@@ -21,23 +21,10 @@ $(document).ready(function(){
 	        });
 			var id = $(this).attr("id");
 		    updateTab({ "id": id });
-		    return false;
+		    return true;
 	    });
 	});
 
-	
-	$("a[href=#ChatRoom]").each(function () {
-	    var anchor = $(this);
-		anchor.bind("click", function () {
-			ui.chatroom.id = $(this).attr("id");
-			console.log("Going to change Chat room with id: " + ui.chatroom.id);
-			if (ui.chatroom.buddy)
-				activateBuddyRoom(ui.chatroom.id);
-			else
-				activateGroupRoom(ui.chatroom.id);
-	        return false;
-	    });
-	});
 
 	$("div[data-role=page]").bind("pagebeforeshow", function (e, data) {
 	    $.mobile.silentScroll(0);
@@ -45,7 +32,7 @@ $(document).ready(function(){
 	});
 
 	
- 
+	function dummy(){}
     $(function() {
         $("#ChatRoom .sendMessage").click(function(){
             var message = new Object();
@@ -53,11 +40,16 @@ $(document).ready(function(){
             message.message = textarea.val();
             textarea.val('');
             message.send_date = (new Date()).toLocaleString();
-            //TODO: ui.saveTextMessage()
             if (ui.chatroom.buddyRoom)
+            {
             	addBuddyMessageToChatRoom(message);
+            	bl.sendBuddyMessage(ui.chatroom.id, message, dummy, printError);
+            }
             else
+            {
             	addGroupMessageToChatRoom(message);
+            	bl.sendGroupMessage(ui.chatroom.id, message, dummy, printError);
+            }
             
             // Send message to server...
         });
@@ -192,24 +184,42 @@ function setGroupRoomMessages(results)
     iterateResults(results, addGroupMessageToChatRoom);
 }
 
+function reBindChatRoomClick()
+{
+	$("a[href=#ChatRoom]").each(function () {
+	    var anchor = $(this);
+		anchor.bind("click", function () {
+			ui.chatroom.id = $(this).attr("id");
+			ui.chatroom.buddyRoom = (ui.chatroom.id.indexOf("@") != -1);
+			console.log("Going to change Chat room with id: " + ui.chatroom.id);
+			if (ui.chatroom.buddyRoom)
+				activateBuddyRoom(ui.chatroom.id);
+			else
+				activateGroupRoom(ui.chatroom.id);
+	        return true;
+	    });
+	});
+}
 function setUserBuddies(results)
 {
     $("#Buddies .buddy").remove();
     iterateResults(results, addBuddyToBuddiesList);
+    reBindChatRoomClick();
+
 }
 
 function setUserGroups(results)
 {
     $("#Groups .group").remove();
-    iterateResults(results, addGroupToGroupsList);
+    iterateResults(results, addGroupToGroupsList);    reBindChatRoomClick();
 }
 
 
 function setRoomHeader(result)
 {
-	if (buddy.email == "")
+	if (result.email == "")
 		return;
-	console.log("RoomHeader of " + buddy.email + " = Name: "+ result.name + ", buddyImg: "+ result.picture);
+	console.log("RoomHeader of " + result.email + " = Name: "+ result.name + ", buddyImg: "+ result.picture);
 	$("#ChatRoom .room-label").text(result.name);
 	document.title = "Chat with " +result.name;
 	$("#ChatRoom .room-image").attr("src", result.picture);
@@ -217,14 +227,12 @@ function setRoomHeader(result)
 
 function activateBuddyRoom(buddyId)
 {
-	ui.chatroom.buddyRoom = true; 
 	bl.getBuddyDetails(buddyId, setRoomHeader, printError);
 	bl.getBuddyMessages(buddyId, setBuddyRoomMessages, printError);
 }
 
 function activateGroupRoom(groupId)
 {
-	ui.chatroom.buddyRoom = false; 
 	bl.getGroupDetails(groupId, setRoomHeader, printError);
 	bl.getGroupMessages(groupId, setGroupRoomMessages, printError);
 }

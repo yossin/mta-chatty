@@ -39,12 +39,12 @@ bl.getBuddyMessages=function (buddyId, onSuccess, onError){
 
 bl.sendBuddyMessage=function (buddyId, message, onSuccess, onError){
 	// sender, ts, message
-	dal.insertBuddyMessages(this.loggedInUser.email, buddyId, message, onSuccess, onError);
+	dal.insertBuddyMessage(this.loggedInUser.email, buddyId, message, onSuccess, onError);
 };
 
 bl.sendGroupMessage=function (groupId, message, onSuccess, onError){
 	// sender, ts, message
-	dal.insertBuddyMessages(this.loggedInUser.email, groupId, message, onSuccess, onError);
+	dal.insertBuddyMessage(this.loggedInUser.email, groupId, message, onSuccess, onError);
 };
 
 bl.getBuddyDetails=function(buddyId, onSuccess, onError){
