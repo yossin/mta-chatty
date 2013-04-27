@@ -21,7 +21,7 @@ $(document).ready(function(){
 	        });
 			var id = $(this).attr("id");
 		    updateTab({ "id": id });
-		    return true;
+		    return false;
 	    });
 	});
 
@@ -189,6 +189,7 @@ function reBindChatRoomClick()
 	$("a[href=#ChatRoom]").each(function () {
 	    var anchor = $(this);
 		anchor.bind("click", function () {
+			$.mobile.changePage(page, { changeHash: true });
 			ui.chatroom.id = $(this).attr("id");
 			ui.chatroom.buddyRoom = (ui.chatroom.id.indexOf("@") != -1);
 			console.log("Going to change Chat room with id: " + ui.chatroom.id);
