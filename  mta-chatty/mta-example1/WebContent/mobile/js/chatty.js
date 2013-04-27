@@ -11,6 +11,7 @@ $(document).ready(function(){
 	    updateTab({ "id": "BuddiesTab" });
 	});
 
+	
 	$("a[data-role=tab]").each(function () {
 	    var anchor = $(this);
 	    anchor.bind("click", function () {
@@ -22,17 +23,7 @@ $(document).ready(function(){
 		    updateTab({ "id": id });
 		    return false;
 	    });
-	    
-	    anchor.bind("pagebeforeshow", function () {
-			var id = $(this).attr("id");
-		    updateTab({ "id": id });
-		    return false;
-	    });
-
 	});
-
-    updateTab({ "id": "BuddiesTab" });
-    updateTab({ "id": "GroupsTab" });
 
 	
 	$("a[href=#ChatRoom]").each(function () {
@@ -186,9 +177,9 @@ function addGroupToGroupsList(group)
             group.group_id + 
 			"><label class='row-label'>" +
             group.name +
-			"</label><img class='row-image' src=" +
+			"</label><img class='row-image' src='" +
 			group.picture +
-			"/></a></li>");
+			"'/></a></li>");
 				
     $("#Buddies .groupList").append(e).listview('refresh');;
 }
