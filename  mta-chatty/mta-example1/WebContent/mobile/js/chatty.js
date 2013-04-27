@@ -1,4 +1,5 @@
-var chatroom="buddyChatRoom";
+var ui={};
+ui.chatroom={buddy:false, id:"name@mail.com"};
 
 $(document).ready(function(){
 
@@ -41,14 +42,14 @@ $(document).ready(function(){
 	});
 
 	
-	// bind callback that will be triggered after a page show event
-	$("#ChatRoom").bind("callback", function(e, args) {
-		if (args.id.indexOf("@") != -1)
-			activateBuddyRoom(args.id);
+	$("#Buddies .buddyhref", "#Groups .grouphref").click(function(){
+    	ui.chatroom.id = $(this);
+        if (ui.chatroom.buddy)
+    		activateBuddyRoom(ui.chatroom.id);
 		else
-			activateGroupRoom(args.id);
-			
+			activateGroupRoom(ui.chatroom.id);
 	});
+	
  
     $(function() {
         $("#ChatRoom .sendMessage").click(function(){
@@ -58,7 +59,7 @@ $(document).ready(function(){
             textarea.val('');
             message.send_date = (new Date()).toLocaleString();
             //TODO: ui.saveTextMessage()
-            if (chatroom=="buddyChatRoom")
+            if (ui.buddychatroom)
             	addBuddyMessageToChatRoom(message);
             else
             	addGroupMessageToChatRoom(message);
@@ -157,7 +158,7 @@ function addBuddyToBuddiesList(buddy)
 {
 	if (buddy.email == "")
 		return;
-    var e = $("<li class='buddy'><a href='#ChatRoom' id=" + 
+    var e = $("<li class='buddy'><a href='#ChatRoom' class='buddyhref' id=" + 
             buddy.email + 
 			"><label class='row-label'>" +
             buddy.name +
@@ -165,14 +166,14 @@ function addBuddyToBuddiesList(buddy)
 			buddy.picture +
 			"'/></a></li>");
 				
-    $("#Buddies .buddyList").append(e).listview('refresh');;
+    $("#Buddies .buddyList").append(e).listview('refresh');
 }
 
 function addGroupToGroupsList(group)
 {
 	if (group.email == "")
 		return;
-    var e = $("<li class='group'><a href='#ChatRoom' id=" + 
+    var e = $("<li class='group'><a href='#ChatRoom' class='grouphref' id=" + 
             group.group_id + 
 			"><label class='row-label'>" +
             group.name +
@@ -180,7 +181,7 @@ function addGroupToGroupsList(group)
 			group.picture +
 			"'/></a></li>");
 				
-    $("#Groups .groupList").append(e).listview('refresh');;
+    $("#Groups .groupList").append(e).listview('refresh');
 }
 
 
@@ -221,14 +222,14 @@ function setRoomHeader(result)
 
 function activateBuddyRoom(buddyId)
 {
-	chatRoom = "buddyChatRoom"; 
+	ui.chatroom.buddy = true; 
 	bl.getBuddyDetails(buddyId, setRoomHeader, printError);
 	bl.getBuddyMessages(buddyId, setBuddyRoomMessages, printError);
 }
 
 function activateGroupRoom(groupId)
 {
-	chatRoom = "groupChatRoom"; 
+	ui.chatroom.buddy = false; 
 	bl.getGroupDetails(groupId, setRoomHeader, printError);
 	bl.getGroupMessages(groupId, setGroupRoomMessages, printError);
 }
