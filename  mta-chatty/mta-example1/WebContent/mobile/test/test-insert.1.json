@@ -29,7 +29,7 @@
   ],
 
 "buddy_list":
-  [{"buddy_id":"bart@mail.com", "owner_email":"bart@mail.com"},
+  [{"buddy_id":"homer@mail.com", "owner_email":"bart@mail.com"},
    {"buddy_id":"maggie@mail.com", "owner_email":"bart@mail.com"},
    {"buddy_id":"lisa@mail.com", "owner_email":"bart@mail.com"}
   ], 

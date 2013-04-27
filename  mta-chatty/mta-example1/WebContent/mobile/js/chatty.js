@@ -6,6 +6,10 @@ $(document).ready(function(){
 //	if (getLogedUser() != null)
 //		document.location.href = "#Buddies";
 
+	$("#Buddies").bind("pagebeforeshow", function (e) {
+		console.log("buddies before show");
+	    updateTab({ "id": "BuddiesTab" });
+	});
 
 	$("a[data-role=tab]").each(function () {
 	    var anchor = $(this);
