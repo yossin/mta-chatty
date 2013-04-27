@@ -18,7 +18,17 @@ $(document).ready(function(){
 		    updateTab({ "id": id });
 		    return false;
 	    });
+	    
+	    anchor.bind("pagebeforeshow", function () {
+			var id = $(this).attr("id");
+		    updateTab({ "id": id });
+		    return false;
+	    });
+
 	});
+
+    updateTab({ "id": "BuddiesTab" });
+    updateTab({ "id": "GroupsTab" });
 
 	
 	$("a[href=#ChatRoom]").each(function () {
@@ -79,9 +89,6 @@ $(document).ready(function(){
 //		if (loginUser(userLoginData)){
 			return true;
 //            document.location.href = "#Buddies";
-//		    updateTab({ "id": "BuddiesTab" });
-//		    updateTab({ "id": "GroupsTab" });
-            
 //        }
 //		else
 //			window.alert('Login failed, Please recheck your input');
