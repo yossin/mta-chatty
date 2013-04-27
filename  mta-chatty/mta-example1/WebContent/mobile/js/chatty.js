@@ -7,7 +7,6 @@ $(document).ready(function(){
 //		document.location.href = "#Buddies";
 
 	$("#Buddies").bind("pagebeforeshow", function (e) {
-		console.log("buddies before show");
 	    updateTab({ "id": "BuddiesTab" });
 	});
 
@@ -181,7 +180,7 @@ function addGroupToGroupsList(group)
 			group.picture +
 			"'/></a></li>");
 				
-    $("#Buddies .groupList").append(e).listview('refresh');;
+    $("#Groups .groupList").append(e).listview('refresh');;
 }
 
 
@@ -205,7 +204,7 @@ function setUserBuddies(results)
 
 function setUserGroups(results)
 {
-    $("#Buddies .group").remove();
+    $("#Groups .group").remove();
     iterateResults(results, addGroupToGroupsList);
 }
 
