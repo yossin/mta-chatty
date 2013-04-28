@@ -6,10 +6,11 @@
 }
 
 [data-role="header"] {
-   	height: 35px !important;
+   	height: 40px !important;
 }
-.room-header {
-	height: 40px !important;
+
+.tabheader {
+	height: 36px !important;
 }
 
 
@@ -38,7 +39,7 @@
 }
 
 
-.room-image, .login-image, .register-image, .edit-profile-image {
+.room-image, .header-image {
 	float:right;
 	margin-top: 4px;
 	width:  24px;   
@@ -46,18 +47,18 @@
 	padding-right:9px;
 }
 
-.login-image, .register-image, .edit-profile-image{
+.header-image {
 	width:  32px;
 }
 
-.room-label, .login-label, .register-label, .edit-profile-label  {
+.header-label {
 	padding-right:45px;
 	padding-bottom:7px;
 	position:absolute;
 	bottom:0; right:0;
 }
 
-.btnRegisterSubmit , .loginOrRegistrerDiv, .RegistrerDiv, .btnCreateGroup {
+.btnRegisterSubmit , .loginOrRegistrerDiv, .RegistrerDiv, .btnCreateGroup, .leaveGroupBtn {
 	float: right;
 }
 
@@ -129,7 +130,7 @@
     width: 100%;
 }
 
-.logoutBtn, .editProfileBtn, .addBuddyBtn, .createGroupBtn {
+.logoutBtn, .editProfileBtn, .addBuddyBtn, .createGroupBtn, .leaveGroupBtn {
 	background-size:22px 22px;
 }
 
@@ -137,7 +138,7 @@
     float:left;
 }
 
-.searchBuddyBtn, .createGroupBtn, .searchGroupBtn {
+.searchBuddyBtn, .createGroupBtn, .searchGroupBtn, .leaveGroupBtn {
 	float:right;
 }
 

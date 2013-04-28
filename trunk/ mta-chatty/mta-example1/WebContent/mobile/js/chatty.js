@@ -25,8 +25,8 @@ $(document).ready(function(){
 	            transition: "none",
 	            changeHash: false
 	        });
-			var id = $(this).attr("id");
-		    updateTab({ "id": id });
+		//	var id = $(this).attr("id");
+		//    updateTab({ "id": id });
 		    return false;
 	    });
 	});
@@ -133,13 +133,12 @@ $(document).ready(function(){
         newGroup.pic  = $("#CreateGroupForm .createGroupPicInput" ).val();
         bl.addNewGroup(newGroup, addCreatedGroupToUser, messageCantAddGroup);
     });
-
-
-	$("#ChatRoom .btnLeaveGroup").click(function(){
-        bl.leaveGroup(ui.chatroom.id, dummy, printError);
-    });
-    
-btnLeaveGroup    
+	
+	$("#LeaveGroup").bind("pagebeforeshow", function (e) {
+		bl.getGroupList(setUserGroupsToLeave, printError);
+	});
+	
+   
 });
 
 function addCreatedGroupToUser(groupID)
@@ -165,7 +164,7 @@ function addGroupMessageToChatRoom(message)
 		return;
 	// TBD - change to group view (add picture/name of sender)
     var e = $("<li class='message'><label class='messages-text'>" + 
-            message.message + 
+            message.name + ": \t" + message.message + 
             "</label><label class='messages-time'>" + 
             message.send_date + 
             "</label></li>");
@@ -187,6 +186,12 @@ function addBuddyToBuddiesList(buddy)
     $("#Buddies .buddyList").append(e).listview('refresh');
 }
 
+function getGroupRow(group)
+{
+
+    return e;
+}
+
 function addGroupToGroupsList(group)
 {
     var e = $("<li class='group'><a href='#ChatRoom' id=" + 
@@ -196,20 +201,28 @@ function addGroupToGroupsList(group)
 			"</label><img class='row-image' src='" +
 			group.picture +
 			"'/></a></li>");
-				
     $("#Groups .groupList").append(e).listview('refresh');
 }
 
+function addGroupToLeaveGroupsList(group)
+{
+    var e = $("<li class='group'><a href='#Groups' class='hrefLeaveGroup' id=" + 
+            group.group_id + 
+			"><label class='row-label'>" +
+            group.name +
+			"</label><img class='row-image' src='" +
+			group.picture +
+			"'/></a></li>");
+    $("#LeaveGroup .groupList").append(e).listview('refresh');
+}
 
 function setBuddyRoomMessages(results)
 {
-    $("#ChatRoom .message").remove();
     iterateResults(results,addBuddyMessageToChatRoom);
 }
 
 function setGroupRoomMessages(results)
 {
-    $("#ChatRoom .message").remove();
     iterateResults(results, addGroupMessageToChatRoom);
 }
 
@@ -218,7 +231,7 @@ function reBindChatRoomClick()
 	$("a[href=#ChatRoom]").each(function () {
 	    var anchor = $(this);
 		anchor.bind("click", function () {
-			$.mobile.changePage(page, { changeHash: true });
+			clearChatRoom(); // in case of failure - we don't want to see previews room
 			ui.chatroom.id = $(this).attr("id");
 			ui.chatroom.buddyRoom = (ui.chatroom.id.indexOf("@") != -1);
 			console.log("Going to change Chat room with id: " + ui.chatroom.id);
@@ -241,7 +254,29 @@ function setUserBuddies(results)
 function setUserGroups(results)
 {
     $("#Groups .group").remove();
-    iterateResults(results, addGroupToGroupsList);    reBindChatRoomClick();
+    iterateResults(results, addGroupToGroupsList);    
+    reBindChatRoomClick();
+}
+
+function reBindLeaveGroupClick()
+{
+	$("#LeaveGroup .hrefLeaveGroup").click(function(){
+		var id = $(this).attr("id");
+		jConfirm('Are you sure you want to leave?', 'Confirm leaving group', function(confirmed){
+            if(confirmed){
+                console.log("Leaving group: " + id);
+                bl.leaveGroup(id, dummy, printError);
+            }
+        });
+        return true;
+    });
+}
+
+function setUserGroupsToLeave(results)
+{
+    $("#LeaveGroup .group").remove();
+    iterateResults(results, addGroupToLeaveGroupsList);    
+    reBindLeaveGroupClick();
 }
 
 
@@ -253,6 +288,14 @@ function setRoomHeader(result)
 	$("#ChatRoom .room-label").text(result.name);
 	document.title = "Chat with " +result.name;
 	$("#ChatRoom .room-image").attr("src", result.picture);
+}
+
+function clearChatRoom()
+{
+	$("#ChatRoom .room-label").text("");
+	document.title = "";
+	$("#ChatRoom .room-image").attr("src", "");
+    $("#ChatRoom .message").remove();
 }
 
 function activateBuddyRoom(buddyId)
