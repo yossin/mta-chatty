@@ -19,9 +19,9 @@
 <body>
 
 	<section id="Login" data-role="page">
-		<header data-role="header" class="login-header">
-			<label class="login-label">Please Login to Chatty</label>
-			<img   class="login-image" src="image/Login.png" />
+		<header data-role="header">
+			<label class="header-label">Please Login to Chatty</label>
+			<img   class="header-image" src="image/Login.png" />
 		</header>
 		<form id="LoginForm" class="content" data-role="content" action="#Buddies" method="post">
 			<div>
@@ -48,9 +48,9 @@
 	</section>
 	
 	<section id="Register" data-role="page" data-add-back-btn="true">
-		<header data-role="header" class="register-header">
-			<label class="register-label">Please Register to Chatty</label>
-			<img   class="register-image" src="image/Register.png" />
+		<header data-role="header">
+			<label class="header-label">Please Register to Chatty</label>
+			<img   class="header-image" src="image/Register.png" />
 		</header>
 		<form id="RegisterForm" class="content" data-role="content" action="#Buddies">
 			<div>
@@ -85,7 +85,7 @@
 	</section>
 	
 	<section id="Buddies" data-role="page">
-		<header data-role="header">
+		<header data-role="header" class="tabheader">
 		 <div data-role="navbar" data-iconpos="left">
 			 <ul>
 				 <li><a href="#Buddies" id="BuddiesTab" data-role="tab" data-icon="custom" class="ui-btn-active">Buddies</a></li>
@@ -119,7 +119,7 @@
 
 
 	<section id="Groups" data-role="page">
-		<header data-role="header">
+		<header data-role="header" class="tabheader">
 		 <div data-role="navbar" data-iconpos="left">
 			 <ul>
 				 <li><a href="#Buddies" id="BuddiesTab" data-role="tab" data-icon="custom" >Buddies</a></li>
@@ -145,24 +145,26 @@
                 <a href="#Login"       class="logoutBtn"      data-role="button" data-icon="delete" data-iconpos="notext">Logout</a>
                 <a href="#EditProfile" class="editProfileBtn" data-role="button" data-icon="gear" data-iconpos="notext">Edit Profile</a>
 
-                <a href="#SearchGroup" class="searchGroupBtn" data-role="button" data-icon="search" data-iconpos="notext">Search</a>
-                <a href="#CreateGroup" class="createGroupBtn" data-role="button" data-icon="plus" data-iconpos="notext">Add</a>
+                <a href="#SearchGroup" class="searchGroupBtn" data-role="button" data-icon="search" data-iconpos="notext">Search Group</a>
+                <a href="#CreateGroup" class="createGroupBtn" data-role="button" data-icon="plus" data-iconpos="notext">Create Group</a>
+                <a href="#LeaveGroup"  class="leaveGroupBtn"  data-role="button" data-icon="minus" data-iconpos="notext">Leave Group</a>
             </div>
         </footer>
 	</section>
 
 	<section id="ChatRoom" data-role="page" data-add-back-btn="true">
 		<header data-role="header" class="room-header">
-			<label class="room-label">room title</label>
+			<label class="room-label"></label>
 			<img   class="room-image" src="" />
-            <a href="#Groups" class="btnLeaveGroup" data-role="button">Leave Group</a>
 		</header>
 		<div data-role="content" class="chatRoom">
 			<ul class="messages" data-role="listview">
+				<!-- Example 
 				<li class="message">
 					<label class="messages-text">message</label>
 					<label class="messages-time">01/02/2013 12:02</label>    
 				</li>
+				-->
 			</ul>
 		</div>		
 		
@@ -176,9 +178,9 @@
 
     
     <section id="EditProfile" data-role="page" data-add-back-btn="true">
-		<header data-role="header" class="edit-profile-header">
-			<label class="edit-profile-label">Edit Your Profile</label>
-			<img   class="edit-profile-image" src="image/Register.png" />
+		<header data-role="header">
+			<label class="header-label">Edit Your Profile</label>
+			<img   class="header-image" src="image/Register.png" />
 		</header>
 		<form id="EditProfileForm" class="content" data-role="content" action="#Buddies">
 			<div>
@@ -212,9 +214,9 @@
 	</section>
     
     <section id="SearchBuddy" data-role="page" data-add-back-btn="true">
-		<header data-role="header" class="search-buddy-header">
-			<label class="edit-profile-label">Search Buddy</label>
-			<img   class="edit-profile-image" src="image/SearchBuddy.png" />
+		<header data-role="header">
+			<label class="header-label">Search Buddy</label>
+			<img   class="header-image" src="image/SearchBuddy.png" />
 		</header>
         <div class="searchBuddyContent" data-role="content">
    			<div class="searchBuddyErea">
@@ -238,9 +240,9 @@
 	</section>
 
     <section id="SearchGroup" data-role="page" data-add-back-btn="true">
-		<header data-role="header" class="search-group-header">
-			<label class="edit-profile-label">Search Group</label>
-			<img   class="edit-profile-image" src="image/SearchGroup.png" />
+		<header data-role="header">
+			<label class="header-label">Search Group</label>
+			<img   class="header-image" src="image/SearchGroup.png" />
 		</header>
         <div class="searchGroupContent" data-role="content">
    			<div class="searchGroupErea">
@@ -262,11 +264,30 @@
             </div>
         </div>
 	</section>	
+
+    <section id="LeaveGroup" data-role="page" data-add-back-btn="true">
+		<header data-role="header">
+			<label class="header-label">Leave Group</label>
+			<img   class="header-image" src="image/LeaveGroup.png" />
+		</header>
+        <div class="leaveGroupContent" data-role="content">
+	        <ul class="searchResultBuddies" data-role="listview">
+	            <!-- Example 
+	                                       -->
+				<li class="group"> 
+					<a href="#Groups" class="hrefLeaveGroup" id=1>
+						<label class="row-label">Simsons</label>
+						<img   class="row-image" src="image/Simsons.jpg" />
+					</a>
+				</li>
+	        </ul>
+        </div>
+	</section>	
     
     <section id="CreateGroup" data-role="page" data-add-back-btn="true">
-		<header data-role="header" class="create-group-header">
-			<label class="edit-profile-label">Create New Group</label>
-			<img   class="edit-profile-image" src="image/SearchGroup.png" />
+		<header data-role="header">
+			<label class="header-label">Create New Group</label>
+			<img   class="header-image" src="image/SearchGroup.png" />
 		</header>
         <form id="CreateGroupForm" class="content" data-role="content" action="#Groups">
 			<div>
