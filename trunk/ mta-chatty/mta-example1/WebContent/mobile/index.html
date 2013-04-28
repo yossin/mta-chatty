@@ -39,7 +39,7 @@
 				<span class="colorRed"><br><br>*Required</span>
 			</div>
               
-			<div class="loginOrRegistrer">
+			<div class="loginOrRegistrerDiv">
 				<a href="#Register" class="btnRegisterToChatty" data-inline="true" data-role="button">Register</a>
 				<a href="#Buddies" class="btnLoginToChatty" data-inline="true" data-role="button">Login</a>
 		<!--	<button type="submit" class="btnLoginToChatty" data-inline="true">Login</button> -->
@@ -77,8 +77,9 @@
 				<span class="colorRed"><br><br>*Required</span>
 			</div>
 				
-			<div class="loginOrRegistrer">
-				<button type="submit" class="btnRegisterSubmit" data-inline="true">Register</button>
+			<div class="RegistrerDiv">
+				<a href="#Buddies" class="btnRegisterSubmit" data-inline="true" data-role="button">Register</a>
+			<!--	<button type="submit" class="btnRegisterSubmit" data-inline="true">Register</button> -->
 			</div>
 		</form>				
 	</section>
@@ -130,7 +131,7 @@
 			<ul class="groupList" data-role="listview" data-filter="true">
                 <!-- Example 
 				<li class="group"> 
-					<a href="#ChatRoom" id="1">
+					<a href="#ChatRoom" id=1>
 						<label class="row-label">Simsons</label>
 						<img   class="row-image" src="image/Simsons.jpg" />
 					</a>
@@ -145,7 +146,7 @@
                 <a href="#EditProfile" class="editProfileBtn" data-role="button" data-icon="gear" data-iconpos="notext">Edit Profile</a>
 
                 <a href="#SearchGroup" class="searchGroupBtn" data-role="button" data-icon="search" data-iconpos="notext">Search</a>
-                <a href="#AddGroup"    class="addGroupBtn"    data-role="button" data-icon="plus" data-iconpos="notext">Add</a>
+                <a href="#CreateGroup" class="createGroupBtn" data-role="button" data-icon="plus" data-iconpos="notext">Add</a>
             </div>
         </footer>
 	</section>
@@ -154,6 +155,7 @@
 		<header data-role="header" class="room-header">
 			<label class="room-label">room title</label>
 			<img   class="room-image" src="" />
+            <a href="#Groups" class="btnLeaveGroup" data-role="button">Leave Group</a>
 		</header>
 		<div data-role="content" class="chatRoom">
 			<ul class="messages" data-role="listview">
@@ -202,44 +204,92 @@
 				<span class="colorRed"><br><br>*Required</span>
 			</div>
 				
-			<div class="loginOrRegistrer">
-				<button type="submit" class="btneditProfileSubmit" data-inline="true">Submit Changes</button>
+			<div class="registrerDiv">
+   				<a href="#Buddies" class="btnEditProfileSubmit" data-inline="true" data-role="button">Submit Changes</a>
+			<!--	<button type="submit" class="btnEditProfileSubmit" data-inline="true">Submit Changes</button> -->
 			</div>
 		</form>				
 	</section>
     
-    <section id="SearchBuddyOrGroup" data-role="page" data-add-back-btn="true">
-		<header data-role="header" class="search-buddyOrGroup-header">
-			<label class="edit-profile-label">Search ...</label>
-			<img   class="edit-profile-image" src="image/Search.png" />
+    <section id="SearchBuddy" data-role="page" data-add-back-btn="true">
+		<header data-role="header" class="search-buddy-header">
+			<label class="edit-profile-label">Search Buddy</label>
+			<img   class="edit-profile-image" src="image/SearchBuddy.png" />
 		</header>
         <div class="searchBuddyContent" data-role="content">
-   			<div class="searchBuddyOrGroupErea">
-                <textarea autofocus="autofocus" class="textArea" placeholder="Search ... by (mail address)/(Name)"></textarea>
-                <a href="#" class="searchBuddyOrGroupBtn" data-role="button" data-icon="search" data-iconpos="notext"></a>
-			</div>
-         
-            <ul id="searchResultBuddiesOrGroup" data-role="listview" data-filter="true">
-            
-                <!-- Example 
-                <li class="searchResultBuddyOrGroup"> 
-                    <a href="#AddBuddyOrGroup" id="lisa">
-                        <label class="searchResultBuddyOrGroupLabel">Lisa, Lisa@Lisa.com</label>
-                        <img   class="searchResultBuddyOrGroupImg" src="image/Lisa.jpg" />
-                    </a>
-                </li>
-                <li class="searchResultBuddyOrGroup"> 
-                    <a href="#AddBuddyOrGroup" id="maggie">
-                        <label class="searchResultBuddyOrGroupLabel">Maggie, Maggie@Maggie.com</label>
-                        <img   class="searchResultBuddyOrGroupImg" src="image/Maggie.jpg" />
-                    </a>
-                </li>
-				-->
-            </ul>
+   			<div class="searchBuddyErea">
+                <textarea autofocus="autofocus" id="searchBuddyText" class="textArea" placeholder="Search by buddy name or mail address"></textarea>
+                <a href="#" class="searchBuddyBtn" data-role="button" data-icon="search" data-iconpos="notext"></a>
+			</div>         
+            <div class="searchResultBuddiesDiv">
+                <ul class="searchResultBuddies" data-role="listview">
+                    <!-- Example 
+                                               -->                       
+                    <li class="searchResultBuddy"> 
+                        <a href="#Buddies" class="searchResultBuddy_href" id="Lisa@Lisa.com">
+                            <label class="searchResultBuddyLabel">Lisa, Lisa@Lisa.com</label>
+                            <img   class="searchResultBuddyImg" src="image/Lisa.jpg" />
+                        </a>
+                    </li>
+                      
+                </ul>
+            </div>
         </div>
-        
-        
 	</section>
-	
+
+    <section id="SearchGroup" data-role="page" data-add-back-btn="true">
+		<header data-role="header" class="search-group-header">
+			<label class="edit-profile-label">Search Group</label>
+			<img   class="edit-profile-image" src="image/SearchGroup.png" />
+		</header>
+        <div class="searchGroupContent" data-role="content">
+   			<div class="searchGroupErea">
+                <textarea autofocus="autofocus" id="searchGroupText" class="textArea" placeholder="Search group by name"></textarea>
+                <a href="#" class="searchBuddyBtn" data-role="button" data-icon="search" data-iconpos="notext"></a>
+			</div>         
+            <div class="searchResultGroupsDiv">
+                <ul class="searchResultBuddies" data-role="listview">
+                    <!-- Example 
+                                               -->                       
+                    <li class="searchResultGroup"> 
+                        <a href="#Groups" class="searchResultGroup_href" id=0>
+                            <label class="searchResultGroupLabel">Simsons</label>
+                            <img   class="searchResultGroupImg" src="image/Simsons.jpg" />
+                        </a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+	</section>	
+    
+    <section id="CreateGroup" data-role="page" data-add-back-btn="true">
+		<header data-role="header" class="create-group-header">
+			<label class="edit-profile-label">Create New Group</label>
+			<img   class="edit-profile-image" src="image/SearchGroup.png" />
+		</header>
+        <form id="CreateGroupForm" class="content" data-role="content" action="#Groups">
+			<div>
+				<span class="colorRed">*</span>
+				<label class="createGroupNameLable">Group Name</label>
+				<input class="createGroupNameInput" type="text" required/>    
+			</div>
+			<div>
+				<span class="colorRed">*</span>
+				<label class="createGroupPicLable">Group Image:</label>
+				<input class="createGroupPicInput" id="file" type="file"/>
+			</div>
+
+			<div>
+				<span class="colorRed"><br><br>*Required</span>
+			</div>
+				
+			<div class="createGroupDiv">
+   				<a href="#Groups" class="btnCreateGroup" data-inline="true" data-role="button">Create Group</a>
+			<!--	<button type="submit" class="btnCreateGroup" data-inline="true">Create Group</button> -->
+			</div>
+		</form>		
+	</section>	
+    
 </body>
 </html>
