@@ -5,9 +5,10 @@ function dummy(){}
 
 $(document).ready(function(){
 
-	// Skip the login user in case there's a user that was previusly loaded
-//	if (getLogedUser() != null)
-//		document.location.href = "#Buddies";
+	$("#Login").bind("pagebeforeshow", function (e) {
+		// Skip the login user in case there's a user that was previously loaded
+		bl.getLogedInUser(skipLogIn, dummy);
+	});
 
 	$("#Buddies").bind("pagebeforeshow", function (e) {
 	    updateTab({ "id": "BuddiesTab" });
@@ -156,7 +157,6 @@ function addGroupMessageToChatRoom(message)
 {
 	if (message.message == "")
 		return;
-	// TBD - change to group view (add picture/name of sender)
     var e = $("<li class='message'><label class='messages-text'>" + 
             message.name + ": \t" + message.message + 
             "</label><label class='messages-time'>" + 
@@ -178,12 +178,6 @@ function addBuddyToBuddiesList(buddy)
 			"'/></a></li>");
 				
     $("#Buddies .buddyList").append(e).listview('refresh');
-}
-
-function getGroupRow(group)
-{
-
-    return e;
 }
 
 function addGroupToGroupsList(group)
@@ -412,4 +406,10 @@ function registerFailed()
 function updateProfileFailed()
 {
 	window.alert('Edit profile failed, Please recheck your input');
+}
+
+function skipLogIn()
+{
+    updateTab({ "id": "BuddiesTab" });
+	document.location.href = "#Buddies";
 }
