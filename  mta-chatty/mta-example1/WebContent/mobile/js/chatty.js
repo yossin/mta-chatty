@@ -70,10 +70,8 @@ $(document).ready(function(){
 		userLoginData.mail = $("#LoginForm .loginUserMailInput").val();
 		userLoginData.pass = $("#LoginForm .loginUserPassInput").val();
 
-        // send to bl..
+		bl.login(userLoginData, login_register_updateProfile_Success, loginFailed);
 		return true;
-
-//			window.alert('Login failed, Please recheck your input');
 	});
     
 	// Bind the register form.
@@ -87,11 +85,9 @@ $(document).ready(function(){
 		userRegisterData.mail = $("#RegisterForm .registerUserMailInput").val();
 		userRegisterData.pass = $("#RegisterForm .registerUserPassInput").val();
 		userRegisterData.pic  = $("#RegisterForm .registerUserPicInput" ).val();
-        updateTab({ "id": "BuddiesTab" });
 
+		bl.registerlogin(userRegisterData, login_register_updateProfile_Success, registerFailed);
         return true;
-        // send to bl..
-//			window.alert('Register failed, Please recheck your input');
 	});
 
     // Bind the login form.
@@ -105,10 +101,8 @@ $(document).ready(function(){
 		userEditProfileData.pass = $("#EditProfileForm .editProfileUserPassInput").val();
 		userEditProfileData.pic  = $("#EditProfileForm .editProfileUserPicInput" ).val();
         
-        // send to bl..
-              
-		return true;
-//			window.alert('Login failed, Please recheck your input');
+		bl.updateProfile(userEditProfileData, login_register_updateProfile_Success, updateProfileFailed);
+        return true;
 	});
 
     $('.editProfileBtn').click(function(){
@@ -398,4 +392,24 @@ function setSearchGroupRes(results)
 function messageCantAddGroup()
 {
 	window.alert("Chatty can not add your new group");
+}
+
+function login_register_updateProfile_Success()
+{
+	document.location.href = "#Buddies";
+}
+
+function loginFailed()
+{
+	window.alert('Login failed, Please recheck your input');
+}
+
+function registerFailed()
+{
+	window.alert('Register failed, Please recheck your input');
+}
+
+function updateProfileFailed()
+{
+	window.alert('Edit profile failed, Please recheck your input');
 }
