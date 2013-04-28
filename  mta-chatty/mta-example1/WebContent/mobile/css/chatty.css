@@ -1,10 +1,6 @@
 @CHARSET "windows-1255";
 
   
-
-
-
-
 [data-role="page"] {
     height:100% !important;
 }
@@ -20,10 +16,9 @@
 [data-role="content"] {
     height:calc(100% - 72px) !important;
 }
-.chatRoom, .buddiesContent, .groupsContent, .searchBuddyContent  {
+.chatRoom, .buddiesContent, .groupsContent  {
     height:calc(100% - 130px) !important;
 }
-
 
 .messages {
     position:absolute;
@@ -41,9 +36,6 @@
 	background: url(../image/Groups.png) 50% 50% no-repeat;
 	background-size:22px 22px;
 }
-
-
-
 
 
 .room-image, .login-image, .register-image, .edit-profile-image {
@@ -65,7 +57,7 @@
 	bottom:0; right:0;
 }
 
-.btnRegisterSubmit , .loginOrRegistrer{
+.btnRegisterSubmit , .loginOrRegistrerDiv, .RegistrerDiv, .btnCreateGroup {
 	float: right;
 }
 
@@ -85,12 +77,11 @@
 }
 
 
-
 .ui-btn-active .ui-btn-inner {
     color: rgb(240,000,000);
  }
 
-.row-image {
+.row-image, .searchResultBuddyImg, .searchResultGroupImg {
 	width:  40px;   
 	height: 54px;
 	margin:auto;
@@ -98,7 +89,7 @@
 	padding-left:12px;
 }
 
-.row-label { 
+.row-label, .searchResultBuddyLabel, .searchResultGroupLabel { 
 	padding-left:64px;
 	padding-bottom:28px;
 	position:absolute;
@@ -128,12 +119,17 @@
 	height: 38px !important;
 }
 
-.buddy, .group, .searchResultBuddyOrGroup {
+.buddy, .group, .searchResultBuddy, .searchResultGroup {
 	height: 66px;
 }
 
+.searchResultBuddiesDiv, .searchResultGroupsDiv {
+    position:absolute;
+    top:125px;
+    width: 100%;
+}
 
-.logoutBtn, .editProfileBtn, .addBuddyBtn, .addGroupBtn {
+.logoutBtn, .editProfileBtn, .addBuddyBtn, .createGroupBtn {
 	background-size:22px 22px;
 }
 
@@ -141,23 +137,11 @@
     float:left;
 }
 
-.searchBuddyBtn, .addGroupBtn, .searchGroupBtn {
+.searchBuddyBtn, .createGroupBtn, .searchGroupBtn {
 	float:right;
 }
 
-.searchResultBuddyOrGroupLabel {
-    padding-left:64px;
-	padding-bottom:28px;
-	position:absolute;
-	bottom:0; left:0;
-}
-.searchResultBuddyOrGroupImg {
-	width:  40px;   
-	height: 54px;
-	margin:auto;
-	padding-top: 5px;
-	padding-left:12px;
-}
+ 
 /*
 [data-role="content"]  {
     overflow-x: initial;
@@ -165,8 +149,3 @@
     border-style:solid !important;
     border-color:red !important;
 }*/
-/*
-[data-role="page"] {
-	
-}
-*/

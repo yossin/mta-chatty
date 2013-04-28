@@ -1,6 +1,8 @@
 var ui={};
 ui.chatroom={buddyRoom:true, id:"name@mail.com"};
 
+function dummy(){}
+
 $(document).ready(function(){
 
 	// Skip the login user in case there's a user that was previusly loaded
@@ -9,6 +11,10 @@ $(document).ready(function(){
 
 	$("#Buddies").bind("pagebeforeshow", function (e) {
 	    updateTab({ "id": "BuddiesTab" });
+	});
+
+  	$("#Groups").bind("pagebeforeshow", function (e) {
+	    updateTab({ "id": "GroupsTab" });
 	});
 
 	
@@ -31,8 +37,6 @@ $(document).ready(function(){
 	    $.mobile.changePage.defaults.transition = 'slide';
 	});
 
-	
-	function dummy(){}
     $(function() {
         $("#ChatRoom .sendMessage").click(function(){
             var message = new Object();
@@ -65,19 +69,16 @@ $(document).ready(function(){
 		var userLoginData = new Object();
 		userLoginData.mail = $("#LoginForm .loginUserMailInput").val();
 		userLoginData.pass = $("#LoginForm .loginUserPassInput").val();
-		
 
-		
-//		if (loginUser(userLoginData)){
-			return true;
-//            document.location.href = "#Buddies";
-//        }
-//		else
+        // send to bl..
+		return true;
+
 //			window.alert('Login failed, Please recheck your input');
 	});
     
 	// Bind the register form.
-	$("#RegisterForm").submit(function( event ){
+//	$("#RegisterForm").submit(function( event ){
+	$("#RegisterForm .btnRegisterToChatty").click(function(){
 		// Prevent the default submit.
 		event.preventDefault();
 		
@@ -87,34 +88,64 @@ $(document).ready(function(){
 		userRegisterData.pass = $("#RegisterForm .registerUserPassInput").val();
 		userRegisterData.pic  = $("#RegisterForm .registerUserPicInput" ).val();
         updateTab({ "id": "BuddiesTab" });
-		//if (!registerNewUser(userRegisterData)){
-        	return true;
-//            document.location.href = "#Buddies";
-//		}
-		//else if (loginUser(userLoginData))
+
+        return true;
+        // send to bl..
 //			window.alert('Register failed, Please recheck your input');
 	});
 
-    $('.editProfileBtn').click(function(){
-
-        // get user profile details
-        //        userEdi	tProfileData = getUserProfile();
+    // Bind the login form.
+//	$("#EditProfileForm").submit(function( event ){
+	$("#EditProfileForm .btnEditProfileSubmit").click(function(){
+		// Prevent the default submit.
+//		event.preventDefault();
+		
+        var userEditProfileData = new Object();
+		userEditProfileData.name = $("#EditProfileForm .editProfileUserNameInput").val();
+		userEditProfileData.pass = $("#EditProfileForm .editProfileUserPassInput").val();
+		userEditProfileData.pic  = $("#EditProfileForm .editProfileUserPicInput" ).val();
         
-            var userEditProfileData  = new Object();
-            userEditProfileData.name = "user2";
-            userEditProfileData.mail = "user2@user.com";
-            userEditProfileData.pass = "user2";
-            userEditProfileData.pic  = "user2.tif";
-            
-            $("#EditProfileForm .editProfileUserNameInput").val(userEditProfileData.name);
-            $("#EditProfileForm .editProfileUserMailInput").val(userEditProfileData.mail);
-            $("#EditProfileForm .editProfileUserPassInput").val(userEditProfileData.pass);
-            $("#EditProfileForm .editProfileUserPicInput ").val(userEditProfileData.pic );
+        // send to bl..
+              
+		return true;
+//			window.alert('Login failed, Please recheck your input');
+	});
+
+    $('.editProfileBtn').click(function(){
+        bl.getBuddyDetails(buddyId, setEditProfileForm, printError);
     });
 
+    $('.searchBuddyBtn').click(function(){
+   		searchBuddyText = $("#searchBuddyText").val();
+        bl.getBuddiesByNameOrID(searchBuddyText, setSearchBuddyRes, printError);
+    });
+
+    $('.searchGroupBtn').click(function(){
+   		searchGroupText = $("#searchBuddyText").val();
+        bl.getGroupByName(searchGroupText, setSearchGroupRes, printError);
+    });
     
+    // Bind the login form.
+//	$("#CreateGroupForm").submit(function( event ){
+	$("#CreateGroupForm .btnCreateGroup").click(function(){
+        var newGroup = new Object();
+       	newGroup.name = $("#CreateGroupForm .createGroupNameInput").val();
+        newGroup.pic  = $("#CreateGroupForm .createGroupPicInput" ).val();
+        bl.addNewGroup(newGroup, addCreatedGroupToUser, messageCantAddGroup);
+    });
+
+
+	$("#ChatRoom .btnLeaveGroup").click(function(){
+        bl.leaveGroup(ui.chatroom.id, dummy, printError);
+    });
+    
+btnLeaveGroup    
 });
 
+function addCreatedGroupToUser(groupID)
+{
+    bl.addGroupToUser(groupID, dummy, printError);
+}
 
 function addBuddyMessageToChatRoom(message)
 {
@@ -158,8 +189,6 @@ function addBuddyToBuddiesList(buddy)
 
 function addGroupToGroupsList(group)
 {
-	if (group.email == "")
-		return;
     var e = $("<li class='group'><a href='#ChatRoom' id=" + 
             group.group_id + 
 			"><label class='row-label'>" +
@@ -201,12 +230,12 @@ function reBindChatRoomClick()
 	    });
 	});
 }
+
 function setUserBuddies(results)
 {
     $("#Buddies .buddy").remove();
     iterateResults(results, addBuddyToBuddiesList);
     reBindChatRoomClick();
-
 }
 
 function setUserGroups(results)
@@ -246,3 +275,84 @@ function updateTab(args)
 		bl.getGroupList(setUserGroups, printError);
 }
 
+function setEditProfileForm(result)
+{
+	if (result.email == "")
+		return;
+    $("#EditProfileForm .editProfileUserNameInput").val(result.name);
+    $("#EditProfileForm .editProfileUserMailInput").val(result.email);
+    $("#EditProfileForm .editProfileUserPassInput").val(result.pass);
+    $("#EditProfileForm .editProfileUserPicInput ").val(result.picture);
+}
+
+function addBuddyToSearchResultList(buddy)
+{
+	if (buddy.email == "")
+		return;
+
+    var e = $("<li class='searchResultBuddy'><a href='#Buddies' class='searchResultBuddy_href' id=" + 
+            buddy.email + 
+			"><label class='searchResultBuddyLabel'>" +
+            buddy.name + ', ' + buddy.email +
+			"</label><img class='searchResultBuddyImg' src='" +
+			buddy.picture +
+			"'/></a></li>");
+				
+    $("#SearchBuddy .searchResultBuddies").append(e).listview('refresh');
+}
+
+function reBindBuddySearchResultClick()
+{
+	$(".searchResultBuddy_href").each(function () {
+	    var anchor = $(this);
+		anchor.bind("click", function () {
+			id = $(this).attr("id");
+            bl.addBuddyToUser(id, dummy, printError);
+			return true;
+	    });
+	});
+}
+
+function setSearchBuddyRes(results)
+{
+    $("#SearchBuddy .searchResultBuddy").remove();
+    iterateResults(results, addBuddyToSearchResultList);
+    reBindBuddySearchResultClick();
+}
+
+function addGroupToSearchResultList(group)
+{
+    var e = $("<li class='searchResultGroup'><a href='#Buddies' class='searchResultGroup_href' id=" + 
+            group.group_id + 
+			"><label class='searchResultGroupLabel'>" +
+            group.name +
+			"</label><img class='searchResultGroupImg' src='" +
+			group.picture +
+			"'/></a></li>");
+				
+    $("#SearchGroup .searchResultGroups").append(e).listview('refresh');
+}
+
+function reBindGroupSearchResultClick()
+{
+	$(".searchResultGroup_href").each(function () {
+	    var anchor = $(this);
+		anchor.bind("click", function () {
+			id = $(this).attr("id");
+            bl.addGroupToUser(id, dummy, printError);
+			return true;
+	    });
+	});
+}
+
+function setSearchGroupRes(results)
+{
+    $("#SearchGroup .searchResultGroup").remove();
+    iterateResults(results, addGroupToSearchResultList);
+    reBindGroupSearchResultClick();
+}
+
+function messageCantAddGroup()
+{
+	window.alert("Chatty can not add your new group");
+}
