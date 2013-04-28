@@ -273,16 +273,16 @@ function setRoomHeader(result)
 	if (result.email == "")
 		return;
 	console.log("RoomHeader of " + result.email + " = Name: "+ result.name + ", buddyImg: "+ result.picture);
-	$("#ChatRoom .room-label").text(result.name);
+	$("#ChatRoom .header-label").text(result.name);
 	document.title = "Chat with " +result.name;
-	$("#ChatRoom .room-image").attr("src", result.picture);
+	$("#ChatRoom .chatroom-image").attr("src", result.picture);
 }
 
 function clearChatRoom()
 {
-	$("#ChatRoom .room-label").text("");
+	$("#ChatRoom .header-label").text("");
 	document.title = "";
-	$("#ChatRoom .room-image").attr("src", "");
+	$("#ChatRoom .chatroom-image").attr("src", "");
     $("#ChatRoom .message").remove();
 }
 

@@ -39,7 +39,7 @@
 }
 
 
-.room-image, .header-image {
+.header-image, .chatroom-image {
 	float:right;
 	margin-top: 4px;
 	width:  24px;   
@@ -47,7 +47,7 @@
 	padding-right:9px;
 }
 
-.header-image {
+.chatroom-image {
 	width:  32px;
 }
 
