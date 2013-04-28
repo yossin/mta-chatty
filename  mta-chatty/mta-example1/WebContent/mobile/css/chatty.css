@@ -58,7 +58,7 @@
 	bottom:0; right:0;
 }
 
-.btnRegisterSubmit , .loginOrRegistrerDiv, .RegistrerDiv, .btnCreateGroup, .leaveGroupBtn {
+.btnRegisterSubmit , .loginOrRegistrerDiv, .RegistrerDiv, .btnCreateGroup, .leaveGroupBtn, .btnEditProfileSubmit {
 	float: right;
 }
 
