@@ -1,53 +1,41 @@
 // TODO: make alerts nicer
 
-var dal={};
-function initializeDB(){
+// generic functions
+function initializeDB(errorHandler){
+	if (typeof(db)!='undefined') return;
 	try {
 		if (!window.openDatabase) {
-			alert('not supported');
+			onError({message:'DB not supported'});
 		} else {
 			// setting for our database
 			var shortName = 'chattydb';
 			var version = '1.0';
 			var displayName = 'chatty db';
 			var maxSize = 65536; // in bytes
-			var db = openDatabase(shortName, version, displayName, maxSize);
+			db = openDatabase(shortName, version, displayName, maxSize);
 
-			Object.defineProperty(dal, 'db', {'value':db,'writable':false});
-			
-			// You should have a database instance in db.
+			//Object.defineProperty(this, 'db', {'value':db,'writable':false});
 		}
 	} catch (e) {
 		// Error handling code goes here.
 		if (e == 2) {
 			// Version number mismatch.
-			alert("Invalid database version.");
+			errorHandler({message:'Invalid database version'});
 		} else {
-			alert("Unknown error " + e + ".");
+			errorHandler({message:'Unknown error '+e+'.'});
 		}
-		throw e;
+		return false;
 	}
-	
+	return true;
 }
 
-
-
-
-
-
-function createTables(insertTestData){
-	// Create table
-	var successCallback=nullDataHandler;
-	if (typeof insertTestData != 'undefined' && insertTestData){
-		successCallback=createTestData;
-	}
-	var statements=[];
+function createTables(onSuccess, onError){
 	ajaxCall('db/drop.1.sql', function(data){
-		statements = statements.concat(data.split(";"));
+		var statements = data.split(";");
 		
 		ajaxCall('db/create.1.sql', function(data){
 			statements = statements.concat(data.split(";"));
-			dal.db.transaction(function(transaction) {
+			db.transaction(function(transaction) {
 				statements.forEach( function(sql) { 
 					if (sql.trim()){
 						transaction.executeSql(sql,[],
@@ -62,20 +50,15 @@ function createTables(insertTestData){
 				});
 				
 
-			}, showError, successCallback);
+			}, onError, onSuccess());
 			
 		});
 		
 	});
-
 }
 
-initializeDB();
-createTables(true);
-
-
-dal.genericSqlStatement=function (sql, params, onSuccess, onError){
-	this.db.transaction(function(transaction) {
+function genericSqlStatement(sql, params, onSuccess, onError){
+	db.transaction(function(transaction) {
 			transaction.executeSql(sql,params,
 			function (tx,result){
 				onSuccess(result);
@@ -85,63 +68,87 @@ dal.genericSqlStatement=function (sql, params, onSuccess, onError){
 				onError(error);
 			});
 
-	}, showError, nullDataHandler);	
-};
+	}, onError, nullDataHandler);	
+}
+
+function DAL(){
+	
+	this.getLoggedInUserId=function(){
+		return localStorage.getItem('loggedInUserId');
+	};
+
+	this.setLoggedInUserId=function(userId){
+		return localStorage.setItem('loggedInUserId', userId);
+	};
+
+	this.removeLoggedInUserId=function(){
+		localStorage.removeItem('loggedInUserId');
+	};
+
+	//----------- BUDDIES -------------
+	
+	this.selectBuddyList=function (userId, onSuccess, onError){
+		var sql="select u.email, u.name, u.picture from 'user' as u inner join buddy_list as bl on u.email==bl.buddy_id where bl.owner_email==?";
+		genericSqlStatement(sql, [userId], onSuccess, onError);
+	};
+
+	this.selectBuddy=function (buddyId, onSuccess, onError){
+		var sql="select email, name, picture from 'user' where email==?";
+		genericSqlStatement(sql, [buddyId], function(results){
+			getFirstResult(results, onSuccess);
+		}, onError);
+	};
+	
+	
+
+	//----------- GROUPS -------------
+
+	this.selectGroupList=function (userId, onSuccess, onError){
+		//id, name, picture, description
+		var sql="select g.group_id, g.name, g.picture, g.description from 'group' as g inner join group_membership as gm on gm.group_id==g.group_id where gm.member_email==?";
+		genericSqlStatement(sql, [userId], onSuccess, onError);
+	};
+	
+	this.selectGroup=function (groupId, onSuccess, onError){
+		var sql="select name, picture, description from 'group' where group_id==?";
+		genericSqlStatement(sql, [groupId], function(results){
+			getFirstResult(results, onSuccess);
+		}, onError);
+	};
+
+	
+	//----------- MESSAGES -------------
+
+	this.selectGroupMessages=function (groupId, onSuccess, onError){
+		// sender-id, sender-name, sender-pic, send-ts, message
+		var sql="select u.email, u.name, u.picture, gm.send_date, gm.message from 'user' as u inner join group_message as gm on gm.sender_id==u.email where gm.receiver_id==?";
+		genericSqlStatement(sql, [groupId], onSuccess, onError);
+	};
+
+	this.selectBuddyMessages=function (userId, buddyId, onSuccess, onError){
+		// sender-id, sender-name, sender-pic, send-ts, message
+		var sql="select bm.send_date, bm.sender_id, bm.receiver_id, bm.message from buddy_message as bm where ((bm.sender_id==? and bm.receiver_id==?) or (bm.sender_id==? and bm.receiver_id==?)) order by bm.send_date";
+		genericSqlStatement(sql, [userId, buddyId, buddyId, userId], onSuccess, onError);
+	};
+
+	this.insertBuddyMessage=function (sender_id, receiver_id, message, onSuccess, onError){
+		var sql="insert into buddy_message (sender_id, receiver_id, message) values(?,?,?)";
+		genericSqlStatement(sql, [sender_id, receiver_id, message], onSuccess, onError);
+	};
+
+	this.insertGroupMessage=function (sender_id, receiver_id, message, onSuccess, onError){
+		var sql="insert into group_message (sender_id, receiver_id, message) values(?,?,?)";
+		genericSqlStatement(sql, [sender_id, receiver_id, message], onSuccess, onError);
+	};
+
+
+}
 
 
 
 
 
-dal.selectBuddyList=function (userId, onSuccess, onError){
-	var sql="select u.email, u.name, u.picture from user as u inner join buddy_list as bl on u.email==bl.buddy_id where bl.owner_email=?";
-	this.genericSqlStatement(sql, [userId], onSuccess, onError);
-};
-
-dal.selectBuddy=function (buddyId, onSuccess, onError){
-	var sql="select email, name, picture from user where email=?";
-	this.genericSqlStatement(sql, [buddyId], function(results){
-		getFirstResult(results, onSuccess);
-	}, onError);
-};
 
 
-dal.selectGroupList=function (userId, onSuccess, onError){
-	//id, name, picture, description
-	var sql="select g.group_id, g.name, g.picture, g.description from 'group' as g inner join group_membership as gm on gm.group_id==g.group_id where gm.member_email==?";
-	this.genericSqlStatement(sql, [userId], onSuccess, onError);
-};
 
-dal.selectGroupMessages=function (groupId, onSuccess, onError){
-	// sender-id, sender-name, sender-pic, send-ts, message
-	var sql="select u.email, u.name, u.picture, gm.send_date, gm.message from user as u inner join group_message as gm on gm.sender_id==u.email where gm.receiver_id==?";
-	this.genericSqlStatement(sql, [groupId], onSuccess, onError);
-};
-
-dal.selectBuddyMessages=function (userId, buddyId, onSuccess, onError){
-	// sender-id, sender-name, sender-pic, send-ts, message
-	var sql="select bm.send_date, bm.sender_id, bm.receiver_id, bm.message from buddy_message as bm where ((bm.sender_id==? and bm.receiver_id==?) or (bm.sender_id==? and bm.receiver_id==?)) order by bm.send_date";
-	this.genericSqlStatement(sql, [userId, buddyId, buddyId, userId], onSuccess, onError);
-};
-
-dal.insertBuddyMessage=function (sender_id, receiver_id, message, onSuccess, onError){
-	var sql="insert into buddy_message (sender_id, receiver_id, message) values(?,?,?)";
-	this.genericSqlStatement(sql, [sender_id, receiver_id, message], onSuccess, onError);
-};
-
-dal.insertGroupMessage=function (sender_id, receiver_id, message, onSuccess, onError){
-	var sql="insert into group_message (sender_id, receiver_id, message) values(?,?,?)";
-	this.genericSqlStatement(sql, [sender_id, receiver_id, message], onSuccess, onError);
-};
-
-dal.getLoggedInUserId=function(){
-	return localStorage.getItem('loggedInUserId');
-};
-
-dal.setLoggedInUserId=function(userId){
-	return localStorage.setItem('loggedInUserId', userId);
-};
-
-dal.removeLoggedInUserId=function(){
-	localStorage.removeItem('loggedInUserId');
-};
 

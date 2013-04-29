@@ -36,8 +36,8 @@ function showError(transaction, error) {
 	return true;
 }
 
-function nullDataHandler(transaction, results) {
-	log.debug("nullDataHandler=" + this);
+function nullDataHandler() {
+	//log.debug("nullDataHandler=" + this);
 }
 
 
