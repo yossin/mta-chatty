@@ -1,13 +1,42 @@
+var bl=new BL();
 var ui={};
 ui.chatroom={buddyRoom:true, id:"name@mail.com"};
 
+function init(onSuccess, onError){
+	if (initializeDB(onError)){
+		createTables(function(){
+			createTestData(onSuccess, onError);
+		}, onError);
+	}
+}
+
+function firstPageNavigation(){
+	bl.checkUserLoggedIn(
+		function(){
+			//log.debug('user should be redirected to buddies page');
+			$.mobile.changePage("#Buddies");
+		},
+		function(){
+			//log.debug('user should be redirected to login page');
+			$.mobile.changePage("#Login");
+		});
+}
+
+
+
 function dummy(){}
 
+function displayError(error){
+	log.error(e);
+	alert('error has occured:'+e);
+}
+
 $(document).ready(function(){
+	init(firstPageNavigation, displayError);
 
 	$("#Login").bind("pagebeforeshow", function (e) {
 		// Skip the login user in case there's a user that was previously loaded
-		bl.checkUserLoggedIn(skipLogIn, dummy);
+		//bl.checkUserLoggedIn(skipLogIn, dummy);
 	});
 
 	$("#Buddies").bind("pagebeforeshow", function (e) {
@@ -45,15 +74,17 @@ $(document).ready(function(){
             message.message = textarea.val();
             textarea.val('');
             message.send_date = (new Date()).toLocaleString();
+            // TODO: we might want to retrieve messages from server 2, how do we keep correct order?
             if (ui.chatroom.buddyRoom)
             {
             	addBuddyMessageToChatRoom(message);
-            	bl.sendBuddyMessage(ui.chatroom.id, message, dummy, printError);
+            	bl.sendBuddyMessage(ui.chatroom.id, message.message, dummy, printError);
             }
             else
             {
+            	// TODO: sender identity is missing
             	addGroupMessageToChatRoom(message);
-            	bl.sendGroupMessage(ui.chatroom.id, message, dummy, printError);
+            	bl.sendGroupMessage(ui.chatroom.id, message.message, dummy, printError);
             }
             
             // Send message to server...
@@ -278,6 +309,15 @@ function setRoomHeader(result)
 	$("#ChatRoom .chatroom-image").attr("src", result.picture);
 }
 
+function setGroupRoomHeader(result)
+{
+	console.log("RoomHeader of " + result.group_id + " = Name: "+ result.name + ", groupImg: "+ result.picture);
+	$("#ChatRoom .header-label").text(result.name);
+	document.title = "Chat with " +result.name;
+	$("#ChatRoom .chatroom-image").attr("src", result.picture);
+}
+
+
 function clearChatRoom()
 {
 	$("#ChatRoom .header-label").text("");
@@ -294,7 +334,7 @@ function activateBuddyRoom(buddyId)
 
 function activateGroupRoom(groupId)
 {
-	bl.getGroupDetails(groupId, setRoomHeader, printError);
+	bl.getGroupDetails(groupId, setGroupRoomHeader, printError);
 	bl.getGroupMessages(groupId, setGroupRoomMessages, printError);
 }
 
@@ -390,7 +430,8 @@ function messageCantAddGroup()
 
 function login_register_updateProfile_Success()
 {
-	document.location.href = "#Buddies";
+	$.mobile.changePage("#Buddies");
+	//document.location.href = "#Buddies";
 }
 
 function loginFailed()
