@@ -1,2 +1,82 @@
 @CHARSET "windows-1255";
 
+
+
+.buddiesContent{
+	float:left;
+	width: 50% !important;
+
+}
+
+.groupsContent{
+	float:right;
+	width: 50% !important;
+}
+
+.buddiesAndGroups {
+    height: 50% !important;
+}
+
+.dashboardContent{
+    height:calc(100% - 72px) !important;
+}
+
+
+.logoutBtn, .editProfileBtn, .addBuddyBtn, .createGroupBtn, .leaveGroupBtn {
+	background-size:22px 22px;
+}
+
+.logoutBtn, .editProfileBtn{
+    float:left;
+}
+
+.searchBuddyBtn, .createGroupBtn, .searchGroupBtn, .leaveGroupBtn {
+	float:right;
+}
+
+.dashboardFooterDiv {
+	padding: 0px;
+}
+
+.dashboardContentDiv {
+	padding: 5px;
+}
+
+.dashboardContentUL {
+	-webkit-margin-before: 0em;
+	-webkit-margin-after: 0em;
+	-webkit-padding-start: 0px;
+}
+
+.dashboardContent {
+	padding: 0px;
+	position:absolute;
+	top:0; left:0;
+	width: 100%;   
+}
+
+#dashboardFooter {
+	padding: 0px;
+	position:absolute;
+	bottom:0; left:0;
+	width:  100%;   
+}
+
+.divider-label {
+	height: 54px;
+}
+
+.row-image {
+	width:  40px;   
+	height: 54px;
+	margin:auto;
+	padding-top: 5px;
+	padding-left:12px;
+}
+
+.row-label { 
+	padding-left:64px;
+	padding-bottom:28px;
+	position:absolute;
+	bottom:0; left:0;
+}
