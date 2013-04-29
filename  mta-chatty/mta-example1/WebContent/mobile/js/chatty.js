@@ -7,7 +7,7 @@ $(document).ready(function(){
 
 	$("#Login").bind("pagebeforeshow", function (e) {
 		// Skip the login user in case there's a user that was previously loaded
-		bl.getLogedInUser(skipLogIn, dummy);
+		bl.checkUserLoggedIn(skipLogIn, dummy);
 	});
 
 	$("#Buddies").bind("pagebeforeshow", function (e) {
@@ -71,7 +71,7 @@ $(document).ready(function(){
 		userLoginData.mail = $("#LoginForm .loginUserMailInput").val();
 		userLoginData.pass = $("#LoginForm .loginUserPassInput").val();
 
-		bl.login(userLoginData, login_register_updateProfile_Success, loginFailed);
+		bl.loginUser(userLoginData.mail, userLoginData.pass, login_register_updateProfile_Success, loginFailed);
 		return true;
 	});
     
@@ -87,7 +87,7 @@ $(document).ready(function(){
 		userRegisterData.pass = $("#RegisterForm .registerUserPassInput").val();
 		userRegisterData.pic  = $("#RegisterForm .registerUserPicInput" ).val();
 
-		bl.registerlogin(userRegisterData, login_register_updateProfile_Success, registerFailed);
+		bl.registerUser(userRegisterData, login_register_updateProfile_Success, registerFailed);
         return true;
 	});
 
@@ -102,7 +102,7 @@ $(document).ready(function(){
 		userEditProfileData.pass = $("#EditProfileForm .editProfileUserPassInput").val();
 		userEditProfileData.pic  = $("#EditProfileForm .editProfileUserPicInput" ).val();
         
-		bl.updateProfile(userEditProfileData, login_register_updateProfile_Success, updateProfileFailed);
+		bl.updateUserProfile(userEditProfileData, login_register_updateProfile_Success, updateProfileFailed);
         return true;
 	});
 
@@ -117,7 +117,7 @@ $(document).ready(function(){
 
     $('.searchGroupBtn').click(function(){
    		searchGroupText = $("#searchBuddyText").val();
-        bl.getGroupByName(searchGroupText, setSearchGroupRes, printError);
+        bl.getGroupsByName(searchGroupText, setSearchGroupRes, printError);
     });
     
     // Bind the login form.
@@ -126,7 +126,7 @@ $(document).ready(function(){
         var newGroup = new Object();
        	newGroup.name = $("#CreateGroupForm .createGroupNameInput").val();
         newGroup.pic  = $("#CreateGroupForm .createGroupPicInput" ).val();
-        bl.addNewGroup(newGroup, addCreatedGroupToUser, messageCantAddGroup);
+        bl.creaetGroup(newGroup, addCreatedGroupToUser, messageCantAddGroup);
     });
 	
 	$("#LeaveGroup").bind("pagebeforeshow", function (e) {
@@ -138,7 +138,7 @@ $(document).ready(function(){
 
 function addCreatedGroupToUser(groupID)
 {
-    bl.addGroupToUser(groupID, dummy, printError);
+    bl.joinGroup(groupID, dummy, printError);
 }
 
 function addBuddyMessageToChatRoom(message)
@@ -338,7 +338,7 @@ function reBindBuddySearchResultClick()
 	    var anchor = $(this);
 		anchor.bind("click", function () {
 			id = $(this).attr("id");
-            bl.addBuddyToUser(id, dummy, printError);
+            bl.addBuddyToList(id, dummy, printError);
 			return true;
 	    });
 	});
@@ -370,7 +370,7 @@ function reBindGroupSearchResultClick()
 	    var anchor = $(this);
 		anchor.bind("click", function () {
 			id = $(this).attr("id");
-            bl.addGroupToUser(id, dummy, printError);
+            bl.addGroupToList(id, dummy, printError);
 			return true;
 	    });
 	});
