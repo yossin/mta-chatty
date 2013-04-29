@@ -123,8 +123,8 @@ function createGroupMessagesTestData(list){
 
 // dummy functions
 function dummyLoginUser(email, password, onSuccessLogin, onLoginError){
-	var sql="select u.email, u.name, u.picture from 'user' as u where u.email==?";
-	dal.genericSqlStatement(sql, [email], 
+	var sql="select u.email, u.name, u.picture from 'user' as u where u.email==? and u.password==?";
+	dal.genericSqlStatement(sql, [email, password], 
 			function(result){
 				if (result.rows.length==1){
 					onSuccessLogin(result.rows.item(0));

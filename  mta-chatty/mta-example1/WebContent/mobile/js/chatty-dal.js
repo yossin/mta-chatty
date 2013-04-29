@@ -132,3 +132,16 @@ dal.insertGroupMessage=function (sender_id, receiver_id, message, onSuccess, onE
 	var sql="insert into group_message (sender_id, receiver_id, message) values(?,?,?)";
 	this.genericSqlStatement(sql, [sender_id, receiver_id, message], onSuccess, onError);
 };
+
+dal.getLoggedInUserId=function(){
+	return localStorage.getItem('loggedInUserId');
+};
+
+dal.setLoggedInUserId=function(userId){
+	return localStorage.setItem('loggedInUserId', userId);
+};
+
+dal.removeLoggedInUserId=function(){
+	localStorage.removeItem('loggedInUserId');
+};
+

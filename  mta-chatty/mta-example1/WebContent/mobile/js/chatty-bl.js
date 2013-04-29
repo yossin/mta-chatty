@@ -8,13 +8,36 @@ bl.registerNewUser = function (user){
 	// validate and register user with server
 };
 
-bl.loginUser=function(user, password, onSuccess, onError){
-	// validate user with server
+
+bl.checkUserLoggedIn=function(onLoggedIn, onNoLoggedIn){
+	var userId = dal.getLoggedInUserId();
+	if (typeof(userId) == 'undefined'){
+		onNoLoggedIn();
+	} else {
+		dal.selectBuddy(userId, 
+			function(buddy){
+				bl.loggedInUser=buddy;
+				onLoggedIn(userId);
+			}, 
+			function(error){
+				dal.removeLoggedInUserId();
+				onNoLoggedIn(error);
+			});
+		
+	}
+};
+
+bl.loginUser=function(email, password, onSuccess, onError){
+	// TODO: validate user with server
+	dummyLoginUser(email, password, onSuccess, onError);
 	// save in local DB
 };
 
-bl.logoutUser=function(){
-	// delete from DB?
+
+bl.logoutUser=function(onSuccess){
+	// TODO: delete data from DB?
+	dal.removeLoggedInUserId();
+	onSuccess();
 };
 
 bl.getBuddyList=function(onSuccess, onError){
@@ -52,3 +75,39 @@ bl.getBuddyDetails=function(buddyId, onSuccess, onError){
 	dal.selectBuddy(buddyId, onSuccess, onError);
 };
 
+//TODO: implement
+bl.registerUser=function(todo_add_params, onSuccess, onError){
+	
+};
+
+bl.updateUserProfile=function(todo_add_params, onSuccess, onError){
+	
+};
+
+bl.getBuddiesByNameOrID=function(searchText, onSuccess, onError){
+
+};
+
+bl.getGroupsByName=function(searchText, onSuccess, onError){
+
+};
+
+bl.creaetGroup=function(groupName, onSuccess, onError){
+
+};
+
+bl.joinGroup=function(groupId, onSuccess, onError){
+
+};
+
+bl.leaveGroup=function(groupId, onSuccess, onError){
+
+};
+
+bl.getGroupDetails=function(groupId, onSuccess, onError){
+	//TODO:dal.selectGroup(buddyId, onSuccess, onError);
+};
+
+bl.addBuddyToList=function(buddyId, onSuccess, onError){
+
+};
