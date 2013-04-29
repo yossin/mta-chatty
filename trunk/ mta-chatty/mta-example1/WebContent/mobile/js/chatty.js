@@ -34,11 +34,6 @@ function displayError(error){
 $(document).ready(function(){
 	init(firstPageNavigation, displayError);
 
-	$("#Login").bind("pagebeforeshow", function (e) {
-		// Skip the login user in case there's a user that was previously loaded
-		//bl.checkUserLoggedIn(skipLogIn, dummy);
-	});
-
 	$("#Buddies").bind("pagebeforeshow", function (e) {
 	    updateTab({ "id": "BuddiesTab" });
 	});
@@ -55,8 +50,6 @@ $(document).ready(function(){
 	            transition: "none",
 	            changeHash: false
 	        });
-		//	var id = $(this).attr("id");
-		//    updateTab({ "id": id });
 		    return false;
 	    });
 	});
@@ -71,7 +64,8 @@ $(document).ready(function(){
         $("#ChatRoom .sendMessage").click(function(){
             var message = new Object();
             var textarea = $("#ChatRoom .textArea");
-            message.message = textarea.val();
+        	message.name = bl.loggedInUser.name;
+        	message.message = textarea.val();
             textarea.val('');
             message.send_date = (new Date()).toLocaleString();
             // TODO: we might want to retrieve messages from server 2, how do we keep correct order?
@@ -82,7 +76,6 @@ $(document).ready(function(){
             }
             else
             {
-            	// TODO: sender identity is missing
             	addGroupMessageToChatRoom(message);
             	bl.sendGroupMessage(ui.chatroom.id, message.message, dummy, printError);
             }
@@ -167,25 +160,11 @@ $(document).ready(function(){
    
 });
 
-function addCreatedGroupToUser(groupID)
-{
+function addCreatedGroupToUser(groupID){
     bl.joinGroup(groupID, dummy, printError);
 }
 
-function addBuddyMessageToChatRoom(message)
-{
-	if (message.message == "")
-		return;
-    var e = $("<li class='message'><label class='messages-text'>" + 
-            message.message + 
-            "</label><label class='messages-time'>" + 
-            message.send_date + 
-            "</label></li>");
-    $("#ChatRoom .messages").append(e).listview('refresh');
-}
-
-function addGroupMessageToChatRoom(message)
-{
+function addBuddyMessageToChatRoom(message){
 	if (message.message == "")
 		return;
     var e = $("<li class='message'><label class='messages-text'>" + 
@@ -196,8 +175,18 @@ function addGroupMessageToChatRoom(message)
     $("#ChatRoom .messages").append(e).listview('refresh');
 }
 
-function addBuddyToBuddiesList(buddy)
-{
+function addGroupMessageToChatRoom(message){
+	if (message.message == "")
+		return;
+    var e = $("<li class='message'><label class='messages-text'>" + 
+            message.name + ": \t" + message.message + 
+            "</label><label class='messages-time'>" + 
+            message.send_date + 
+            "</label></li>");
+    $("#ChatRoom .messages").append(e).listview('refresh');
+}
+
+function addBuddyToBuddiesList(buddy){
 	if (buddy.email == "")
 		return;
     var e = $("<li class='buddy'><a href='#ChatRoom' id=" + 
@@ -211,8 +200,7 @@ function addBuddyToBuddiesList(buddy)
     $("#Buddies .buddyList").append(e).listview('refresh');
 }
 
-function addGroupToGroupsList(group)
-{
+function addGroupToGroupsList(group){
     var e = $("<li class='group'><a href='#ChatRoom' id=" + 
             group.group_id + 
 			"><label class='row-label'>" +
@@ -223,8 +211,7 @@ function addGroupToGroupsList(group)
     $("#Groups .groupList").append(e).listview('refresh');
 }
 
-function addGroupToLeaveGroupsList(group)
-{
+function addGroupToLeaveGroupsList(group){
     var e = $("<li class='group'><a href='#Groups' class='hrefLeaveGroup' id=" + 
             group.group_id + 
 			"><label class='row-label'>" +
@@ -235,18 +222,15 @@ function addGroupToLeaveGroupsList(group)
     $("#LeaveGroup .groupList").append(e).listview('refresh');
 }
 
-function setBuddyRoomMessages(results)
-{
+function setBuddyRoomMessages(results){
     iterateResults(results,addBuddyMessageToChatRoom);
 }
 
-function setGroupRoomMessages(results)
-{
+function setGroupRoomMessages(results){
     iterateResults(results, addGroupMessageToChatRoom);
 }
 
-function reBindChatRoomClick()
-{
+function reBindChatRoomClick(){
 	$("a[href=#ChatRoom]").each(function () {
 	    var anchor = $(this);
 		anchor.bind("click", function () {
@@ -263,22 +247,19 @@ function reBindChatRoomClick()
 	});
 }
 
-function setUserBuddies(results)
-{
+function setUserBuddies(results){
     $("#Buddies .buddy").remove();
     iterateResults(results, addBuddyToBuddiesList);
     reBindChatRoomClick();
 }
 
-function setUserGroups(results)
-{
+function setUserGroups(results){
     $("#Groups .group").remove();
     iterateResults(results, addGroupToGroupsList);    
     reBindChatRoomClick();
 }
 
-function reBindLeaveGroupClick()
-{
+function reBindLeaveGroupClick(){
 	$("#LeaveGroup .hrefLeaveGroup").click(function(){
 		var id = $(this).attr("id");
 		jConfirm('Are you sure you want to leave?', 'Confirm leaving group', function(confirmed){
@@ -291,16 +272,14 @@ function reBindLeaveGroupClick()
     });
 }
 
-function setUserGroupsToLeave(results)
-{
+function setUserGroupsToLeave(results){
     $("#LeaveGroup .group").remove();
     iterateResults(results, addGroupToLeaveGroupsList);    
     reBindLeaveGroupClick();
 }
 
 
-function setRoomHeader(result)
-{
+function setRoomHeader(result){
 	if (result.email == "")
 		return;
 	console.log("RoomHeader of " + result.email + " = Name: "+ result.name + ", buddyImg: "+ result.picture);
@@ -309,8 +288,7 @@ function setRoomHeader(result)
 	$("#ChatRoom .chatroom-image").attr("src", result.picture);
 }
 
-function setGroupRoomHeader(result)
-{
+function setGroupRoomHeader(result){
 	console.log("RoomHeader of " + result.group_id + " = Name: "+ result.name + ", groupImg: "+ result.picture);
 	$("#ChatRoom .header-label").text(result.name);
 	document.title = "Chat with " +result.name;
@@ -318,36 +296,31 @@ function setGroupRoomHeader(result)
 }
 
 
-function clearChatRoom()
-{
+function clearChatRoom(){
 	$("#ChatRoom .header-label").text("");
 	document.title = "";
 	$("#ChatRoom .chatroom-image").attr("src", "");
     $("#ChatRoom .message").remove();
 }
 
-function activateBuddyRoom(buddyId)
-{
+function activateBuddyRoom(buddyId){
 	bl.getBuddyDetails(buddyId, setRoomHeader, printError);
 	bl.getBuddyMessages(buddyId, setBuddyRoomMessages, printError);
 }
 
-function activateGroupRoom(groupId)
-{
+function activateGroupRoom(groupId){
 	bl.getGroupDetails(groupId, setGroupRoomHeader, printError);
 	bl.getGroupMessages(groupId, setGroupRoomMessages, printError);
 }
 
-function updateTab(args)
-{
+function updateTab(args){
 	if (args.id == "BuddiesTab")
 		bl.getBuddyList(setUserBuddies, printError);
 	else
 		bl.getGroupList(setUserGroups, printError);
 }
 
-function setEditProfileForm(result)
-{
+function setEditProfileForm(result){
 	if (result.email == "")
 		return;
     $("#EditProfileForm .editProfileUserNameInput").val(result.name);
@@ -356,8 +329,7 @@ function setEditProfileForm(result)
     $("#EditProfileForm .editProfileUserPicInput ").val(result.picture);
 }
 
-function addBuddyToSearchResultList(buddy)
-{
+function addBuddyToSearchResultList(buddy){
 	if (buddy.email == "")
 		return;
 
@@ -372,8 +344,7 @@ function addBuddyToSearchResultList(buddy)
     $("#SearchBuddy .searchResultBuddies").append(e).listview('refresh');
 }
 
-function reBindBuddySearchResultClick()
-{
+function reBindBuddySearchResultClick(){
 	$(".searchResultBuddy_href").each(function () {
 	    var anchor = $(this);
 		anchor.bind("click", function () {
@@ -384,15 +355,13 @@ function reBindBuddySearchResultClick()
 	});
 }
 
-function setSearchBuddyRes(results)
-{
+function setSearchBuddyRes(results){
     $("#SearchBuddy .searchResultBuddy").remove();
     iterateResults(results, addBuddyToSearchResultList);
     reBindBuddySearchResultClick();
 }
 
-function addGroupToSearchResultList(group)
-{
+function addGroupToSearchResultList(group){
     var e = $("<li class='searchResultGroup'><a href='#Buddies' class='searchResultGroup_href' id=" + 
             group.group_id + 
 			"><label class='searchResultGroupLabel'>" +
@@ -404,8 +373,7 @@ function addGroupToSearchResultList(group)
     $("#SearchGroup .searchResultGroups").append(e).listview('refresh');
 }
 
-function reBindGroupSearchResultClick()
-{
+function reBindGroupSearchResultClick(){
 	$(".searchResultGroup_href").each(function () {
 	    var anchor = $(this);
 		anchor.bind("click", function () {
@@ -416,41 +384,33 @@ function reBindGroupSearchResultClick()
 	});
 }
 
-function setSearchGroupRes(results)
-{
+function setSearchGroupRes(results){
     $("#SearchGroup .searchResultGroup").remove();
     iterateResults(results, addGroupToSearchResultList);
     reBindGroupSearchResultClick();
 }
 
-function messageCantAddGroup()
-{
+function messageCantAddGroup(){
 	window.alert("Chatty can not add your new group");
 }
 
-function login_register_updateProfile_Success()
-{
+function login_register_updateProfile_Success(){
 	$.mobile.changePage("#Buddies");
-	//document.location.href = "#Buddies";
 }
 
-function loginFailed()
-{
+function loginFailed(){
 	window.alert('Login failed, Please recheck your input');
 }
 
-function registerFailed()
-{
+function registerFailed(){
 	window.alert('Register failed, Please recheck your input');
 }
 
-function updateProfileFailed()
-{
+function updateProfileFailed(){
 	window.alert('Edit profile failed, Please recheck your input');
 }
 
-function skipLogIn()
-{
+function skipLogIn(){
     updateTab({ "id": "BuddiesTab" });
-	document.location.href = "#Buddies";
+	$.mobile.changePage("#Buddies");
 }
