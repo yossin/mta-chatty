@@ -111,3 +111,7 @@ bl.getGroupDetails=function(groupId, onSuccess, onError){
 bl.addBuddyToList=function(buddyId, onSuccess, onError){
 
 };
+
+bl.addGroupToList=function(groupId, onSuccess, onError){
+
+};
