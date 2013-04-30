@@ -8,21 +8,73 @@
 }
 
 .divChatRoom{
-	float:right;
-	width: calc(100% - 280px) !important;
+	width: calc(100% - 295px) !important;
+	position:absolute;
+    bottom: 50px;
+    right: 0;
+    overflow-y:auto !important;
+/*
+    border-width:3px !important;
+    border-style:solid !important;
+    border-color: rgb(000,150,255) !important;   */
 }
+
+.chatRoom{
+	position:absolute;
+    bottom: 65px;
+	width: calc(100% - 300px) !important;
+}
+
+.messageErea{
+	position:absolute;
+    bottom: 0px;
+	width: calc(100% - 5px) !important;
+}
+
+.chatRoom{
+	width: 97% !important;
+}
+
+.message{
+	height: 35px;
+}
+
+.messages-time {
+	float: right;
+	font-size: small;
+	color: gray;
+	position: absolute;
+	bottom: 18px;right: 10px;
+}
+
+
+.sendMessage {
+	width: 27px;
+	margin-top: 14px;
+	padding: 0px;
+	float:right;
+}
+
+.textArea {
+	float:left;
+	resize: none;
+	width: calc(100% - 35px) !important;
+	height: 38px !important;
+}
+
 
 .divBuddiesAndGroups, .divChatRoom  {
     overflow-y:auto !important;
 }
 
-.buddiesAndGroupsList{
-	width: 100% !important;
-    margin: 0px !important;
-    -webkit-padding-start: 0px !important;;
+.divBuddiesAndGroups{
+    border-width:3px !important;
+    border-style:solid !important;
+    border-color: rgb(000,150,255) !important;   
 }
-.chatRoom{
-	width: 98% !important;
+
+.buddiesAndGroupsList{
+    margin: 0px !important;
 }
 
 .buddy, .group {
@@ -70,54 +122,3 @@
 	bottom:0; left:0;
 	width:  100%;   
 }
-
-
-/*
-
-
-.buddiesAndGroupsList {
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow-y:auto;
-}
-
-
-.buddiesAndGroups {
-    height: 50% !important;
-}
-
-.dashboardContent{
-    height:calc(100% - 72px) !important;
-}
-
-.buddy{
-	width: 100% !important;
-}
-
-
-
-.dashboardContentUL {
-	-webkit-margin-before: 0em;
-	-webkit-margin-after: 0em;
-	-webkit-padding-start: 0px;
-}
-
-.dashboardContent {
-	padding: 0px;
-	position:absolute;
-	top:0; left:0;
-	width: 100%;   
-}
-
-
-.divider-label {
-	height: 54px;
-}
-
-
-
-.divChatRoom {
-    position:absolute;
-	bottom:0; left:0;
-	height: 50%;
-}*/
