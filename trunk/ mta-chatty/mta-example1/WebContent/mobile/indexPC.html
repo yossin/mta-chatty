@@ -18,13 +18,18 @@
 
 
 <body>
-
-	<section id="Login" data-role="dialog">
-		<header data-role="header" class="login-header">
-			<label class="login-label">Please Login to Chatty</label>
-			<img   class="login-image" src="image/Login.png" />
+	<section id="Loading" data-role="dialog">
+		<header data-role="header">
+			<label class="header-label">Loading..</label>
+			<img   class="header-image" src="image/Loading.gif" />
 		</header>
-		<form id="LoginFormPC" class="content" data-role="content">
+	</section>
+	<section id="Login" data-role="dialog">
+		<header data-role="header">
+			<label class="header-label">Please Login to Chatty</label>
+			<img   class="header-image" src="image/Login.png" />
+		</header>
+		<form id="LoginForm" class="content" data-role="content" action="#Dashboard" method="post">
 			<div>
 				<span class="colorRed">*</span>
 				<label class="loginUserMailLable">Email:</label>
@@ -40,19 +45,20 @@
 				<span class="colorRed"><br><br>*Required</span>
 			</div>
               
-			<div class="loginOrRegistrer">
+			<div class="loginOrRegistrerDiv">
 				<a href="#Register" class="btnRegisterToChatty" data-inline="true" data-role="button">Register</a>
-				<button type="submit" class="btnLoginToChatty" data-inline="true">Login</button>
+				<a href="" class="btnLoginToChatty" data-inline="true" data-role="button">Login</a>
+		<!--	<button type="submit" class="btnLoginToChatty" data-inline="true">Login</button> -->
 			</div>
         </form>		
 	</section>
 	
 	<section id="Register" data-role="dialog" data-add-back-btn="true">
-		<header data-role="header" class="register-header">
-			<label class="register-label">Please Register to Chatty</label>
-			<img   class="register-image" src="image/Register.png" />
+		<header data-role="header">
+			<label class="header-label">Please Register to Chatty</label>
+			<img   class="header-image" src="image/Register.png" />
 		</header>
-		<form id="RegisterFormPC" class="content" data-role="content">
+		<form id="RegisterForm" class="content" data-role="content" action="#Dashboard">
 			<div>
 				<span class="colorRed">*</span>
 				<label class="registerUserMailLable">Email:</label>
@@ -77,8 +83,9 @@
 				<span class="colorRed"><br><br>*Required</span>
 			</div>
 				
-			<div class="loginOrRegistrer">
-				<button type="submit" class="btnRegisterSubmit" data-inline="true">Register</button>
+			<div class="RegistrerDiv">
+				<a href="#Dashboard" class="btnRegisterSubmit" data-inline="true" data-role="button">Register</a>
+			<!--	<button type="submit" class="btnRegisterSubmit" data-inline="true">Register</button> -->
 			</div>
 		</form>				
 	</section>
@@ -201,11 +208,153 @@
             <div class="dashboardFooterDiv">
                 <a href="#Login"       class="logoutBtn"      data-role="button" data-icon="delete">Logout</a>
                 <a href="#EditProfile" class="editProfileBtn" data-role="button" data-icon="gear">Edit Profile</a>
-                <a href="#SearchBuddy" class="searchBuddyBtn" data-role="button" data-icon="search" >Search</a>
+                
+                <a href="#SearchGroup" class="searchGroupBtn" data-role="button" data-icon="search">Search Group</a>
+                <a href="#CreateGroup" class="createGroupBtn" data-role="button" data-icon="plus">Create Group</a>
+                <a href="#LeaveGroup"  class="leaveGroupBtn"  data-role="button" data-icon="minus">Leave Group</a>
+                
+                <a href="#SearchBuddy" class="searchBuddyBtn" data-role="button" data-icon="search" >Search Buddy</a>
+                
             </div>
         </footer>
 	</section>	
     
-	
+    <section id="EditProfile" data-role="dialog" data-add-back-btn="true">
+		<header data-role="header">
+			<label class="header-label">Edit Your Profile</label>
+			<img   class="header-image" src="image/Register.png" />
+		</header>
+		<form id="EditProfileForm" class="content" data-role="content">
+			<div>
+				<label class="editProfileUserMailLable">Email:</label>
+				<input class="editProfileUserMailInput" type="email" required disabled/>    
+			</div>
+			<div>
+				<span class="colorRed">*</span>
+				<label class="editProfileUserNameLable">Name:</label>
+				<input class="editProfileUserNameInput" type="text" required />    
+			</div>
+			<div>
+				<span class="colorRed">*</span>
+				<label class="editProfileUserPassLable">Password:</label>
+				<input class="editProfileUserPassInput" type="password" required/>    
+			</div>
+			<div>
+				<label class="editProfileUserPicLable">Profile Image:</label>
+				<input class="editProfileUserPicInput" id="file" type="file"/>
+			</div>
+
+			<div>
+				<span class="colorRed"><br>*Required</span>
+			</div>
+				
+			<div class="registrerDiv">
+   				<a href="" class="btnEditProfileSubmit" data-inline="true" data-role="button">Submit Changes</a>
+			<!--	<button type="submit" class="btnEditProfileSubmit" data-inline="true">Submit Changes</button> -->
+			</div>
+		</form>				
+	</section>
+    
+    <section id="SearchBuddy" data-role="dialog" data-add-back-btn="true">
+		<header data-role="header">
+			<label class="header-label">Search Buddy</label>
+			<img   class="header-image" src="image/SearchBuddy.png" />
+		</header>
+        <div class="searchBuddyContent" data-role="content">
+   			<div class="searchBuddyErea">
+                <textarea autofocus="autofocus" id="searchBuddyText" class="textArea" placeholder="Search by buddy name or mail address"></textarea>
+                <a href="#" class="searchBuddiesBtn" data-role="button" data-icon="search" data-iconpos="notext"></a>
+			</div>         
+            <div class="searchResultBuddiesDiv">
+                <ul class="searchResultBuddies" data-role="listview">
+                    <!-- Example 
+                    <li class="searchResultBuddy"> 
+                        <a href="#Dashboard" class="searchResultBuddy_href" id="Lisa@Lisa.com">
+                            <label class="searchResultBuddyLabel">Lisa, Lisa@Lisa.com</label>
+                            <img   class="searchResultBuddyImg" src="image/Lisa.jpg" />
+                        </a>
+                    </li>
+                    --> 
+                </ul>
+            </div>
+        </div>
+	</section>
+
+    <section id="SearchGroup" data-role="dialog" data-add-back-btn="true">
+		<header data-role="header">
+			<label class="header-label">Search Group</label>
+			<img   class="header-image" src="image/SearchGroup.png" />
+		</header>
+        <div class="searchGroupContent" data-role="content">
+   			<div class="searchGroupErea">
+                <textarea autofocus="autofocus" id="searchGroupsText" class="textArea" placeholder="Search group by name"></textarea>
+                <a href="#" class="searchGroupsBtn" data-role="button" data-icon="search" data-iconpos="notext"></a>
+			</div>         
+            <div class="searchResultGroupsDiv">
+                <ul class="searchResultGroups" data-role="listview">
+                    <!-- Example
+                    <li class="searchResultGroup"> 
+                        <a href="#Groups" class="searchResultGroup_href" id=0>
+                            <label class="searchResultGroupLabel">Simsons</label>
+                            <img   class="searchResultGroupImg" src="image/Simsons.jpg" />
+                        </a>
+                    </li>
+                    -->                       
+                </ul>
+            </div>
+        </div>
+	</section>	
+
+    <section id="LeaveGroup" data-role="dialog" data-add-back-btn="true">
+		<header data-role="header">
+			<label class="header-label">Leave Group</label>
+			<img   class="header-image" src="image/LeaveGroup.png" />
+		</header>
+        <div class="leaveGroupContent" data-role="content">
+	        <ul class="groupList" data-role="listview">
+	            <!-- Example 
+				<li class="group"> 
+					<a href="#Groups" class="hrefLeaveGroup" id=1>
+						<label class="row-label">Simsons</label>
+						<img   class="row-image" src="image/Simsons.jpg" />
+					</a>
+				</li>
+                -->
+	        </ul>
+        </div>
+	</section>	
+    
+    <section id="CreateGroup" data-role="dialog" data-add-back-btn="true">
+		<header data-role="header">
+			<label class="header-label">Create New Group</label>
+			<img   class="header-image" src="image/SearchGroup.png" />
+		</header>
+        <form id="CreateGroupForm" class="content" data-role="content" action="#Groups">
+			<div>
+				<span class="colorRed">*</span>
+				<label class="createGroupNameLable">Group Name</label>
+				<input class="createGroupNameInput" type="text" required/>    
+			</div>
+			<div>
+				<span class="colorRed">*</span>
+				<label class="createGroupPicLable">Group Image:</label>
+				<input class="createGroupPicInput" id="file" type="file"/>
+			</div>
+			<div>
+				<label class="createGroupDescLable">Group Description:</label>
+				<input class="createGroupDescInput" type="text"/>
+			</div>
+
+			<div>
+				<span class="colorRed"><br><br>*Required</span>
+			</div>
+				
+			<div class="createGroupDiv">
+   				<a href="#Groups" class="btnCreateGroup" data-inline="true" data-role="button">Create Group</a>
+			<!--	<button type="submit" class="btnCreateGroup" data-inline="true">Create Group</button> -->
+			</div>
+		</form>		
+	</section>	
+    
 </body>
 </html>
