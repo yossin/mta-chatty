@@ -1,26 +1,52 @@
 @CHARSET "windows-1255";
 
 
-
-.buddiesContent{
-	float:left;
-	width: 50% !important;
-
+.divBuddiesAndGroups{
+	position:absolute;
+	top:0; left:0;
+	width: 280px !important;
 }
 
-.groupsContent{
+.divChatRoom{
 	float:right;
-	width: 50% !important;
+	width: calc(100% - 280px) !important;
 }
 
-.buddiesAndGroups {
-    height: 50% !important;
+.divBuddiesAndGroups, .divChatRoom  {
+    overflow-y:auto !important;
 }
 
-.dashboardContent{
-    height:calc(100% - 72px) !important;
+.buddiesAndGroupsList{
+	width: 100% !important;
+    margin: 0px !important;
+    -webkit-padding-start: 0px !important;;
+}
+.chatRoom{
+	width: 98% !important;
 }
 
+.buddy, .group {
+	height: 66px;
+}
+
+.row-image {
+	width:  40px;   
+	height: 54px;
+	margin:auto;
+	padding-top: 5px;
+	padding-left:12px;
+}
+
+.row-label { 
+	padding-left:64px;
+	padding-bottom:28px;
+	position:absolute;
+	bottom:0; left:0;
+}
+
+#Dashboard{
+    position:static !important;
+}
 
 .logoutBtn, .editProfileBtn, .addBuddyBtn, .createGroupBtn, .leaveGroupBtn {
 	background-size:22px 22px;
@@ -38,9 +64,37 @@
 	padding: 0px;
 }
 
-.dashboardContentDiv {
-	padding: 5px;
+#dashboardFooter {
+	padding: 0px;
+	position:absolute;
+	bottom:0; left:0;
+	width:  100%;   
 }
+
+
+/*
+
+
+.buddiesAndGroupsList {
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-y:auto;
+}
+
+
+.buddiesAndGroups {
+    height: 50% !important;
+}
+
+.dashboardContent{
+    height:calc(100% - 72px) !important;
+}
+
+.buddy{
+	width: 100% !important;
+}
+
+
 
 .dashboardContentUL {
 	-webkit-margin-before: 0em;
@@ -55,28 +109,15 @@
 	width: 100%;   
 }
 
-#dashboardFooter {
-	padding: 0px;
-	position:absolute;
-	bottom:0; left:0;
-	width:  100%;   
-}
 
 .divider-label {
 	height: 54px;
 }
 
-.row-image {
-	width:  40px;   
-	height: 54px;
-	margin:auto;
-	padding-top: 5px;
-	padding-left:12px;
-}
 
-.row-label { 
-	padding-left:64px;
-	padding-bottom:28px;
-	position:absolute;
+
+.divChatRoom {
+    position:absolute;
 	bottom:0; left:0;
-}
+	height: 50%;
+}*/
