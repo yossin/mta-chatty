@@ -58,7 +58,7 @@
 .textArea {
 	float:left;
 	resize: none;
-	width: calc(100% - 35px) !important;
+	width: calc(100% - 33px) !important;
 	height: 38px !important;
 }
 
@@ -77,19 +77,25 @@
     margin: 0px !important;
 }
 
-.buddy, .group {
+.buddy, .group, .searchResultBuddy, .searchResultGroup {
 	height: 66px;
 }
 
-.row-image {
-	width:  40px;   
+.searchResultBuddiesDiv, .searchResultGroupsDiv {
+    position:absolute;
+    top:95px;
+    width: 100%;
+}
+
+.row-image, .searchResultBuddyImg, .searchResultGroupImg {
+	width:  40px;
 	height: 54px;
 	margin:auto;
 	padding-top: 5px;
 	padding-left:12px;
 }
 
-.row-label { 
+.row-label, .searchResultBuddyLabel, .searchResultGroupLabel{ 
 	padding-left:64px;
 	padding-bottom:28px;
 	position:absolute;
@@ -112,6 +118,15 @@
 	float:right;
 }
 
+.searchBuddyBtn {
+	margin-right: 15px;
+}
+
+.searchBuddiesBtn, .searchGroupsBtn {
+	float:right;
+	margin-top: 13px;
+}
+
 .dashboardFooterDiv {
 	padding: 0px;
 }
@@ -121,4 +136,27 @@
 	position:absolute;
 	bottom:0; left:0;
 	width:  100%;   
+}
+
+.header-image {
+	float:right;
+	margin-top: 4px;
+	width:  24px;   
+	height: 32px;
+	padding-right:9px;
+}
+
+.header-label {
+	padding-right:45px;
+	padding-bottom:7px;
+	position:absolute;
+	bottom:0; right:0;
+}
+
+.btnRegisterSubmit , .loginOrRegistrerDiv, .RegistrerDiv, .btnCreateGroup, .leaveGroupBtn, .btnEditProfileSubmit {
+	float: right;
+}
+
+.colorRed {
+	color: red;
 }
