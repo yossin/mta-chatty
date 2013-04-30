@@ -1,14 +1,7 @@
-var bl=new BL();
 var ui={};
 ui.chatroom={buddyRoom:true, id:"name@mail.com"};
 
-function init(onSuccess, onError){
-	if (initializeDB(onError)){
-		createTables(function(){
-			createTestData(onSuccess, onError);
-		}, onError);
-	}
-}
+
 
 function firstPageNavigation(){
 	bl.checkUserLoggedIn(
@@ -17,8 +10,7 @@ function firstPageNavigation(){
 			$.mobile.changePage("#Buddies");
 		},
 		function(){
-			//log.debug('user should be redirected to login page');
-			$.mobile.changePage("#Login");
+			recreateDB(setLoginForm,displayError);
 		});
 }
 
@@ -32,7 +24,7 @@ function displayError(error){
 }
 
 $(document).ready(function(){
-	init(firstPageNavigation, displayError);
+	initChatty(firstPageNavigation, displayError);
 
 	$("#Buddies").bind("pagebeforeshow", function (e) {
 	    updateTab({ "id": "BuddiesTab" });
@@ -101,17 +93,22 @@ $(document).ready(function(){
     
 	// Bind the register form.
 //	$("#RegisterForm").submit(function( event ){
-	$("#RegisterForm .btnRegisterToChatty").click(function(){
+	$("#RegisterForm .btnRegisterSubmit").click(function(){
 		// Prevent the default submit.
 		event.preventDefault();
 		
-		var userRegisterData = new Object();
-		userRegisterData.name = $("#RegisterForm .registerUserNameInput").val();
-		userRegisterData.mail = $("#RegisterForm .registerUserMailInput").val();
-		userRegisterData.pass = $("#RegisterForm .registerUserPassInput").val();
-		userRegisterData.pic  = $("#RegisterForm .registerUserPicInput" ).val();
+		var regData = new Object();
+		regData.name = $("#RegisterForm .registerUserNameInput").val();
+		regData.email = $("#RegisterForm .registerUserMailInput").val();
+		regData.pass = $("#RegisterForm .registerUserPassInput").val();
+		regData.pic  = $("#RegisterForm .registerUserPicInput" ).val();
 
-		bl.registerUser(userRegisterData, login_register_updateProfile_Success, registerFailed);
+		//TODO: ?load info from user?
+		//regData.address = "Generated Dummy Address From UI";
+		//regData.cityId = 1; //1=Tel-Aviv
+		//regData.postalCode=undefined; 
+		bl.registerNewUser(regData.email, regData.name, regData.pic, regData.pass, 
+				login_register_updateProfile_Success, registerFailed);
         return true;
 	});
 
@@ -134,23 +131,29 @@ $(document).ready(function(){
         bl.getBuddyDetails(buddyId, setEditProfileForm, printError);
     });
 
+    $('.logoutBtn').click(function(event){
+    	event.preventDefault();
+        bl.logoutUser(setLoginForm, printError);
+    });
+
     $('.searchBuddyBtn').click(function(){
    		searchBuddyText = $("#searchBuddyText").val();
-        bl.getBuddiesByNameOrID(searchBuddyText, setSearchBuddyRes, printError);
+        bl.searchBuddiesByNameOrID(searchBuddyText, setSearchBuddyRes, printError);
     });
 
     $('.searchGroupBtn').click(function(){
-   		searchGroupText = $("#searchBuddyText").val();
-        bl.getGroupsByName(searchGroupText, setSearchGroupRes, printError);
+   		searchGroupText = $("#searchGroupText").val();
+        bl.searchGroupsByName(searchGroupText, setSearchGroupRes, printError);
     });
     
     // Bind the login form.
 //	$("#CreateGroupForm").submit(function( event ){
 	$("#CreateGroupForm .btnCreateGroup").click(function(){
-        var newGroup = new Object();
-       	newGroup.name = $("#CreateGroupForm .createGroupNameInput").val();
-        newGroup.pic  = $("#CreateGroupForm .createGroupPicInput" ).val();
-        bl.creaetGroup(newGroup, addCreatedGroupToUser, messageCantAddGroup);
+
+       	var name = $("#CreateGroupForm .createGroupNameInput").val();
+        var pic  = $("#CreateGroupForm .createGroupPicInput" ).val();
+        var desc = $("#CreateGroupForm .createGroupDescInput" ).val();
+        bl.createGroup(name, pic, desc, displayGroupList, messageCantAddGroup);
     });
 	
 	$("#LeaveGroup").bind("pagebeforeshow", function (e) {
@@ -160,8 +163,8 @@ $(document).ready(function(){
    
 });
 
-function addCreatedGroupToUser(groupID){
-    bl.joinGroup(groupID, dummy, printError);
+function displayGroupList(){
+    bl.getGroupList(setUserGroups, printError);
 }
 
 function addBuddyMessageToChatRoom(message){
@@ -328,6 +331,10 @@ function setEditProfileForm(result){
     $("#EditProfileForm .editProfileUserPassInput").val(result.pass);
     $("#EditProfileForm .editProfileUserPicInput ").val(result.picture);
 }
+function setLoginForm(){
+	log.debug("navigate back to login page");
+	$.mobile.changePage("#Login");
+}
 
 function addBuddyToSearchResultList(buddy){
 	if (buddy.email == "")
@@ -378,7 +385,7 @@ function reBindGroupSearchResultClick(){
 	    var anchor = $(this);
 		anchor.bind("click", function () {
 			id = $(this).attr("id");
-            bl.addGroupToList(id, dummy, printError);
+            bl.joinGroup(id, dummy, printError);
 			return true;
 	    });
 	});

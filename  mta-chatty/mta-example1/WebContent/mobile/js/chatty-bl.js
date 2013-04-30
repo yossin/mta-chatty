@@ -1,3 +1,17 @@
+function initChatty(onSuccess, onError){
+	bl=new BL();
+
+	if (initializeDB(onError)){
+		onSuccess();
+	}
+}
+
+function recreateDB(onSuccess, onError){
+	tables.recreate(function(){
+		createTestData(onSuccess, onError);
+	}, onError);	
+}
+
 
 
 
@@ -27,12 +41,15 @@ function BL(onSuccessInit, onError){
 		}
 	};
 
+	// ----------- USER -------------
 	
-	//TODO: implement
-	this.registerNewUser=function(todo_add_params, onSuccess, onError){
+	//TODO: verify
+	// email, name, picture, password, address, cityId, postalCode? **where? must be undefined** 
+	this.registerNewUser=function(email, name, picture, password, onSuccess, onError){
+		dal.insertUser(email, name, picture, password, onSuccess, onError);
 	};
 
-	//TODO: implement
+	//TODO: implement - do we need all parameters??
 	this.updateUserProfile=function(todo_add_params, onSuccess, onError){
 
 	};
@@ -62,7 +79,7 @@ function BL(onSuccessInit, onError){
 
 	this.getBuddyList=function(onSuccess, onError){
 		//email, name, picture
-		dal.selectBuddyList(this.loggedInUser.email, onSuccess, onError);
+		dal.selectBuddyList(bl.loggedInUser.email, onSuccess, onError);
 	};
 
 	this.getBuddyDetails=function(buddyId, onSuccess, onError){
@@ -70,40 +87,42 @@ function BL(onSuccessInit, onError){
 		dal.selectBuddy(buddyId, onSuccess, onError);
 	};
 
-	//TODO: implement
-	this.getBuddiesByNameOrID=function(searchText, onSuccess, onError){
-
+	this.searchBuddiesByNameOrID=function(searchText, onSuccess, onError){
+		dal.selectBuddiesByNameOrID(bl.loggedInUser.email, searchText, onSuccess, onError);		
 	};
 
-	//TODO: implement
 	this.addBuddyToList=function(buddyId, onSuccess, onError){
-
+		dal.addBuddy(bl.loggedInUser.email, buddyId, onSuccess, onError);		
 	};
 
 	//----------- GROUPS -------------
 
 	this.getGroupList=function(onSuccess, onError){
 		//id, name, picture
-		dal.selectGroupList(this.loggedInUser.email, onSuccess, onError);
+		dal.selectGroupList(bl.loggedInUser.email, onSuccess, onError);
 	};
 
-	//TODO: implement
-	this.getGroupsByName=function(searchText, onSuccess, onError){
-
+	this.searchGroupsByName=function(searchText, onSuccess, onError){
+		dal.selectGroupsByName(bl.loggedInUser.email, searchText, onSuccess, onError);		
 	};
 
-	//TODO: implement
-	this.createGroup=function(groupName, onSuccess, onError){
-
+	this.createGroup=function(name, picture, description, onSuccess, onError){
+		// create group
+		dal.insertGroup(name, picture, description, function(groupId){
+			dal.insertGroupMembership(bl.loggedInUser.email, groupId, onSuccess, onError);
+		}, onError);		
 	};
 
-	//TODO: implement
+	//TODO: tested on create group flow. should be tested separately 
 	this.joinGroup=function(groupId, onSuccess, onError){
-
+		dal.insertGroupMembership(bl.loggedInUser.email, groupId, onSuccess, onError);
 	};
 
-	//TODO: implement
+	//TODO: untested! - verify works correctly - concurrent requests!
 	this.leaveGroup=function(groupId, onSuccess, onError){
+		dal.deleteGroupMembership(bl.loggedInUser.email, groupId, function(){
+			dal.deleteGroupIfEmpry(groupId, onSuccess, onError);
+		}, onError);
 
 	};
 
@@ -121,20 +140,20 @@ function BL(onSuccessInit, onError){
 
 	this.getBuddyMessages=function (buddyId, onSuccess, onError){
 		// sender, ts, message
-		dal.selectBuddyMessages(this.loggedInUser.email, buddyId, onSuccess, onError);
+		dal.selectBuddyMessages(bl.loggedInUser.email, buddyId, onSuccess, onError);
 	};
 
 	this.sendBuddyMessage=function (buddyId, message, onSuccess, onError){
 		// sender, ts, message
-		dal.insertBuddyMessage(this.loggedInUser.email, buddyId, message, onSuccess, onError);
+		dal.insertBuddyMessage(bl.loggedInUser.email, buddyId, message, onSuccess, onError);
 	};
 
 	this.sendGroupMessage=function (groupId, message, onSuccess, onError){
 		// sender, ts, message
-		dal.insertGroupMessage(this.loggedInUser.email, groupId, message, onSuccess, onError);
+		dal.insertGroupMessage(bl.loggedInUser.email, groupId, message, onSuccess, onError);
 	};
 }
-// ----------- USER -------------
+
 
 
 

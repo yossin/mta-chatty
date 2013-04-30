@@ -29,12 +29,11 @@ function initializeDB(errorHandler){
 	return true;
 }
 
-function createTables(onSuccess, onError){
-	ajaxCall('db/drop.1.sql', function(data){
-		var statements = data.split(";");
-		
-		ajaxCall('db/create.1.sql', function(data){
-			statements = statements.concat(data.split(";"));
+
+function Tables(){
+	function dbExecute(list, onSuccess, onError){
+		ajaxCalls(list, function(statmentList){
+			var statements = statmentList[0].split(";").concat(statmentList[1].split(";"));
 			db.transaction(function(transaction) {
 				statements.forEach( function(sql) { 
 					if (sql.trim()){
@@ -51,11 +50,24 @@ function createTables(onSuccess, onError){
 				
 
 			}, onError, onSuccess());
-			
 		});
-		
-	});
+	}
+	var dropSqls='db/drop.1.sql';
+	var createSqls='db/create.1.sql';
+	
+	this.drop=function(onSuccess, onError){
+		dbExecute([dropSqls], onSuccess, onError);
+	};
+	this.create=function(onSuccess, onError){
+		dbExecute([createSqls], onSuccess, onError);
+	};
+	this.recreate=function(onSuccess, onError){
+		dbExecute([dropSqls,createSqls], onSuccess, onError);
+	};
 }
+
+var tables=new Tables();
+
 
 function genericSqlStatement(sql, params, onSuccess, onError){
 	db.transaction(function(transaction) {
@@ -71,6 +83,45 @@ function genericSqlStatement(sql, params, onSuccess, onError){
 	}, onError, nullDataHandler);	
 }
 
+//TODO: verify
+function genericSqlInsertStatement(sql, params, onSuccess, onError){
+	db.transaction(function(transaction) {
+		transaction.executeSql(sql,params,
+			function (tx,result){
+			if (typeof(result)!='undefined'){
+				onSuccess(result.insertId);
+			} else {
+				onError({message:"unable to get insert id"});
+			}
+		},
+		function (tx,error){
+			log.error("unable to perform sql statement"+sql+" \nparams: "+params+ "\n. error message is: "+error.message);
+			onError(error);
+		});
+	}, onError, nullDataHandler);	
+}
+function genericSqlInsertStatement1(sql, params, onSuccess, onError){
+	db.transaction(function(transaction) {
+			transaction.executeSql(sql,params,
+				function (tx,result){
+					transaction.executeSql("last_insert_rowid()",[],
+						function (tx,result){
+							getFirstResult(result);
+						},
+						function (tx,error){
+							log.error("unable to get last inserted index using: last_insert_rowid().\n error message is: "+error.message);
+							onError(error);
+						});
+			},
+			function (tx,error){
+				log.error("unable to perform sql statement"+sql+" \nparams: "+params+ "\n. error message is: "+error.message);
+				onError(error);
+			});
+
+	}, onError, nullDataHandler);	
+}
+
+
 function DAL(){
 	
 	this.getLoggedInUserId=function(){
@@ -84,6 +135,12 @@ function DAL(){
 	this.removeLoggedInUserId=function(){
 		localStorage.removeItem('loggedInUserId');
 	};
+
+	this.insertUser=function(email, name, picture, password, onSuccess, onError){
+		var sql="insert into 'user' (email, name, picture, password) values(?,?,?,?)";
+		genericSqlStatement(sql, [email, name, picture, password], onSuccess, onError);
+	};
+
 
 	//----------- BUDDIES -------------
 	
@@ -99,7 +156,20 @@ function DAL(){
 		}, onError);
 	};
 	
+	this.addBuddy=function (ownerEmail, buddyId, onSuccess, onError){
+		var sql="insert into buddy_list (owner_email, buddy_id) values(?,?)";
+		genericSqlStatement(sql, [ownerEmail, buddyId], function(results){
+			getFirstResult(results, onSuccess);
+		}, onError);
+	};
 	
+	//TODO: verify
+	this.selectBuddiesByNameOrID=function (ownerEmail, searchText, onSuccess, onError){
+		var sql="select u.email, u.name, u.picture from 'user' as u left join buddy_list as bl on u.email==bl.buddy_id where (bl.buddy_id is null) and (u.name like ? or u.email like ?) and u.email!=?";
+		var serachWithLike='%'+searchText+'%';
+		genericSqlStatement(sql, [serachWithLike, serachWithLike, ownerEmail], onSuccess, onError);
+	};
+
 
 	//----------- GROUPS -------------
 
@@ -116,7 +186,22 @@ function DAL(){
 		}, onError);
 	};
 
+	this.selectGroupsByName=function (ownerEmail, searchText, onSuccess, onError){
+		var sql="select g.group_id, g.name, g.picture, g.description from 'group' as g  where g.name like ? and g.group_id not in (select gm.group_id from group_membership as gm where gm.member_email==?)";
+		var serachWithLike='%'+searchText+'%';
+		genericSqlStatement(sql, [serachWithLike, ownerEmail], onSuccess, onError);
+	};
+
+	this.insertGroup=function (name, picture, description, onSuccess, onError){
+		var sql="insert into 'group' (name, picture, description) values (?,?,?)";
+		genericSqlInsertStatement(sql, [name, picture, description], onSuccess, onError);
+	};
 	
+	this.insertGroupMembership=function (memberMail, groupId, onSuccess, onError){
+		var sql="insert into 'group_membership' (member_email, group_id) values (?,?)";
+		genericSqlStatement(sql, [memberMail, groupId], onSuccess, onError);
+	};
+
 	//----------- MESSAGES -------------
 
 	this.selectGroupMessages=function (groupId, onSuccess, onError){

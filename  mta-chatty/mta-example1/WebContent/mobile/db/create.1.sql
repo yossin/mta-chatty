@@ -19,7 +19,7 @@ CREATE  INDEX idx_fk_country_id ON city (country_id);
 
 
 CREATE  TABLE IF NOT EXISTS address (
-  address_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT ,
+  address_id TEXT NOT NULL PRIMARY KEY ,
   address TEXT NOT NULL ,
   city_id INTEGER NOT NULL ,
   postal_code TEXT NULL DEFAULT NULL ,
@@ -28,27 +28,27 @@ CREATE  TABLE IF NOT EXISTS address (
     FOREIGN KEY (city_id)
     REFERENCES city (city_id)
     ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_address_user
+    FOREIGN KEY (address_id)
+    REFERENCES 'user' (email)
+    ON DELETE RESTRICT
     ON UPDATE CASCADE);
 
 CREATE INDEX idx_fk_city_id on address (city_id);
+CREATE INDEX idx_fk_address_id on address (address_id);
+
 
 
 CREATE  TABLE IF NOT EXISTS 'user' (
   email TEXT  NOT NULL PRIMARY KEY,
   name TEXT NOT NULL ,
   picture TEXT NOT NULL DEFAULT 'images/defaultUser.jpg',
-  address_id INTEGER NOT NULL ,
   active BOOLEAN NOT NULL DEFAULT TRUE ,
   create_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
-  password TEXT NOT NULL ,
-  CONSTRAINT fk_customer_address
-    FOREIGN KEY (address_id)
-    REFERENCES address (address_id)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE);
+  password TEXT NOT NULL);
 
-  CREATE INDEX idx_fk_address_id  ON 'user'(address_id);
   CREATE INDEX idx_last_name ON 'user' (picture);
   
   

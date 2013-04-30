@@ -10,22 +10,27 @@
    {"city":"Petach-Tikva", "country_id":1},
    {"city":"Hod-Hasharon", "country_id":1},
    {"city":"Givatayim", "country_id":1},
-   {"city":"Springfield", "country_id":2}
+   {"city":"Springfield", "country_id":2},
+   {"city":"NY", "country_id":2}
   ],
 
 "addresses":
   [
-   {"address_id":1,"address":"742 Evergreen Terrace", "city_id":5},
-   {"address_id":2,"address":"742 Evergreen Terrace", "city_id":5},
-   {"address_id":3,"address":"742 Evergreen Terrace", "city_id":5},
-   {"address_id":4,"address":"742 Evergreen Terrace", "city_id":5}
+   {"address_id":"bart@mail.com","address":"742 Evergreen Terrace", "city_id":5},
+   {"address_id":"homer@mail.com","address":"742 Evergreen Terrace", "city_id":5},
+   {"address_id":"maggie@mail.com","address":"742 Evergreen Terrace", "city_id":5},
+   {"address_id":"lisa@mail.com","address":"742 Evergreen Terrace", "city_id":5},
+   {"address_id":"marge@mail.com","address":"742 Evergreen Terrace", "city_id":5},
+   {"address_id":"ironman@mail.com","address":"Iron Building", "city_id":5}
   ],
   
 "users": 
-  [{"email":"bart@mail.com","name":"Bart","picture":"image/Bart.jpg", "address_id":1, "password":"123"},
-   {"email":"homer@mail.com","name":"Homer","picture":"image/Homer.jpg", "address_id":2, "password":"123"},
-   {"email":"maggie@mail.com","name":"Maggie","picture":"image/Maggie.jpg", "address_id":3, "password":"123"},
-   {"email":"lisa@mail.com","name":"Lisa","picture":"image/Lisa.jpg", "address_id":4, "password":"123"}
+  [{"email":"bart@mail.com","name":"Bart","picture":"image/Bart.jpg", "password":"123"},
+   {"email":"homer@mail.com","name":"Homer","picture":"image/Homer.jpg", "password":"123"},
+   {"email":"maggie@mail.com","name":"Maggie","picture":"image/Maggie.jpg", "password":"123"},
+   {"email":"lisa@mail.com","name":"Lisa","picture":"image/Lisa.jpg", "password":"123"},
+   {"email":"marge@mail.com","name":"Marge","picture":"image/Marge.jpg", "password":"123"},
+   {"email":"ironman@mail.com","name":"Iron Man","picture":"image/IronMan.jpg", "password":"123"}
   ],
 
 "buddy_list":
@@ -36,7 +41,8 @@
   
    
 "groups": 
-  [{"name":"Simpsons","picture":"image/Simsons.jpg","description":"The Simpsons"}
+  [{"name":"Simpsons","picture":"image/Simsons.jpg","description":"The Simpsons"},
+   {"name":"The Iron Man","picture":"image/TheIronMan.jpg","description":"The Iron Man"}
   ],
    
 "buddy_messages":
