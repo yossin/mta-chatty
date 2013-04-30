@@ -14,7 +14,7 @@ $(document).ready(function(){
 
 function updateMainDivsHeight(){
     docHeight = $(document).height();
-    updateHeightPX = ((docHeight - 50) +"px");
+    updateHeightPX = ((docHeight - 55) +"px");
     $(".divBuddiesAndGroups").css({ height: updateHeightPX });
     $(".divChatRoom").css({ height: updateHeightPX });
 }
