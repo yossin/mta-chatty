@@ -137,13 +137,25 @@ $(document).ready(function(){
     });
 
     $('.searchBuddyBtn').click(function(){
+   		$("#searchBuddyText").val("");
+   	    $("#SearchBuddy .searchResultBuddy").remove();
+    });
+
+    $('.searchBuddiesBtn').click(function(){
    		searchBuddyText = $("#searchBuddyText").val();
-        bl.searchBuddiesByNameOrID(searchBuddyText, setSearchBuddyRes, printError);
+        if (searchBuddyText != "")
+        	bl.searchBuddiesByNameOrID(searchBuddyText, setSearchBuddyRes, printError);
     });
 
     $('.searchGroupBtn').click(function(){
+   		$("#searchGroupText").val("");
+   	    $("#SearchGroup .searchResultBuddy").remove();
+    });
+
+    $('.searchGroupsBtn').click(function(){
    		searchGroupText = $("#searchGroupText").val();
-        bl.searchGroupsByName(searchGroupText, setSearchGroupRes, printError);
+        if (searchGroupText != "")
+        	bl.searchGroupsByName(searchGroupText, setSearchGroupRes, printError);
     });
     
     // Bind the login form.
