@@ -265,12 +265,8 @@ function setUserGroups(results){
 function reBindLeaveGroupClick(){
 	$("#LeaveGroup .hrefLeaveGroup").click(function(){
 		var id = $(this).attr("id");
-		jConfirm('Are you sure you want to leave?', 'Confirm leaving group', function(confirmed){
-            if(confirmed){
-                console.log("Leaving group: " + id);
-                bl.leaveGroup(id, dummy, printError);
-            }
-        });
+        console.log("Leaving group: " + id);
+        bl.leaveGroup(id, dummy, printError);
         return true;
     });
 }
