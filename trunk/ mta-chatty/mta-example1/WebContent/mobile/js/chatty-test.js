@@ -5,8 +5,8 @@ function createTestData(onSuccess, onError){
 		var testData = JSON.parse(data);
 		createCountriesTestData(testData.countries, function(){
 			createCitiesTestData(testData.cities, function(){
-				createAddressesTestData(testData.addresses, function(){
-					createUsersTestData(testData.users, function(){
+				createUsersTestData(testData.users, function(){
+					createAddressesTestData(testData.addresses, function(){
 						createBuddyListTestData(testData.buddy_list, function(){
 							createGroupsTestData(testData.groups, function(){
 								createBuddyMessagesTestData(testData.buddy_messages, function(){
@@ -64,20 +64,20 @@ function createCitiesTestData(list, onSuccess, onError){
 
 
 function createAddressesTestData(list, onSuccess, onError){
-	genericCreateTestData("insert into address (address, city_id) values (?,?)", 
+	genericCreateTestData("insert into address (address_id, address, city_id) values (?,?,?)", 
 			"address", list, 
 			function(address){
-				return [address.address, address.city_id];
+				return [address.address_id, address.address, address.city_id];
 			}, onSuccess, onError
 	);
 }
 
 
 function createUsersTestData(list, onSuccess, onError){
-	genericCreateTestData("insert into 'user' (email, name, picture, address_id, password) values (?,?,?,?,?)", 
+	genericCreateTestData("insert into 'user' (email, name, picture, password) values (?,?,?,?)", 
 			"user", list, 
 			function(user){
-				return [user.email, user.name, user.picture, user.address_id, user.password];
+				return [user.email, user.name, user.picture, user.password];
 			}, onSuccess, onError
 	);
 }
@@ -92,6 +92,7 @@ function createBuddyListTestData(list, onSuccess, onError){
 	);
 }
 
+//TODO: change group id int -> text(creatoremail)+timestamp(creation). add those fields on creation
 function createGroupsTestData(list, onSuccess, onError){
 	genericCreateTestData("insert into 'group' (name, picture, description) values (?,?,?)", 
 			"group", list, 

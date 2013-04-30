@@ -3,6 +3,7 @@ var log = log4javascript.getDefaultLogger();
 // initialize logger
 function initLogger(){
 	var appender = new log4javascript.BrowserConsoleAppender();
+	log.removeAllAppenders();
 	log.addAppender(appender);
 }
 
@@ -20,6 +21,20 @@ function ajaxCall(url, action, method){
 	};
 	client.send();
 
+}
+
+function ajaxCalls(urls, action, method, alldata){
+	method = typeof method !== 'undefined' ? method : "GET";
+	alldata = typeof alldata !== 'undefined' ? alldata : [];
+	if (urls.length){
+		var url= urls.shift();
+		ajaxCall(url, function(data){
+			alldata=alldata.concat(data);
+			ajaxCalls(urls, action, method, alldata);
+		});
+	} else {
+		action(alldata);
+	}
 }
 
 function printError(error){
