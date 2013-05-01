@@ -62,16 +62,9 @@ $(document).ready(function(){
             message.send_date = (new Date()).toLocaleString();
             // TODO: we might want to retrieve messages from server 2, how do we keep correct order?
             if (ui.chatroom.buddyRoom)
-            {
-            	addBuddyMessageToChatRoom(message);
-            	bl.sendBuddyMessage(ui.chatroom.id, message.message, dummy, printError);
-            }
-            else
-            {
-            	addGroupMessageToChatRoom(message);
-            	bl.sendGroupMessage(ui.chatroom.id, message.message, dummy, printError);
-            }
-            
+            	bl.sendBuddyMessage(ui.chatroom.id, message.message, repaintChatRoom, printError);
+        	else
+        		bl.sendGroupMessage(ui.chatroom.id, message.message, repaintChatRoom, printError);
             // Send message to server...
         });
 	});
@@ -128,7 +121,7 @@ $(document).ready(function(){
 	});
 
     $('.editProfileBtn').click(function(){
-        bl.getBuddyDetails(buddyId, setEditProfileForm, printError);
+        bl.getBuddyDetails(bl.loggedInUser.email, setEditProfileForm, printError);
     });
 
     $('.logoutBtn').click(function(event){
@@ -179,24 +172,18 @@ function displayGroupList(){
     bl.getGroupList(setUserGroups, printError);
 }
 
-function addBuddyMessageToChatRoom(message){
+function addMessageToChatRoom(send_date, sender_id, message, sender_name, sender_picture){
 	if (message.message == "")
 		return;
-    var e = $("<li class='message'><label class='messages-text'>" + 
-            message.name + ": \t" + message.message + 
+    var e = $("<li class='message'><label class='messages-senderName'>" +
+    		sender_name +
+    		"</label><img class='messages-senderImg' src='" +
+    		sender_picture +
+    		"' alt='" + sender_name +
+    		"' /><label class='messages-text'>" + 
+    		message + 
             "</label><label class='messages-time'>" + 
-            message.send_date + 
-            "</label></li>");
-    $("#ChatRoom .messages").append(e).listview('refresh');
-}
-
-function addGroupMessageToChatRoom(message){
-	if (message.message == "")
-		return;
-    var e = $("<li class='message'><label class='messages-text'>" + 
-            message.name + ": \t" + message.message + 
-            "</label><label class='messages-time'>" + 
-            message.send_date + 
+            send_date + 
             "</label></li>");
     $("#ChatRoom .messages").append(e).listview('refresh');
 }
@@ -210,9 +197,18 @@ function addBuddyToBuddiesList(buddy){
             buddy.name +
 			"</label><img class='row-image' src='" +
 			buddy.picture +
-			"'/></a></li>");
+			"' alt='" + buddy.name + 
+			"' /></a></li>");
 				
     $("#Buddies .buddyList").append(e).listview('refresh');
+}
+
+function addGroupMessageToChatRoom(m){
+	addMessageToChatRoom(m.send_date, m.email, m.message, m.name, m.picture);
+}
+
+function addBuddyMessageToChatRoom(m){
+	addMessageToChatRoom(m.send_date, m.sender_id, m.message, m.sender_name, m.sender_picture);
 }
 
 function addGroupToGroupsList(group){
@@ -222,7 +218,9 @@ function addGroupToGroupsList(group){
             group.name +
 			"</label><img class='row-image' src='" +
 			group.picture +
-			"'/></a></li>");
+			"' alt='" + 
+			group.name + 
+			" '/></a></li>");
     $("#Groups .groupList").append(e).listview('refresh');
 }
 
@@ -233,6 +231,8 @@ function addGroupToLeaveGroupsList(group){
             group.name +
 			"</label><img class='row-image' src='" +
 			group.picture +
+			"' alt='" + 
+			group.name + 
 			"'/></a></li>");
     $("#LeaveGroup .groupList").append(e).listview('refresh');
 }
@@ -336,8 +336,9 @@ function setEditProfileForm(result){
 		return;
     $("#EditProfileForm .editProfileUserNameInput").val(result.name);
     $("#EditProfileForm .editProfileUserMailInput").val(result.email);
-    $("#EditProfileForm .editProfileUserPassInput").val(result.pass);
-    $("#EditProfileForm .editProfileUserPicInput ").val(result.picture);
+//    $("#EditProfileForm .editProfileUserPicInput ").val(result.picture);
+    
+    
 }
 function setLoginForm(){
 	log.debug("navigate back to login page");
@@ -354,6 +355,8 @@ function addBuddyToSearchResultList(buddy){
             buddy.name + ', ' + buddy.email +
 			"</label><img class='searchResultBuddyImg' src='" +
 			buddy.picture +
+			"' alt='" + 
+			buddy.name + 
 			"'/></a></li>");
 				
     $("#SearchBuddy .searchResultBuddies").append(e).listview('refresh');
@@ -383,6 +386,8 @@ function addGroupToSearchResultList(group){
             group.name +
 			"</label><img class='searchResultGroupImg' src='" +
 			group.picture +
+			"' alt='" + 
+			group.name + 
 			"'/></a></li>");
 				
     $("#SearchGroup .searchResultGroups").append(e).listview('refresh');
@@ -428,4 +433,12 @@ function updateProfileFailed(){
 function skipLogIn(){
     updateTab({ "id": "BuddiesTab" });
 	$.mobile.changePage("#Buddies");
+}
+
+function repaintChatRoom(){
+    $("#ChatRoom .message").remove();
+	if (ui.chatroom.buddyRoom)
+		activateBuddyRoom(ui.chatroom.id);
+	else
+		activateGroupRoom(ui.chatroom.id);	
 }
