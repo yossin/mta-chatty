@@ -211,8 +211,8 @@ function DAL(){
 	};
 
 	this.selectBuddyMessages=function (userId, buddyId, onSuccess, onError){
-		// sender-id, sender-name, sender-pic, send-ts, message
-		var sql="select bm.send_date, bm.sender_id, bm.receiver_id, bm.message from buddy_message as bm where ((bm.sender_id==? and bm.receiver_id==?) or (bm.sender_id==? and bm.receiver_id==?)) order by bm.send_date";
+		// send_date, sender_id, receiver_id, message, sender_name, sender_picture
+		var sql="select bm.send_date, bm.sender_id, bm.receiver_id, bm.message, u.name as sender_name, u.picture as sender_picture from buddy_message as bm join 'user' as u on u.email==bm.sender_id where ((bm.sender_id==? and bm.receiver_id==?) or (bm.sender_id==? and bm.receiver_id==?)) order by bm.send_date";
 		genericSqlStatement(sql, [userId, buddyId, buddyId, userId], onSuccess, onError);
 	};
 
