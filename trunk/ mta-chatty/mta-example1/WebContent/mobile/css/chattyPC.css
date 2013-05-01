@@ -52,7 +52,8 @@
 
 .messages-senderImg {
 	height: 45px;
-    position:absolute;
+	width: 34px;
+	position:absolute;
     top: 2px;
     left: 20px;
 }
