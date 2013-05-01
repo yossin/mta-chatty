@@ -1,0 +1,183 @@
+@CHARSET "windows-1255";
+
+  
+[data-role="page"] {
+    height:100% !important;
+}
+
+[data-role="header"] {
+   	height: 40px !important;
+}
+
+.tabheader {
+	height: 36px !important;
+}
+
+
+[data-role="content"] {
+    height:calc(100% - 72px) !important;
+}
+
+.chatRoom, .buddiesContent, .groupsContent  {
+    height:calc(100% - 125px) !important;
+}
+
+.messages {
+    position:absolute;
+    bottom:73px;
+    width: 100%;
+}
+
+
+[href="#Buddies"] .ui-icon {
+	background: url(../image/Buddys.png) 50% 50% no-repeat;
+	background-size:22px 22px;
+}
+
+[href="#Groups"] .ui-icon {
+	background: url(../image/Groups.png) 50% 50% no-repeat;
+	background-size:22px 22px;
+}
+
+
+.header-image, .chatroom-image {
+	float:right;
+	margin-top: 4px;
+	width:  24px;   
+	height: 32px;
+	padding-right:9px;
+}
+
+.chatroom-image {
+	width:  32px;
+}
+
+.header-label {
+	padding-right:45px;
+	padding-bottom:7px;
+	position:absolute;
+	bottom:0; right:0;
+}
+
+.btnRegisterSubmit , .loginOrRegistrerDiv, .RegistrerDiv, .btnCreateGroup, .leaveGroupBtn, .btnEditProfileSubmit {
+	float: right;
+}
+
+
+.colorRed {
+	color: red;
+}
+
+
+.requiredText {
+   	float: left;
+	color: red;
+}
+
+.registerUserPicInput, .editProfileUserPicInput {
+	padding-left: 6px !important;
+}
+
+
+.ui-btn-active .ui-btn-inner {
+    color: rgb(240,000,000);
+ }
+
+.row-image, .searchResultBuddyImg, .searchResultGroupImg {
+	width:  40px;   
+	height: 54px;
+	margin:auto;
+	padding-top: 5px;
+	padding-left:12px;
+}
+
+.row-label, .searchResultBuddyLabel, .searchResultGroupLabel { 
+	padding-left:64px;
+	padding-bottom:28px;
+	position:absolute;
+	bottom:0; left:0;
+}
+
+.message {
+    padding: 0px !important;
+    min-height: 50px !important;
+    max-height: 50px !important;
+}
+
+.messages-time {
+	float: right;
+	font-size: small;
+	color: gray;
+	position: absolute;
+	bottom: 3px;
+    right: 10px;
+}
+
+.messages-senderImg {
+	height: 45px;
+	width: 34px;
+	position:absolute;
+    top: 2px;
+    left: 5px;
+}
+
+.messages-senderName {
+    position:absolute;
+    bottom: 1px;
+    left: 43px;
+   	font-size: small;
+	color: gray;
+}
+
+.messages-text{
+	position: absolute;
+   	font-size: large;
+	bottom: 16px;
+    left: 60px;    
+}
+
+
+.sendMessage {
+	width: 27px;
+	margin-top: 14px;
+	padding: 0px;
+	float:right;
+}
+
+.textArea {
+	float:left;
+	resize: none;
+	width: calc(100% - 35px) !important;
+	height: 38px !important;
+}
+
+.buddy, .group, .searchResultBuddy, .searchResultGroup {
+	height: 66px;
+}
+
+.searchResultBuddiesDiv, .searchResultGroupsDiv {
+    position:absolute;
+    top:125px;
+    width: 100%;
+}
+
+.logoutBtn, .editProfileBtn, .addBuddyBtn, .createGroupBtn, .leaveGroupBtn {
+	background-size:22px 22px;
+}
+
+.logoutBtn, .editProfileBtn{
+    float:left;
+}
+
+.searchBuddyBtn, .createGroupBtn, .searchGroupBtn, .leaveGroupBtn, .searchBuddiesBtn, .searchGroupsBtn {
+	float:right;
+}
+
+ 
+/*
+[data-role="content"]  {
+    overflow-x: initial;
+    border-width:1px !important;
+    border-style:solid !important;
+    border-color:red !important;
+}*/
