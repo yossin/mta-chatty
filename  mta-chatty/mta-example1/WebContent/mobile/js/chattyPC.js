@@ -80,7 +80,7 @@ function UI(){
 			    var e = $('<li class="'+clsid+
 			    		'"><a href="#ChatRoom-'+clsid+'" id="'+id+
 			    		'"><label class="row-label">'+name+
-			    		'</label><img class="row-image" src="'+img+
+			    		'</label><img class="row-image" src="'+img+'" alt="'+name+
 			    		'" /></a></li>');
 			    $(contractsRef).append(e);
 			}
@@ -121,7 +121,7 @@ function UI(){
 				return '<li class="searchResultBuddy">'+
 	    		'<a href="#Dashboard" class="searchResultBuddy_href" id="'+buddy.email+
 	    		'"><label class="searchResultBuddyLabel">'+buddy.name+', '+buddy.email+
-	    		'</label><img   class="searchResultBuddyImg" src="'+buddy.picture+
+	    		'</label><img   class="searchResultBuddyImg" src="'+buddy.picture+'" alt="'+buddy.name+
 	    		'" /></a></li>';
 			}
 			drawSearchResultFlow(listRef,createBuddy,buddies,ui.bind.addBuddyClick);
@@ -133,7 +133,7 @@ function UI(){
 				return '<li class="searchResultGroup">'+
 	    		'<a href="#Dashboard" class="searchResultGroup_href" id="'+group.group_id+
 	    		'"><label class="searchResultGroupLabel">'+group.name+', '+group.group_id+
-	    		'</label><img   class="searchResultGroupImg" src="'+group.picture+
+	    		'</label><img   class="searchResultGroupImg" src="'+group.picture+'" alt="'+group.name+
 	    		'" /></a></li>';
 			}
 			drawSearchResultFlow(listRef,createGroup,groups,ui.bind.addGroupClick);
@@ -145,7 +145,7 @@ function UI(){
 				return '<li class="group">'+
 	    		'<a href="#Dashboard" class="hrefLeaveGroup" id="'+group.group_id+
 	    		'"><label class="searchResultGroupLabel">'+group.name+', '+group.group_id+
-	    		'</label><img   class="searchResultGroupImg" src="'+group.picture+
+	    		'</label><img   class="searchResultGroupImg" src="'+group.picture+'" alt="'+group.name+
 	    		'" /></a></li>';
 			}
 			drawSearchResultFlow(listRef,createGroup,groups,ui.bind.leaveGroupClick);
@@ -157,7 +157,7 @@ function UI(){
 			function draw(send_date, sender_id, message, sender_name, sender_picture){
 			    var e = $('<li class="message">'+
 			    		'<label class="messages-senderName">'+sender_name+
-			    		'</label><img   class="messages-senderImg" src="'+sender_picture+
+			    		'</label><img   class="messages-senderImg" src="'+sender_picture+'" alt="'+sender_name+
 			    		'" /><label class="messages-text">'+message+
 			    		'</label><label class="messages-time">'+send_date+
 			    		'</label></li>');
