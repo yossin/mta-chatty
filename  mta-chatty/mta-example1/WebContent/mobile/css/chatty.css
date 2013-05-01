@@ -98,13 +98,41 @@
 	bottom:0; left:0;
 }
 
+.message {
+    padding: 0px !important;
+    min-height: 50px !important;
+    max-height: 50px !important;
+}
 
 .messages-time {
 	float: right;
 	font-size: small;
 	color: gray;
 	position: absolute;
-	bottom: 1px;right: 10px;
+	bottom: 3px;
+    right: 10px;
+}
+
+.messages-senderImg {
+	height: 45px;
+    position:absolute;
+    top: 2px;
+    left: 5px;
+}
+
+.messages-senderName {
+    position:absolute;
+    bottom: 1px;
+    left: 43px;
+   	font-size: small;
+	color: gray;
+}
+
+.messages-text{
+	position: absolute;
+   	font-size: large;
+	bottom: 16px;
+    left: 60px;    
 }
 
 
