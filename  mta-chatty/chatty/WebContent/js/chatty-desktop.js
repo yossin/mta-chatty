@@ -5,10 +5,12 @@ function UI(){
 	function Messages(){
 		function printError(msg,e){
 			log.error(e);
+			//TODO: replace with dialog
 			alert(msg+':'+e);
 		}
 		function printMessage(msg){
-			alert(msg);
+			log.info(msg);
+			//alert(msg);
 		}
 		this.error=function(e){
 			printError('error has occured',e);
