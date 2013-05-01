@@ -1,6 +1,6 @@
 
 function UI(){
-	this.context={buddyRoom:true, id:"name@mail.com"};
+	var context={lastSelected:{type:undefined, id:undefined}};
 	
 	function Messages(){
 		function printError(msg,e){
@@ -12,6 +12,12 @@ function UI(){
 		};
 		this.loginError=function(e){
 			printError('error has occured while login please try again',e);
+		};
+		this.getMessagesError=function(e){
+			printError('error has occured while retreiving messages',e);
+		};
+		this.sendMessagesError=function(e){
+			printError('error has occured while sending message',e);
 		};
 
 	}
@@ -31,9 +37,8 @@ function UI(){
 	this.navigate=new Navigate();
 	
 	function Draw(){
-		
 		this.buddiesAndGroups=function(buddies, groups){
-			var listRef="#Dashboard .buddiesAndGroupsList";
+			var contractsRef="#Dashboard .buddiesAndGroupsList";
 			function deleteItems(type){
 			    $("#Dashboard ."+type).remove();
 			}
@@ -41,24 +46,21 @@ function UI(){
 			function appendDivider(name){
 			    var e = $('<li data-role="list-divider"><label class="divider-label">'
 			    		+name+'</label></li>');
-			    $(listRef).append(e);
+			    $(contractsRef).append(e);
 			}
 			function appendLI(clsid,id,name,img){
 			    var e = $('<li class="'+clsid+
-			    		'"><a href="#ChatRoomUpdate" id="'+id+
+			    		'"><a href="#ChatRoom-'+clsid+'" id="'+id+
 			    		'"><label class="row-label">'+name+
 			    		'</label><img class="row-image" src="'+img+
 			    		'" /></a>');
-			    $(listRef).append(e);
+			    $(contractsRef).append(e);
 			}
 			function appendBuddy(b){
 				appendLI("buddy",b.email,b.name,b.picture);
 			}
 			function appendGroup(g){
 				appendLI("group",g.group_id,g.name,g.picture);
-			}
-			function bind(){
-				
 			}
 			deleteItems("divider-label");
 			deleteItems("buddy");
@@ -68,45 +70,73 @@ function UI(){
 			iterateResults(buddies,appendBuddy);
 			appendDivider("Groups");
 			iterateResults(groups,appendGroup);
-		    $(listRef).listview('refresh');
-		    
-		    //bind();
-
+		    $(contractsRef).listview('refresh');
+		    ui.bind.buddyClick();
+		    ui.bind.groupClick();
 		};
 		
-		this.buddiesMessages=function(messages){
+		function DrawMessages(){
+			var msgRef="#Dashboard .messages";
+			function draw(send_date, sender_id, message, sender_name, sender_picture){
+				//TODO: draw all message fields
+			    var e = $('<li class="message"><label class="messages-text">'+message+
+			    		'</label><label class="messages-time">'+send_date+
+			    		'</label></li>');
+			    $(msgRef).append(e);
+			}
+			
+			function drawFlow(callback, messages){
+			    $("#Dashboard .message").remove();
+				iterateResults(messages,callback);
+			    $(msgRef).listview('refresh');
+			};
+			this.fromBuddy=function(messages){
+				function drawMessage(m){
+					draw(m.send_date, m.sender_id, m.message, m.sender_name, m.sender_picture);
+				}
+				drawFlow(drawMessage, messages);
+			};
+			this.fromGroup=function(messages){
+				function drawMessage(m){
+					draw(m.send_date, m.email, m.message, m.name, m.picture);
+				}
+				drawFlow(drawMessage, messages);
+			};
 			
 		};
+		this.messages=new DrawMessages();
+		
 	}
 	this.draw = new Draw();
 	
 	function Bind(){
-		this.buddyClick=function(){
-			$("a[href=#ChatRoomUpdate]").each(function () {
+		function bindContract(type,callback){
+			var ref="a[href=#ChatRoom-"+type+"]";
+			$(ref).each(function () {
 			    var anchor = $(this);
-				anchor.bind("click", function () {
-					//TODO:continue here...
-					clearChatRoom(); // in case of failure - we don't want to see previews room
-					ui.chatroom.id = $(this).attr("id");
-					ui.chatroom.buddyRoom = (ui.chatroom.id.indexOf("@") != -1);
-					console.log("Going to change Chat room with id: " + ui.chatroom.id);
-					if (ui.chatroom.buddyRoom)
-						activateBuddyRoom(ui.chatroom.id);
-					else
-						activateGroupRoom(ui.chatroom.id);
+				anchor.bind("click", function (event) {
+					event.preventDefault();
+					var id = $(this).attr("id");
+					callback(id);
 			        return true;
 			    });
 			});
+		}
+		this.buddyClick=function(){
+			bindContract("buddy", ui.getBuddyMessages);
+		};
+		this.groupClick=function(){
+			bindContract("group", ui.getGroupMessages);
 		};
 	}
 	this.bind = new Bind();
 	
-	this.startLogin=function(){
+	this.initApp=function(){
 		recreateDB(ui.navigate.login,ui.messages.error);
 	};
 	
 	this.startApp=function (){
-		bl.checkUserLoggedIn(ui.navigate.dashboard,ui.startLogin);
+		bl.checkUserLoggedIn(ui.navigate.dashboard,ui.initApp);
 	};
 
 	this.login=function(){
@@ -129,6 +159,53 @@ function UI(){
 		bl.getBuddyList(getBuddyListRes, ui.messages.error);
 		
 	};
+	
+	this.refreshMessages=function(){
+		var id=	context.lastSelected.id;
+		var type = context.lastSelected.type;
+		if (type=='buddy'){
+			ui.getBuddyMessages(id);
+		} else if (type=='group'){
+			ui.getGroupMessages(id);
+		} else {
+			log.error('unknown message type: '+type+', therfore unable to refresh messages');
+		}
+	};
+	
+	this.getBuddyMessages=function(id){
+		log.debug("retreive buddy "+id+" messages");
+		context.lastSelected.type="buddy";
+		context.lastSelected.id=id;
+		bl.getBuddyMessages(id, ui.draw.messages.fromBuddy, ui.messages.getMessagesError);
+	};
+	this.getGroupMessages=function(id){
+		log.debug("retreive group "+id+" messages");
+		context.lastSelected.type="group";
+		context.lastSelected.id=id;
+		bl.getGroupMessages(id, ui.draw.messages.fromGroup, ui.messages.getMessagesError);
+	};
+	this.sendMessage=function(){
+		if (context.lastSelected.type!=undefined){
+			var text=$("#Dashboard .textArea");
+			var message=text.val();
+			if (message!=null && message!=""){
+				text.val('');
+				log.debug("send "+context.lastSelected.type+" "+context.lastSelected.id+" a message: "+message);
+				if (context.lastSelected.type=='buddy'){
+					bl.sendBuddyMessage(context.lastSelected.id, message, ui.refreshMessages, ui.messages.sendMessagesError);
+				} else if (context.lastSelected.type=='group'){
+					bl.sendGroupMessage(context.lastSelected.id, message, ui.refreshMessages, ui.messages.sendMessagesError);
+				}
+				ui.refreshMessages();
+			} else {
+				log.debug("no message is going to be sent. user must write something..");
+			}
+			
+			//bl.getGroupMessages(id, ui.draw.messages.fromGroup, ui.messages.getMessagesError);
+		} else {
+			log.debug("no message is going to be sent. user must select a contract");
+		}
+	};
 }
 var ui=new UI();
 
@@ -149,6 +226,7 @@ $(document).ready(function(){
 	$("#LoginForm .btnLoginToChatty").click(ui.login);
 
 	$("#Dashboard").bind("pagebeforeshow", ui.loadContacts);
+	$("#Dashboard .sendMessage").bind("click", ui.sendMessage);
     
 });
 
