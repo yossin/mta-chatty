@@ -7,6 +7,9 @@ function UI(){
 			log.error(e);
 			alert(msg+':'+e);
 		}
+		function printMessage(msg){
+			alert(msg);
+		}
 		this.error=function(e){
 			printError('error has occured',e);
 		};
@@ -17,7 +20,35 @@ function UI(){
 			printError('error has occured while retreiving messages',e);
 		};
 		this.sendMessagesError=function(e){
-			printError('error has occured while sending message',e);
+			printError('error has occured while sending a message',e);
+		};
+		this.searchBuddiesError=function(e){
+			printError('error has occured while searching buddies',e);
+		};
+		this.searchGroupsError=function(e){
+			printError('error has occured while searching groups',e);
+		};
+		this.addBuddyError=function(e){
+			printError('error has occured while adding a buddy',e);
+		};
+		this.addGroupError=function(e){
+			printError('error has occured while adding a group',e);
+		};
+		this.createGroup=function(res){
+			printMessage('a new group has been created');
+		};
+		this.createGroupError=function(e){
+			printError('error has occured while creating a group',e);
+		};
+		this.searchGroupsToLeaveError=function(e){
+			printError('error has occured while searching a group to leave',e);
+		};
+		this.leaveGroup=function(res){
+			printMessage('you have left a group');
+			ui.loadContacts();
+		};
+		this.leaveGroupError=function(e){
+			printError('error has occured while leaving a group',e);
 		};
 
 	}
@@ -32,39 +63,34 @@ function UI(){
 			log.debug("navigate into dashboard page");
 			$.mobile.changePage("#Dashboard");
 		};
-
 	}
 	this.navigate=new Navigate();
 	
 	function Draw(){
+		
 		this.buddiesAndGroups=function(buddies, groups){
 			var contractsRef="#Dashboard .buddiesAndGroupsList";
-			function deleteItems(type){
-			    $("#Dashboard ."+type).remove();
-			}
 			
 			function appendDivider(name){
 			    var e = $('<li data-role="list-divider"><label class="divider-label">'
 			    		+name+'</label></li>');
 			    $(contractsRef).append(e);
 			}
-			function appendLI(clsid,id,name,img){
+			function appendContract(clsid,id,name,img){
 			    var e = $('<li class="'+clsid+
 			    		'"><a href="#ChatRoom-'+clsid+'" id="'+id+
 			    		'"><label class="row-label">'+name+
 			    		'</label><img class="row-image" src="'+img+
-			    		'" /></a>');
+			    		'" /></a></li>');
 			    $(contractsRef).append(e);
 			}
 			function appendBuddy(b){
-				appendLI("buddy",b.email,b.name,b.picture);
+				appendContract("buddy",b.email,b.name,b.picture);
 			}
 			function appendGroup(g){
-				appendLI("group",g.group_id,g.name,g.picture);
+				appendContract("group",g.group_id,g.name,g.picture);
 			}
-			deleteItems("divider-label");
-			deleteItems("buddy");
-			deleteItems("group");
+			$(contractsRef).empty();
 			
 			appendDivider("Buddies");
 			iterateResults(buddies,appendBuddy);
@@ -75,11 +101,64 @@ function UI(){
 		    ui.bind.groupClick();
 		};
 		
+		function drawSearchResultFlow(listRef, createItemAction, items, bindAction){
+			
+			function appendItem(data){
+				var item=createItemAction(data);
+			    var e = $(item);
+			    $(listRef).append(e);
+			}
+
+			$(listRef).empty();
+			iterateResults(items,appendItem);
+		    $(listRef).listview('refresh');
+		    bindAction();
+			
+		}
+		this.searchBuddiesResult=function(buddies){
+			var listRef="#SearchBuddy .searchResultBuddies";
+			function createBuddy(buddy){
+				return '<li class="searchResultBuddy">'+
+	    		'<a href="#Dashboard" class="searchResultBuddy_href" id="'+buddy.email+
+	    		'"><label class="searchResultBuddyLabel">'+buddy.name+', '+buddy.email+
+	    		'</label><img   class="searchResultBuddyImg" src="'+buddy.picture+
+	    		'" /></a></li>';
+			}
+			drawSearchResultFlow(listRef,createBuddy,buddies,ui.bind.addBuddyClick);
+		};
+		
+		this.searchGroupsResult=function(groups){
+			var listRef="#SearchGroup .searchResultGroups";
+			function createGroup(group){
+				return '<li class="searchResultGroup">'+
+	    		'<a href="#Dashboard" class="searchResultGroup_href" id="'+group.group_id+
+	    		'"><label class="searchResultGroupLabel">'+group.name+', '+group.group_id+
+	    		'</label><img   class="searchResultGroupImg" src="'+group.picture+
+	    		'" /></a></li>';
+			}
+			drawSearchResultFlow(listRef,createGroup,groups,ui.bind.addGroupClick);
+		};
+		
+		this.searchGroupsToLeaveResult=function(groups){
+			var listRef="#LeaveGroup .groupList";
+			function createGroup(group){
+				return '<li class="group">'+
+	    		'<a href="#Dashboard" class="hrefLeaveGroup" id="'+group.group_id+
+	    		'"><label class="searchResultGroupLabel">'+group.name+', '+group.group_id+
+	    		'</label><img   class="searchResultGroupImg" src="'+group.picture+
+	    		'" /></a></li>';
+			}
+			drawSearchResultFlow(listRef,createGroup,groups,ui.bind.leaveGroupClick);
+		};
+
+
 		function DrawMessages(){
 			var msgRef="#Dashboard .messages";
 			function draw(send_date, sender_id, message, sender_name, sender_picture){
-				//TODO: draw all message fields
-			    var e = $('<li class="message"><label class="messages-text">'+message+
+			    var e = $('<li class="message">'+
+			    		'<label class="messages-senderName">'+sender_name+
+			    		'</label><img   class="messages-senderImg" src="'+sender_picture+
+			    		'" /><label class="messages-text">'+message+
 			    		'</label><label class="messages-time">'+send_date+
 			    		'</label></li>');
 			    $(msgRef).append(e);
@@ -110,23 +189,41 @@ function UI(){
 	this.draw = new Draw();
 	
 	function Bind(){
-		function bindContract(type,callback){
-			var ref="a[href=#ChatRoom-"+type+"]";
-			$(ref).each(function () {
+		function callByIdBinding(selector,callback, prevent){
+			$(selector).each(function () {
 			    var anchor = $(this);
 				anchor.bind("click", function (event) {
-					event.preventDefault();
+					if (typeof(prevent)==undefined || prevent)
+						event.preventDefault();
 					var id = $(this).attr("id");
 					callback(id);
 			        return true;
 			    });
 			});
 		}
+
+		
+		function bindContract(type,callback){
+			var ref="a[href=#ChatRoom-"+type+"]";
+			callByIdBinding(ref, callback);
+		}
 		this.buddyClick=function(){
 			bindContract("buddy", ui.getBuddyMessages);
 		};
 		this.groupClick=function(){
 			bindContract("group", ui.getGroupMessages);
+		};
+		this.addBuddyClick=function(){
+			var ref='.searchResultBuddy_href';
+			callByIdBinding(ref, ui.addBuddy, false);
+		};
+		this.addGroupClick=function(){
+			var ref='.searchResultGroup_href';
+			callByIdBinding(ref, ui.addGroup, false);
+		};
+		this.leaveGroupClick=function(){
+			var ref='.hrefLeaveGroup';
+			callByIdBinding(ref, ui.removeGroup, false);
 		};
 	}
 	this.bind = new Bind();
@@ -206,6 +303,41 @@ function UI(){
 			log.debug("no message is going to be sent. user must select a contract");
 		}
 	};
+	
+	this.searchBuddies=function(){
+		var text=$("#SearchBuddy .textArea");
+		var search=text.val();
+		bl.searchBuddiesByNameOrID(search, ui.draw.searchBuddiesResult, ui.messages.searchBuddiesError);
+		return true;
+	};
+	this.searchGroups=function(){
+		var text=$("#SearchGroup .textArea");
+		var search=text.val();
+		bl.searchGroupsByName(search, ui.draw.searchGroupsResult, ui.messages.searchGroupsError);
+		return true;
+	};
+	this.addBuddy=function(id){
+		bl.addBuddyToList(id, ui.loadContacts, ui.messages.addBuddyError);
+		return true;
+	};
+	this.addGroup=function(id){
+		bl.joinGroup(id, ui.loadContacts, ui.messages.addGroupError);
+		return true;
+	};
+	this.createGroup=function(){
+		var name=$("#CreateGroup .createGroupNameInput").val();
+		var pic =$("#CreateGroup .createGroupPicInput").val();
+		var desc =$("#CreateGroup .createGroupDescInput").val();
+		bl.createGroup(name, pic, desc, ui.messages.createGroup, ui.messages.createGroupError);
+		return true;
+	};
+	this.leaveGroup=function(){
+		bl.getGroupList(ui.draw.searchGroupsToLeaveResult, ui.messages.searchGroupsToLeaveError);
+	};
+	this.removeGroup=function(id){
+		bl.leaveGroup(id, ui.messages.leaveGroup, ui.messages.leaveGroupError);
+		return true;
+	};
 }
 var ui=new UI();
 
@@ -215,19 +347,22 @@ var ui=new UI();
 $(document).ready(function(){
 	initChatty(ui.startApp, ui.messages.error);
 	
-    $(window).resize(function(){
-        updateMainDivsHeight();
-    });
+    $(window).resize(updateMainDivsHeight);
     
-    $(document).bind('pagebeforeshow', function(){
-        updateMainDivsHeight();
-    });
+    $(document).bind('pagebeforeshow', updateMainDivsHeight);
     
 	$("#LoginForm .btnLoginToChatty").click(ui.login);
 
 	$("#Dashboard").bind("pagebeforeshow", ui.loadContacts);
 	$("#Dashboard .sendMessage").bind("click", ui.sendMessage);
-    
+
+	$("#SearchBuddy .searchBuddiesBtn").bind("click", ui.searchBuddies);
+	$("#SearchGroup .searchGroupsBtn").bind("click", ui.searchGroups);
+	$("#CreateGroup .btnCreateGroup").bind("click", ui.createGroup);
+	
+	$("#LeaveGroup").bind('pagebeforeshow', ui.leaveGroup);
+	
+
 });
 
 

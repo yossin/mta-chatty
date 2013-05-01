@@ -201,6 +201,16 @@ function DAL(){
 		var sql="insert into 'group_membership' (member_email, group_id) values (?,?)";
 		genericSqlStatement(sql, [memberMail, groupId], onSuccess, onError);
 	};
+	
+	this.deleteGroupMembership=function (memberMail, groupId, onSuccess, onError){
+		var sql="delete from 'group_membership' where member_email=? and group_id=?";
+		genericSqlStatement(sql, [memberMail, groupId], onSuccess, onError);
+	};
+	
+	this.deleteGroupIfEmpry=function (groupId, onSuccess, onError){
+		var sql="delete from 'group' where group_id==? and not exists (select gm.group_id from group_membership as gm where gm.group_id==?)";
+		genericSqlStatement(sql, [groupId, groupId], onSuccess, onError);
+	};
 
 	//----------- MESSAGES -------------
 
