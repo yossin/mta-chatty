@@ -205,7 +205,7 @@ function UI(){
 		
 		function bindContract(type,callback){
 			var ref="a[href=#ChatRoom-"+type+"]";
-			callByIdBinding(ref, callback);
+			callByIdBinding(ref, callback, true);
 		}
 		this.buddyClick=function(){
 			bindContract("buddy", ui.getBuddyMessages);

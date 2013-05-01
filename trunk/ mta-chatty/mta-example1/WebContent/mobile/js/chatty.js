@@ -70,7 +70,7 @@ $(document).ready(function(){
 	});
 	
 	
-	// Bind the login form.
+	// Bind the login form
 //	$("#LoginForm").submit(function( event ){
 	$("#LoginForm .btnLoginToChatty").click(function(){
 		// Prevent the default submit.
