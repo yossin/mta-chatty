@@ -113,12 +113,10 @@ function BL(onSuccessInit, onError){
 		}, onError);		
 	};
 
-	//TODO: tested on create group flow. should be tested separately 
 	this.joinGroup=function(groupId, onSuccess, onError){
 		dal.insertGroupMembership(bl.loggedInUser.email, groupId, onSuccess, onError);
 	};
 
-	//TODO: untested! - verify works correctly - concurrent requests!
 	this.leaveGroup=function(groupId, onSuccess, onError){
 		dal.deleteGroupMembership(bl.loggedInUser.email, groupId, function(){
 			dal.deleteGroupIfEmpry(groupId, onSuccess, onError);
