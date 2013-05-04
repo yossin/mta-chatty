@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Context>
+	<Resource name="jdbc/chattyDB" auth="Container"
+		type="javax.sql.DataSource" username="chatty" password="12345678"
+		driverClassName="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:3306/chatty"
+		maxActive="15" maxIdle="3" />
+</Context>
