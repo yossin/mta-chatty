@@ -141,14 +141,14 @@ $(document).ready(function(){
     });
 
     $('.searchGroupBtn').click(function(){
-   		$("#searchGroupText").val("");
+   		$("#searchGroupsText").val("");
    	    $("#SearchGroup .searchResultBuddy").remove();
     });
 
     $('.searchGroupsBtn').click(function(){
-   		searchGroupText = $("#searchGroupText").val();
-        if (searchGroupText != "")
-        	bl.searchGroupsByName(searchGroupText, setSearchGroupRes, printError);
+   		searchGroupsText = $("#searchGroupsText").val();
+        if (searchGroupsText != "")
+        	bl.searchGroupsByName(searchGroupsText, setSearchGroupRes, printError);
     });
     
     // Bind the login form.
