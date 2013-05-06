@@ -8,11 +8,17 @@ import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
-public class PreperedStatementExecuter {
-	private static Logger logger = Logger.getLogger(PreperedStatementExecuter.class.getName());
+import edu.mta.chatty.dal.handlers.BatchHandler;
+import edu.mta.chatty.dal.handlers.Handler;
+import edu.mta.chatty.dal.handlers.QueryHandler;
+import edu.mta.chatty.dal.handlers.SafeBatchInsert;
+import edu.mta.chatty.dal.handlers.UpdateHandler;
+
+public class PreparedStatementExecuter {
+	private static Logger logger = Logger.getLogger(PreparedStatementExecuter.class.getName());
 	private SimpleConManager dal;
 	
-	public PreperedStatementExecuter(DataSource dataSource){
+	public PreparedStatementExecuter(DataSource dataSource){
 		dal = new SimpleConManager(dataSource);
 	}
 	
@@ -41,7 +47,7 @@ public class PreperedStatementExecuter {
 			statement = prepareStatement(connection, handler);
 			executer.execute(statement);
 		} catch (SQLException e){
-			logger.fine(String.format("error while executing sql {0}, exception {1}",handler.getSql(), e));
+			logger.severe(String.format("error while executing sql %s, exception %s",handler.getSql(), e));
 		} finally{
 			close(statement);
 			dal.disconnect();
@@ -76,12 +82,34 @@ public class PreperedStatementExecuter {
 			}
 			handler.handleResults(statement.executeBatch());
 		} catch (SQLException e){
-			logger.fine(String.format("error while executing sqls {0}, exception is {1}",handler.getBatchList(), e));
+			logger.severe(String.format("error while executing sqls %s, exception is %s",handler.getBatchList(), e));
 			throw e;
 		} finally{
 			close(statement);
 			dal.disconnect();
 		} 
-		
 	}
+	private <T> PreparedStatement prepareStatement(Connection connection, SafeBatchInsert<T> handler) throws SQLException{
+		PreparedStatement statement  = connection.prepareStatement(handler.getSql());
+		for(T t: handler.getInsertData()){
+			handler.setVariables(statement,t);
+			statement.addBatch();
+		}
+		return statement;
+	}
+
+	public <T>void execute(final SafeBatchInsert<T> handler) throws SQLException{
+		Connection connection = dal.connect();
+		PreparedStatement statement = null;
+		try {
+			statement = prepareStatement(connection, handler);
+			handler.handleResult(statement.executeBatch());
+		} catch (SQLException e){
+			logger.severe(String.format("error while executing batch sql %s, exception %s",handler.getSql(), e));
+		} finally{
+			close(statement);
+			dal.disconnect();
+		} 	
+	}
+
 }

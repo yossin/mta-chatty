@@ -1,4 +1,5 @@
-package edu.mta.chatty.dal;
+package edu.mta.chatty.dal.handlers;
+
 
 
 public interface UpdateHandler extends Handler{

@@ -8,13 +8,13 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import edu.mta.chatty.dal.BatchHandler;
-import edu.mta.chatty.dal.PreperedStatementExecuter;
+import edu.mta.chatty.dal.PreparedStatementExecuter;
+import edu.mta.chatty.dal.handlers.BatchHandler;
 
 public class DBHelper {
-	final private PreperedStatementExecuter executer;
+	final private PreparedStatementExecuter executer;
 	public DBHelper(DataSource dataSource){
-		this.executer = new PreperedStatementExecuter(dataSource);
+		this.executer = new PreparedStatementExecuter(dataSource);
 	}
 	
 	
