@@ -1,6 +1,7 @@
-package edu.mta.chatty.dal;
+package edu.mta.chatty.dal.handlers;
 
 import java.sql.ResultSet;
+
 
 
 public interface QueryHandler extends Handler{

@@ -22,7 +22,9 @@ public class AppWatcher  implements ServletContextListener {
 		ServletContext context = event.getServletContext();
 		
 		if (initializer.dropTables(context)){
-			initializer.createTables(context);
+			if (initializer.createTables(context)){
+				initializer.loadTestData(context);
+			}
 		}
     }
 

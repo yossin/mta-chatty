@@ -45,19 +45,19 @@ function genericCreateTestData(sql, itemName, list, createParams, onSuccess, onE
 }
 
 function createCountriesTestData(list, onSuccess, onError){
-	genericCreateTestData("insert into country (country) values (?)", 
+	genericCreateTestData("insert into country (country_id,country) values (?,?)", 
 			"country", list, 
 			function(country){
-				return [country.country];
+				return [country.country_id, country.country];
 			}, onSuccess, onError
 	);
 }
 
 function createCitiesTestData(list, onSuccess, onError){
-	genericCreateTestData("insert into city (city, country_id) values (?,?)", 
+	genericCreateTestData("insert into city (city_id, city, country_id) values (?,?,?)", 
 			"city", list, 
 			function(city){
-				return [city.city, city.country_id];
+				return [city.city_id, city.city, city.country_id];
 			}, onSuccess, onError
 	);
 }
