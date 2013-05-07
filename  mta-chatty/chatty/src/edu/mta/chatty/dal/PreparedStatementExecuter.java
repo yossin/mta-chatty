@@ -16,10 +16,10 @@ import edu.mta.chatty.dal.handlers.UpdateHandler;
 
 public class PreparedStatementExecuter {
 	private static Logger logger = Logger.getLogger(PreparedStatementExecuter.class.getName());
-	private SimpleConManager dal;
+	private SimpleConManager db;
 	
 	public PreparedStatementExecuter(DataSource dataSource){
-		dal = new SimpleConManager(dataSource);
+		db = new SimpleConManager(dataSource);
 	}
 	
 	private static void close(Statement statement){
@@ -41,7 +41,7 @@ public class PreparedStatementExecuter {
 	}
 	
 	private void execute(Handler handler, Executer executer) throws SQLException{
-		Connection connection = dal.connect();
+		Connection connection = db.connect();
 		PreparedStatement statement = null;
 		try {
 			statement = prepareStatement(connection, handler);
@@ -50,7 +50,7 @@ public class PreparedStatementExecuter {
 			logger.severe(String.format("error while executing sql %s, exception %s",handler.getSql(), e));
 		} finally{
 			close(statement);
-			dal.disconnect();
+			db.disconnect();
 		} 
 	}
 
@@ -73,7 +73,7 @@ public class PreparedStatementExecuter {
 		});
 	}
 	public void execute(final BatchHandler handler) throws SQLException{
-		Connection connection = dal.connect();
+		Connection connection = db.connect();
 		Statement statement = null;
 		try {
 			statement = connection.createStatement();
@@ -86,7 +86,7 @@ public class PreparedStatementExecuter {
 			throw e;
 		} finally{
 			close(statement);
-			dal.disconnect();
+			db.disconnect();
 		} 
 	}
 	private <T> PreparedStatement prepareStatement(Connection connection, SafeBatchInsert<T> handler) throws SQLException{
@@ -99,7 +99,7 @@ public class PreparedStatementExecuter {
 	}
 
 	public <T>void execute(final SafeBatchInsert<T> handler) throws SQLException{
-		Connection connection = dal.connect();
+		Connection connection = db.connect();
 		PreparedStatement statement = null;
 		try {
 			statement = prepareStatement(connection, handler);
@@ -108,7 +108,7 @@ public class PreparedStatementExecuter {
 			logger.severe(String.format("error while executing batch sql %s, exception %s",handler.getSql(), e));
 		} finally{
 			close(statement);
-			dal.disconnect();
+			db.disconnect();
 		} 	
 	}
 
