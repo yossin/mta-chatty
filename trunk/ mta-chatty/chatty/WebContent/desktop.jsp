@@ -20,7 +20,7 @@
 
 <body>
 	
-	<% String machine = new String("desktop"); %>
+	<% String machine = "desktop"; %>
 	
 	
 	<section id="Loading" data-role="dialog">
