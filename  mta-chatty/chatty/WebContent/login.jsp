@@ -7,12 +7,8 @@
 			<img   class="header-image" src="image/Login.png" alt="Login"/>
 		</header>
 
-		<% if ( request.getParameter("machine").equals("mobile")) { %>
-		<form id="LoginForm" class="content" data-role="content" action="#Buddies" method="post">
-		<% } else { %>
-		<form id="LoginForm" class="content" data-role="content" action="#Dashboard" method="post">
-		<% } %>
-		
+		<% String action = request.getParameter("machine").equals("mobile")?"#Dashboard":"#Buddies"; %>
+		<form id="LoginForm" class="content" data-role="content" action="<%=action%>" method="post">
 			<div>
 				<span class="colorRed">*</span>
 				<label class="loginUserMailLable">Email:</label>
