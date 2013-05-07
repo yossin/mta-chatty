@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=windows-1255"
-    pageEncoding="windows-1255"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
 
 
 		<header data-role="header">
@@ -7,11 +7,9 @@
 			<img   class="header-image" src="image/Register.png" alt="Register"/>
 		</header>
 		
-		<% if ( request.getParameter("machine").equals("mobile")) { %>
-		<form id="RegisterForm" class="content" data-role="content" action="#Buddies">
-		<% } else { %>
-		<form id="RegisterForm" class="content" data-role="content" action="#Dashboard">
-		<% } %>
+		<% String nextpage = request.getParameter("device").equals("mobile")?"#Buddies":"#Dashboard"; %>
+		
+		<form id="RegisterForm" class="content" data-role="content" action="<%=nextpage%>">
 			<div>
 				<span class="colorRed">*</span>
 				<label class="registerUserMailLable">Email:</label>
@@ -37,11 +35,7 @@
 			</div>
 				
 			<div class="RegistrerDiv">
-				<% if ( request.getParameter("machine").equals("mobile")) { %>
-				<a href="#Buddies" class="btnRegisterSubmit" data-inline="true" data-role="button">Register</a>
-				<% } else { %>
-				<a href="#Dashboard" class="btnRegisterSubmit" data-inline="true" data-role="button">Register</a>
-				<% } %>
+				<a href="<%=nextpage%>" class="btnRegisterSubmit" data-inline="true" data-role="button">Register</a>
 			<%--	<button type="submit" class="btnRegisterSubmit" data-inline="true">Register</button> --%>
 			</div>
 		</form>				

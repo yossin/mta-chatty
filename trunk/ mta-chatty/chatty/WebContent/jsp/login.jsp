@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=windows-1255"
-    pageEncoding="windows-1255"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
 
 
 		<header data-role="header">
@@ -7,7 +7,7 @@
 			<img   class="header-image" src="image/Login.png" alt="Login"/>
 		</header>
 
-		<% String action = request.getParameter("machine").equals("mobile")?"#Dashboard":"#Buddies"; %>
+		<% String action; if(request.getParameter("device").equals("mobile")) action="#Buddies"; else action="#Dashboard"; %>
 		<form id="LoginForm" class="content" data-role="content" action="<%=action%>" method="post">
 			<div>
 				<span class="colorRed">*</span>

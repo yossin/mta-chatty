@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=windows-1255"
-    pageEncoding="windows-1255"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
 
 
 		<header data-role="header">
@@ -27,10 +27,8 @@
 			</div>
 				
 			<div class="createGroupDiv">
-   				<% if ( request.getParameter("machine").equals("mobile")) { %>
-				<a href="#Groups" class="btnCreateGroup" data-inline="true" data-role="button">Create Group</a>
-				<% } else { %>
-				<a href="#Dashboard" class="btnCreateGroup" data-inline="true" data-role="button">Create Group</a><% } %>
+				<% String href = request.getParameter("device").equals("mobile")?"#Groups":"#Dashboard"; %>
+				<a href="<%=href %>" class="btnCreateGroup" data-inline="true" data-role="button">Create Group</a>
 			<%--	<button type="submit" class="btnCreateGroup" data-inline="true">Create Group</button> --%>
 			</div>
 		</form>		
