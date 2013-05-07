@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
 	<link rel="stylesheet" href="css/chatty-mobile.css">
 	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-	<script	src="js/imported/log4javascript.js"></script>
+	<script	src="<%=request.getContextPath()%>/js/imported/log4javascript.js"></script>
 	<script	src="js/chatty-util.js"></script>
 	<script	src="js/chatty-test.js"></script>
 	<script	src="js/chatty-dal.js"></script>
