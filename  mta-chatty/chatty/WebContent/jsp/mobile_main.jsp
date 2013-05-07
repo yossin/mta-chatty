@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=windows-1255"
-    pageEncoding="windows-1255"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
 
 
 	<section id="Buddies" data-role="page">
@@ -27,8 +27,8 @@
 		<footer data-role="footer" class="ui-bar">
             <div>
                 <a href="#Login"       class="logoutBtn"      data-role="button" data-icon="delete" data-iconpos="notext">Logout</a>
-                <a href="#EditProfile" class="editProfileBtn" data-role="button" data-icon="gear" data-iconpos="notext">Edit Profile</a>
-                <a href="#SearchBuddy" class="searchBuddyBtn"    data-role="button" data-icon="search" data-iconpos="notext">Search Buddy</a>
+                <a href="#EditProfile" class="editProfileBtn" data-role="button" data-icon="gear"   data-iconpos="notext">Edit Profile</a>
+                <a href="#SearchBuddy" class="searchBuddyBtn" data-role="button" data-icon="search" data-iconpos="notext">Search Buddy</a>
             </div>
         </footer>
 	</section>
