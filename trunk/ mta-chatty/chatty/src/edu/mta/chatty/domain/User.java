@@ -1,4 +1,4 @@
-package edu.mta.chatty.bl;
+package edu.mta.chatty.domain;
 
 public class User{
 	private String email;
