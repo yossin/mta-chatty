@@ -13,7 +13,7 @@ import edu.mta.chatty.bl.Initializer;
 public class AppWatcher  implements ServletContextListener {
 	private final static Logger logger = Logger.getLogger(AppWatcher.class.getName());
 	
-	@Resource(name = "jdbc/chattyDB")
+	@Resource(name = Constants.DataSource)
 	DataSource ds;
 
 	public void contextInitialized(ServletContextEvent event) {

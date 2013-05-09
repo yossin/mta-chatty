@@ -1,6 +1,8 @@
 package edu.mta.chatty.domain;
 
-public class User{
+import edu.mta.chatty.contract.LoginRequest;
+
+public class User implements LoginRequest{
 	private String email;
 	private String name;
 	private String picture;
