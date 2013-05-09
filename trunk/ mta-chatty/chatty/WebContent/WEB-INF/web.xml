@@ -19,4 +19,14 @@
   <listener>
     <listener-class>edu.mta.chatty.AppWatcher</listener-class>
   </listener>
+  <servlet>
+    <description></description>
+    <display-name>LoginService</display-name>
+    <servlet-name>LoginService</servlet-name>
+    <servlet-class>edu.mta.chatty.service.LoginService</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LoginService</servlet-name>
+    <url-pattern>/services/login</url-pattern>
+  </servlet-mapping>
 </web-app>
