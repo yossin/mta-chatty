@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
+import edu.mta.chatty.contract.GenericDataResponse;
 import edu.mta.chatty.contract.LoginRequest;
 import edu.mta.chatty.dal.DAL;
 import edu.mta.chatty.domain.User;
@@ -14,6 +15,7 @@ public class BL {
 	private final static Logger logger = Logger.getLogger(BL.class.getName());
 	private DAL dal;
 	final public Users users = new Users();
+	final public GenericData generic = new GenericData();
 
 	public BL(DataSource ds){
 		dal = new DAL(ds);
@@ -48,6 +50,31 @@ public class BL {
 			return user;
 		}
 	}
+	
+	public class GenericData{
+		public GenericDataResponse getGenericData() throws IllegalArgumentException, Exception{
+			BLExecuter<Void, GenericDataResponse> executer = new BLExecuter<Void, GenericDataResponse>();
+			GenericDataResponse data = executer.execute(new BLRequest<Void, GenericDataResponse>() {
+				@Override
+				public void validate(Void t) throws IllegalArgumentException {
+				}
+				
+				@Override
+				public GenericDataResponse perform(Void t) throws Exception {
+					try {
+						return dal.generic.getGenericData();
+					} catch (SQLException e) {
+						String msg = String.format("unable to get generic data, with error %s", e);
+						logger.severe(msg);
+						logger.log(Level.SEVERE, e.getMessage(), e);
+						throw new Exception (msg, e);
+					}
+				}
+			}, null);
+			return data;
+		}
+	}
+	
 	
 	
 
