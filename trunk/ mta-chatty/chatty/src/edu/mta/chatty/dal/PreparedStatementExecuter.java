@@ -19,6 +19,40 @@ public class PreparedStatementExecuter {
 	private static Logger logger = Logger.getLogger(PreparedStatementExecuter.class.getName());
 	private SimpleConManager db;
 	
+	static interface Command{
+		PreparedStatement prepareStatement(Connection connection) throws SQLException;
+		void execute(PreparedStatement statement) throws SQLException;
+	}
+	interface Executer{
+		void execute(PreparedStatement statement) throws SQLException;
+	}
+	
+	static abstract class SinglePreparedCommand extends CommandExecuter{
+		Handler handler;
+		SinglePreparedCommand(Handler handler,Executer executer){
+			super(executer);
+			this.handler=handler;
+		}
+		@Override
+		public PreparedStatement prepareStatement(Connection connection) throws SQLException {
+			PreparedStatement statement  = connection.prepareStatement(handler.getSql());
+			handler.setVariables(statement);
+			return statement;
+		}
+	}
+	static abstract class CommandExecuter implements Command{
+		Executer executer;
+		CommandExecuter(Executer executer){
+			this.executer=executer;
+		}
+		@Override
+		public void execute(PreparedStatement statement) throws SQLException {
+			executer.execute(statement);
+		}
+	}
+	
+	
+	
 	public PreparedStatementExecuter(DataSource dataSource){
 		db = new SimpleConManager(dataSource);
 	}
@@ -32,23 +66,20 @@ public class PreparedStatementExecuter {
 			}
 		}
 	}
-	private PreparedStatement prepareStatement(Connection connection, Handler handler) throws SQLException{
-		PreparedStatement statement  = connection.prepareStatement(handler.getSql());
-		handler.setVariables(statement);
-		return statement;
-	}
-	private interface Executer{
-		void execute(PreparedStatement statement) throws SQLException;
+
+	private void execute(Handler handler, Executer executer) throws SQLException{
+		SinglePreparedCommand command = new SinglePreparedCommand(handler,executer){};
+		execute(command);
 	}
 	
-	private void execute(Handler handler, Executer executer) throws SQLException{
+	private void execute(Command command) throws SQLException{
 		Connection connection = db.connect();
 		PreparedStatement statement = null;
 		try {
-			statement = prepareStatement(connection, handler);
-			executer.execute(statement);
+			statement = command.prepareStatement(connection);
+			command.execute(statement);
 		} catch (SQLException e){
-			logger.severe(String.format("error while executing sql %s, exception %s",handler.getSql(), e));
+			logger.severe(String.format("error while executing statement  %s, exception %s",statement, e));
 			logger.log(Level.SEVERE, e.getMessage(), e);
 		} finally{
 			close(statement);
@@ -74,6 +105,34 @@ public class PreparedStatementExecuter {
 			}
 		});
 	}
+	
+	public <T>void execute(final SafeBatchInsert<T> handler) throws SQLException{
+		Executer executer = new Executer(){
+			@Override
+			public void execute(PreparedStatement statement)
+					throws SQLException {
+				handler.handleResult(statement.executeBatch());
+			}
+		};
+		CommandExecuter command = new CommandExecuter(executer) {
+			@Override
+			public PreparedStatement prepareStatement(Connection connection)
+					throws SQLException {
+				PreparedStatement statement  = connection.prepareStatement(handler.getSql());
+				for(T t: handler.getInsertData()){
+					handler.setVariables(statement,t);
+					statement.addBatch();
+				}
+				return statement;
+			}
+		};
+		execute(command);
+	}
+
+	
+	
+	
+	
 	public void execute(final BatchHandler handler) throws SQLException{
 		Connection connection = db.connect();
 		Statement statement = null;
@@ -92,28 +151,7 @@ public class PreparedStatementExecuter {
 			db.disconnect();
 		} 
 	}
-	private <T> PreparedStatement prepareStatement(Connection connection, SafeBatchInsert<T> handler) throws SQLException{
-		PreparedStatement statement  = connection.prepareStatement(handler.getSql());
-		for(T t: handler.getInsertData()){
-			handler.setVariables(statement,t);
-			statement.addBatch();
-		}
-		return statement;
-	}
 
-	public <T>void execute(final SafeBatchInsert<T> handler) throws SQLException{
-		Connection connection = db.connect();
-		PreparedStatement statement = null;
-		try {
-			statement = prepareStatement(connection, handler);
-			handler.handleResult(statement.executeBatch());
-		} catch (SQLException e){
-			logger.severe(String.format("error while executing batch sql %s, exception %s",handler.getSql(), e));
-			logger.log(Level.SEVERE, e.getMessage(), e);
-		} finally{
-			close(statement);
-			db.disconnect();
-		} 	
-	}
-
+	
+	
 }
