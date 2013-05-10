@@ -53,7 +53,7 @@ public class CloudFoundryContext {
 
 	private static VCAPServices loadVCAPDefinitions(){
 		String env = System.getenv("VCAP_SERVICES");
-		env ="{\"mysql-5.1\":[{\"name\":\"chattyDB\",\"label\":\"mysql-5.1\",\"plan\":\"free\",\"tags\":[\"relational\",\"mysql-5.1\",\"mysql\"],\"credentials\":{\"name\":\"dd7de4c8bb45b4da5a64b303c860fc2a6\",\"hostname\":\"172.30.48.30\",\"host\":\"172.30.48.30\",\"port\":3306,\"user\":\"u9ALUSdrXshXo\",\"username\":\"u9ALUSdrXshXo\",\"password\":\"pUD3ikt6WIJbR\"}}]}";
+		//env ="{\"mysql-5.1\":[{\"name\":\"chattyDB\",\"label\":\"mysql-5.1\",\"plan\":\"free\",\"tags\":[\"relational\",\"mysql-5.1\",\"mysql\"],\"credentials\":{\"name\":\"dd7de4c8bb45b4da5a64b303c860fc2a6\",\"hostname\":\"172.30.48.30\",\"host\":\"172.30.48.30\",\"port\":3306,\"user\":\"u9ALUSdrXshXo\",\"username\":\"u9ALUSdrXshXo\",\"password\":\"pUD3ikt6WIJbR\"}}]}";
 		if (env != null){
 	        ByteArrayInputStream is = new ByteArrayInputStream(env.getBytes());
 			ObjectMapper mapper = new ObjectMapper();
