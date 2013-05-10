@@ -1,6 +1,7 @@
 package edu.mta.chatty.bl;
 
 import java.sql.SQLException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.sql.DataSource;
@@ -39,6 +40,7 @@ public class BL {
 					} catch (SQLException e) {
 						String msg = String.format("unable to login user %s, with error %s", t.getEmail(), e);
 						logger.severe(msg);
+						logger.log(Level.SEVERE, e.getMessage(), e);
 						throw new Exception (msg, e);
 					}
 				}

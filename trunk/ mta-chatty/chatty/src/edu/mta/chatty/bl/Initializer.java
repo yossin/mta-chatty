@@ -3,6 +3,7 @@ package edu.mta.chatty.bl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletContext;
@@ -27,8 +28,11 @@ public class Initializer {
 			return true;
 		} catch (IOException e){
 			logger.severe(String.format("unable to load file %s for DB batch update. error is %s", fileName, e));
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		} catch (SQLException e){
+			//e.printStackTrace();
 			logger.severe(String.format("unable to perform sql batch update for file %s. error is %s", fileName, e));
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return false;
 	}
@@ -47,6 +51,7 @@ public class Initializer {
 			return dataInitializer.loadInitData(context);
 		}catch (Exception e){
 			logger.severe(String.format("unable to load test data into DB. error is %s", e));
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			return false;
 		}
 	}

@@ -1,9 +1,9 @@
 package edu.mta.chatty.service;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.Enumeration;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
@@ -22,6 +22,7 @@ import edu.mta.chatty.Constants;
 import edu.mta.chatty.bl.BL;
 
 public abstract class BaseService<T> extends HttpServlet{
+	private static final long serialVersionUID = -814577615549749718L;
 	final static private Logger logger = Logger.getLogger(BaseService.class.getName());
 	@Resource(name = Constants.DataSource)
 	private DataSource ds;
@@ -61,6 +62,7 @@ public abstract class BaseService<T> extends HttpServlet{
 		} catch (Exception e) {
 			String msg = String.format("error while performing action %s", e);
 			logger.severe(msg);
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			throw new ServletException(e);
 		}
 	}
