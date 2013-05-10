@@ -21,19 +21,18 @@ CREATE  TABLE IF NOT EXISTS city (
 
 
 CREATE  TABLE IF NOT EXISTS `user` (
-  email VARCHAR(250)  NOT NULL PRIMARY KEY,
-  name VARCHAR(250) NOT NULL ,
-  picture VARCHAR(250) NOT NULL DEFAULT 'images/defaultUser.jpg',
+  email VARCHAR(150)  NOT NULL PRIMARY KEY,
+  name VARCHAR(150) NOT NULL ,
+  picture VARCHAR(150) NOT NULL DEFAULT 'images/defaultUser.jpg',
   active BOOLEAN NOT NULL DEFAULT TRUE ,
-  create_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
-  password VARCHAR(250) NOT NULL,
+  password VARCHAR(150) NOT NULL,
   INDEX idx_user_name (name))
  DEFAULT CHARACTER SET = utf8;
 
  
 CREATE  TABLE IF NOT EXISTS address (
-  address_id VARCHAR(250) NOT NULL PRIMARY KEY ,
+  address_id VARCHAR(150) NOT NULL PRIMARY KEY ,
   address TEXT NOT NULL ,
   city_id INTEGER NOT NULL ,
   postal_code TEXT NULL DEFAULT NULL ,
@@ -52,11 +51,11 @@ CREATE  TABLE IF NOT EXISTS address (
     ON UPDATE CASCADE)
  DEFAULT CHARACTER SET = utf8;
     
-    
+
 CREATE  TABLE IF NOT EXISTS buddy_list (
-  buddy_id VARCHAR(250) NOT NULL ,
+  buddy_id VARCHAR(150) NOT NULL ,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
-  owner_email VARCHAR(250) NOT NULL,
+  owner_email VARCHAR(150) NOT NULL,
   PRIMARY KEY (owner_email, buddy_id),
   INDEX fk_buddy_list_user2_idx (buddy_id ASC),
   CONSTRAINT fk_buddy_list_user1
@@ -75,7 +74,7 @@ CREATE  TABLE IF NOT EXISTS buddy_list (
  CREATE  TABLE IF NOT EXISTS `group` (
   group_id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT ,
   name TEXT NOT NULL ,
-  picture VARCHAR(250) NOT NULL DEFAULT 'images/defaultGroup.jpg',
+  picture VARCHAR(150) NOT NULL DEFAULT 'images/defaultGroup.jpg',
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   description TEXT NULL)
  DEFAULT CHARACTER SET = utf8;
@@ -83,8 +82,8 @@ CREATE  TABLE IF NOT EXISTS buddy_list (
  
 CREATE  TABLE IF NOT EXISTS buddy_message (
   send_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
-  sender_id VARCHAR(250) NOT NULL ,
-  receiver_id VARCHAR(250) NOT NULL ,
+  sender_id VARCHAR(150) NOT NULL ,
+  receiver_id VARCHAR(150) NOT NULL ,
   message TEXT NOT NULL ,
   is_attachment_path BOOLEAN NOT NULL DEFAULT FALSE ,
   PRIMARY KEY (sender_id, receiver_id),
@@ -104,7 +103,7 @@ CREATE  TABLE IF NOT EXISTS buddy_message (
 
  
  CREATE  TABLE IF NOT EXISTS group_membership (
-  member_email VARCHAR(250) NOT NULL ,
+  member_email VARCHAR(150) NOT NULL ,
   group_id INTEGER NOT NULL,
   PRIMARY KEY (member_email, group_id) ,
  INDEX fk_user_has_group_group1_idx (group_id ASC),
@@ -124,7 +123,7 @@ CREATE  TABLE IF NOT EXISTS buddy_message (
 
 CREATE  TABLE IF NOT EXISTS group_message (
   send_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
-  sender_id VARCHAR(250) NOT NULL ,
+  sender_id VARCHAR(150) NOT NULL ,
   receiver_id INTEGER NOT NULL ,
   message TEXT NOT NULL ,
   is_attachment_path BOOLEAN NOT NULL DEFAULT FALSE ,
@@ -143,8 +142,3 @@ CREATE  TABLE IF NOT EXISTS group_message (
     ON UPDATE NO ACTION)
    DEFAULT CHARACTER SET = utf8;
 
- 
- 
- 
- 
- 
