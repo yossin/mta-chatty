@@ -29,4 +29,16 @@
     <servlet-name>LoginService</servlet-name>
     <url-pattern>/services/login</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+    <description></description>
+    <display-name>GenericDataService</display-name>
+    <servlet-name>GenericDataService</servlet-name>
+    <servlet-class>edu.mta.chatty.service.GenericDataService</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GenericDataService</servlet-name>
+    <url-pattern>/services/generic-data</url-pattern>
+  </servlet-mapping>
+  
 </web-app>
