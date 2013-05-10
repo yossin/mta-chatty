@@ -34,6 +34,8 @@ public class AppWatcher  implements ServletContextListener {
 				initializer.loadTestData(context);
 			}
 		}
+		logger.info("chatty initialization has been completed.");
+
     }
 
     public void contextDestroyed(ServletContextEvent event) {
