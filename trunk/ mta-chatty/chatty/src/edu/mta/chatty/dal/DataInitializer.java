@@ -21,7 +21,7 @@ import edu.mta.chatty.domain.Country;
 import edu.mta.chatty.domain.Group;
 import edu.mta.chatty.domain.GroupMemberships;
 import edu.mta.chatty.domain.GroupMessages;
-import edu.mta.chatty.domain.InitData;
+import edu.mta.chatty.domain.UserData;
 import edu.mta.chatty.domain.User;
 
 public class DataInitializer {
@@ -293,23 +293,23 @@ public class DataInitializer {
 		return context.getResourceAsStream(fileName);
 	}
 
-	private void insertInitData(InitData data) throws SQLException {
-		insertCountries(data.countries);
-		insertCities(data.cities);
-		insertUsers(data.users);
-		insertAddresses(data.addresses);
-		insertBuddyList(data.buddy_list);
-		insertGroups(data.groups);
-		insertGroupMemberships(data.group_memberships);
-		insertBuddyMessages(data.buddy_messages);
-		insertGroupMessages(data.group_messages);
+	private void insertInitData(UserData data) throws SQLException {
+		insertCountries(data.getCountries());
+		insertCities(data.getCities());
+		insertUsers(data.getUsers());
+		insertAddresses(data.getAddresses());
+		insertBuddyList(data.getBuddy_list());
+		insertGroups(data.getGroups());
+		insertGroupMemberships(data.getGroup_memberships());
+		insertBuddyMessages(data.getBuddy_messages());
+		insertGroupMessages(data.getGroup_messages());
 	}
 
 	public boolean loadInitData(ServletContext context) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			InputStream is = getTestDataResourceFile(context);
-			InitData data = mapper.readValue(is, InitData.class);
+			UserData data = mapper.readValue(is, UserData.class);
 			insertInitData(data);
 			return true;
 		} catch (SQLException e) {
