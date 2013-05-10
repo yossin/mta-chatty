@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.sql.DataSource;
@@ -48,6 +49,7 @@ public class PreparedStatementExecuter {
 			executer.execute(statement);
 		} catch (SQLException e){
 			logger.severe(String.format("error while executing sql %s, exception %s",handler.getSql(), e));
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		} finally{
 			close(statement);
 			db.disconnect();
@@ -83,6 +85,7 @@ public class PreparedStatementExecuter {
 			handler.handleResults(statement.executeBatch());
 		} catch (SQLException e){
 			logger.severe(String.format("error while executing sqls %s, exception is %s",handler.getBatchList(), e));
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			throw e;
 		} finally{
 			close(statement);
@@ -106,6 +109,7 @@ public class PreparedStatementExecuter {
 			handler.handleResult(statement.executeBatch());
 		} catch (SQLException e){
 			logger.severe(String.format("error while executing batch sql %s, exception %s",handler.getSql(), e));
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		} finally{
 			close(statement);
 			db.disconnect();
