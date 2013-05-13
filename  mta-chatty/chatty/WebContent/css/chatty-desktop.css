@@ -120,22 +120,22 @@
 	padding-left:12px;
 }
 
-.row-label, .searchResultBuddyLabel, .searchResultGroupLabel{ 
+.row-label, .searchResultBuddyLabel, .searchResultGroupLabel { 
 	padding-left:64px;
 	padding-bottom:28px;
 	position:absolute;
 	bottom:0; left:0;
 }
 
-#Dashboard{
+#Dashboard {
     position:static !important;
 }
 
-.logoutBtn, .editProfileBtn, .addBuddyBtn, .createGroupBtn, .leaveGroupBtn {
+.logoutBtn, .editProfileBtn, .addBuddyBtn, .createGroupBtn, .leaveGroupBtn, .adminPageBtn {
 	background-size:22px 22px;
 }
 
-.logoutBtn, .editProfileBtn{
+.logoutBtn, .editProfileBtn, .adminPageBtn {
     float:left;
 }
 
@@ -185,3 +185,8 @@
 .colorRed {
 	color: red;
 }
+
+.adminHeader {
+   	height: 40px !important;
+}
+

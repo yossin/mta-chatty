@@ -340,6 +340,50 @@ function UI(){
 		bl.leaveGroup(id, ui.messages.leaveGroup, ui.messages.leaveGroupError);
 		return true;
 	};
+	
+	this.createAdminPageCharts=function(){
+		var dataSetBudies   = []; 
+		var dataSetGroups   = []; 
+		var dataSetMessages = []; 
+		
+		var start = 1354586000000;
+		for (var i = 0; i < 10; i += 0.5){
+			dataSetBudies.push([start, Math.tan(i)]); 
+			dataSetGroups.push([start, Math.sin(i)]); 
+			dataSetMessages.push([start, Math.cos(i)]); 
+	        start+= 100000;
+			} 
+		
+		var grid_options = { 
+				series: { lines: { fill: false } }, 
+				grid:  	{ backgroundColor: { colors: ["#D1D1D1", "#7A7A7A"] } }, 
+				xaxis: 	{ mode: "time", timeformat: "%0y/%0d/%0m %H:%0M"} 
+				};
+
+		var dataBG = [
+		        { 	data: dataSetBudies,
+		        	label:"Budies",
+		        	points:	{ show: true}, 
+		        	lines: 	{ show: true}
+		        },
+		        { 	data: dataSetGroups,
+		        	label:"Groups",
+		        	points:	{ show: true}, 
+		        	lines: 	{ show: true}
+		        }
+		];
+		
+		var dataM = [
+				        { 	data: dataSetBudies,
+				        	label:"Messages/Day",
+				        	points:	{ show: true}, 
+				        	lines: 	{ show: true}
+				        }
+				];
+		
+		$.plot($("#flot_buddies_groups"  ), dataBG , grid_options );
+		$.plot($("#flot_messages_per_day"), dataM  , grid_options );
+	};
 }
 var ui=new UI();
 
@@ -364,7 +408,7 @@ $(document).ready(function(){
 	
 	$("#LeaveGroup").bind('pagebeforeshow', ui.leaveGroup);
 	
-
+	$("#AdminPage").bind("pagebeforeshow", ui.createAdminPageCharts);
 });
 
 
@@ -377,5 +421,4 @@ function updateMainDivsHeight(){
 	   $(".searchBuddyContent").css({ height: updateDialogHeight });
 	   $(".searchGroupContent").css({ height: updateDialogHeight });    
 	   $(".leaveGroupContent").css({ height: updateDialogHeight });    
-}
-	
+}	
