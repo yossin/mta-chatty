@@ -15,6 +15,7 @@
 	<script	src="<%=request.getContextPath()%>/js/chatty-dal.js"></script>
 	<script	src="<%=request.getContextPath()%>/js/chatty-bl.js"></script>
 	<script	src="<%=request.getContextPath()%>/js/chatty-desktop.js"></script>
+	
 	<script	src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
 </head>
 
@@ -44,6 +45,8 @@
 		    <jsp:param name="device" value="<%=device%>" />
 		</jsp:include>
 	</section>
+    
+    <jsp:include page="admin.jsp" />
     
     <section id="SearchBuddy" data-role="dialog" data-add-back-btn="true">
 		<jsp:include page="search_buddy.jsp" >
