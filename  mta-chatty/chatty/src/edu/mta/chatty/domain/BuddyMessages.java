@@ -1,9 +1,26 @@
 package edu.mta.chatty.domain;
 
-public class BuddyMessages extends Updatable{
+import java.sql.Timestamp;
+
+public class BuddyMessages {
 	private String sender_id;
 	private String receiver_id;
 	private String message;
+	private Timestamp send_date;
+	private boolean is_attachment_path;
+
+	public Timestamp getSend_date() {
+		return send_date;
+	}
+	public void setSend_date(Timestamp send_date) {
+		this.send_date = send_date;
+	}
+	public boolean isIs_attachment_path() {
+		return is_attachment_path;
+	}
+	public void setIs_attachment_path(boolean is_attachment_path) {
+		this.is_attachment_path = is_attachment_path;
+	}
 	public String getSender_id() {
 		return sender_id;
 	}
