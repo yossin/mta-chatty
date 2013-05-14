@@ -1,6 +1,5 @@
 package edu.mta.chatty.domain;
 
-import java.sql.Timestamp;
 
 public class City extends Updatable{
 	private int city_id;

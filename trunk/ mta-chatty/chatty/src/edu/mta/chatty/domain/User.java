@@ -1,7 +1,5 @@
 package edu.mta.chatty.domain;
 
-import java.sql.Timestamp;
-
 import edu.mta.chatty.contract.LoginRequest;
 
 public class User extends Updatable implements LoginRequest{
