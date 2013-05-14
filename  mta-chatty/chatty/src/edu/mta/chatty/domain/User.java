@@ -1,5 +1,7 @@
 package edu.mta.chatty.domain;
 
+import java.sql.Timestamp;
+
 import edu.mta.chatty.contract.LoginRequest;
 
 public class User implements LoginRequest{
@@ -7,6 +9,20 @@ public class User implements LoginRequest{
 	private String name;
 	private String picture;
 	private String password;
+	private boolean active=true;
+	private Timestamp last_update;
+	public boolean isActive() {
+		return active;
+	}
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	public Timestamp getLast_update() {
+		return last_update;
+	}
+	public void setLast_update(Timestamp last_update) {
+		this.last_update = last_update;
+	}
 	public String getEmail() {
 		return email;
 	}
