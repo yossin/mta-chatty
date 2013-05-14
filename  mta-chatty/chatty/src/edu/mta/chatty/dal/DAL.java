@@ -1,7 +1,6 @@
 package edu.mta.chatty.dal;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,7 +10,7 @@ import javax.sql.DataSource;
 
 import edu.mta.chatty.contract.GenericDataResponse;
 import edu.mta.chatty.contract.LoginRequest;
-import edu.mta.chatty.dal.handlers.ListQueryHandler;
+import edu.mta.chatty.dal.handlers.GenericListQueryHandler;
 import edu.mta.chatty.domain.City;
 import edu.mta.chatty.domain.Country;
 import edu.mta.chatty.domain.User;
@@ -24,9 +23,19 @@ public class DAL {
 	final public GenericData generic = new GenericData();
 	
 	public class Users{
+		private abstract class UserListQueryHandler extends GenericListQueryHandler<User>{
+			UserListQueryHandler(List<User> results){
+				super(results);
+			}
+			@Override
+			protected User create() {
+				return new User();
+			}
+		}
+		
 		public User login(final LoginRequest request) throws SQLException{
 			final List<User> results = new LinkedList<User>();
-			ListQueryHandler<User> handler = new ListQueryHandler<User>(results) {
+			UserListQueryHandler handler = new UserListQueryHandler(results) {
 				@Override
 				public void setVariables(PreparedStatement statement) throws SQLException {
 					statement.setString(1, request.getEmail());
@@ -35,14 +44,6 @@ public class DAL {
 				@Override
 				public String getSql() {
 					return "select u.email, u.name, u.picture from `user` as u where u.email=? and u.password=?";
-				}
-				@Override
-				protected User handleResult(ResultSet resultSet) throws SQLException{
-					User user = new User();
-					user.setEmail(resultSet.getString(1));
-					user.setName(resultSet.getString(2));
-					user.setPicture(resultSet.getString(3));
-					return user;
 				}
 			};
 			
@@ -57,12 +58,49 @@ public class DAL {
 			}
 		}
 		
+		public List<User> getBuddies(final String ownerEmail) throws SQLException{
+			final List<User> results = new LinkedList<User>();
+			UserListQueryHandler handler = new UserListQueryHandler(results) {
+				@Override
+				public void setVariables(PreparedStatement statement) throws SQLException {
+					statement.setString(1, ownerEmail);
+					statement.setString(2, ownerEmail);
+					statement.setString(3, ownerEmail);
+				}
+				@Override
+				public String getSql() {
+					return "select u.email,u.name,u.picture,u.active,u.last_update from `user` as u join (select g.member_email from group_membership as g join (select group_id from group_membership where member_email=?) as z on g.group_id=z.group_id where g.member_email!=? union select u.email from `user` as u join buddy_list as b on u.email=b.buddy_id where b.owner_email=?) as z on u.email=z.member_email";
+				}
+			};
+			
+			executer.execute(handler);
+			return results;
+		}
+		
 	}
 	
 	public class GenericData{
+		private abstract class CityListQueryHandler extends GenericListQueryHandler<City>{
+			CityListQueryHandler(List<City> results){
+				super(results);
+			}
+			@Override
+			protected City create() {
+				return new City();
+			}
+		}
+		private abstract class CountryListQueryHandler extends GenericListQueryHandler<Country>{
+			CountryListQueryHandler(List<Country> results){
+				super(results);
+			}
+			@Override
+			protected Country create() {
+				return new Country();
+			}
+		}
 		private List<Country> getCountries() throws SQLException{
 			final List<Country> results = new LinkedList<Country>();
-			ListQueryHandler<Country> handler = new ListQueryHandler<Country>(results) {
+			CountryListQueryHandler handler = new CountryListQueryHandler(results) {
 				@Override
 				public void setVariables(PreparedStatement statement) throws SQLException {
 					//no parameters
@@ -71,14 +109,6 @@ public class DAL {
 				public String getSql() {
 					return "select country_id,country,last_update from country";
 				}
-				@Override
-				protected Country handleResult(ResultSet resultSet) throws SQLException{
-					Country country = new Country();
-					country.setCountry_id(resultSet.getInt(1));
-					country.setCountry(resultSet.getString(2));
-					country.setLast_update(resultSet.getTimestamp(3));
-					return country;
-				}
 			};
 			executer.execute(handler);
 			return results;
@@ -86,7 +116,7 @@ public class DAL {
 		
 		private List<City> getCities() throws SQLException{
 			final List<City> results = new LinkedList<City>();
-			ListQueryHandler<City> handler = new ListQueryHandler<City>(results) {
+			CityListQueryHandler handler = new CityListQueryHandler(results) {
 				@Override
 				public void setVariables(PreparedStatement statement) throws SQLException {
 					//no parameters
@@ -94,15 +124,6 @@ public class DAL {
 				@Override
 				public String getSql() {
 					return "select city_id,city,country_id,last_update from city";
-				}
-				@Override
-				protected City handleResult(ResultSet resultSet) throws SQLException{
-					City city = new City();
-					city.setCity_id(resultSet.getInt(1));
-					city.setCity(resultSet.getString(2));
-					city.setCountry_id(resultSet.getInt(3));
-					city.setLast_update(resultSet.getTimestamp(4));
-					return city;
 				}
 			};
 			executer.execute(handler);
