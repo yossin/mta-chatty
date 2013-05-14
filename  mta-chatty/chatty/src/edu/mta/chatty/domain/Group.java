@@ -1,6 +1,5 @@
 package edu.mta.chatty.domain;
 
-import java.sql.Timestamp;
 
 public class Group extends Updatable{
 	private int group_id;
