@@ -103,6 +103,7 @@ CREATE INDEX fk_buddy_message_sender_idx ON buddy_message(sender_id ASC);
 CREATE  TABLE IF NOT EXISTS group_membership (
   member_email TEXT NOT NULL ,
   group_id INTEGER NOT NULL ,
+  last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   PRIMARY KEY (member_email, group_id) ,
   CONSTRAINT fk_group_membership_email
     FOREIGN KEY (member_email )

@@ -105,6 +105,7 @@ CREATE  TABLE IF NOT EXISTS buddy_message (
  CREATE  TABLE IF NOT EXISTS group_membership (
   member_email VARCHAR(150) NOT NULL ,
   group_id INTEGER NOT NULL,
+  last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   PRIMARY KEY (member_email, group_id) ,
  INDEX fk_user_has_group_group1_idx (group_id ASC),
  INDEX fk_user_has_group_user1_idx (member_email ASC),
