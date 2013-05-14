@@ -1,6 +1,5 @@
 package edu.mta.chatty.contract;
 
-public interface LoginRequest {
-	String getEmail();
+public interface LoginRequest extends UserRequest{
 	String getPassword();
 }
