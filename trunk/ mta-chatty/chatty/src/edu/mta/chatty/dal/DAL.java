@@ -11,8 +11,13 @@ import javax.sql.DataSource;
 import edu.mta.chatty.contract.GenericDataResponse;
 import edu.mta.chatty.contract.LoginRequest;
 import edu.mta.chatty.dal.handlers.GenericListQueryHandler;
+import edu.mta.chatty.domain.BuddyList;
+import edu.mta.chatty.domain.BuddyMessages;
 import edu.mta.chatty.domain.City;
 import edu.mta.chatty.domain.Country;
+import edu.mta.chatty.domain.Group;
+import edu.mta.chatty.domain.GroupMemberships;
+import edu.mta.chatty.domain.GroupMessages;
 import edu.mta.chatty.domain.User;
 import edu.mta.chatty.domain.UserData;
 
@@ -20,18 +25,56 @@ public class DAL {
 	private final static Logger logger = Logger.getLogger(DAL.class.getName());
 	private PreparedStatementExecuter executer;
 	final public Users users = new Users();
-	final public GenericData generic = new GenericData();
+	final public Data data = new Data();
+	final public Groups groups = new Groups();
 	
-	public class Users{
-		private abstract class UserListQueryHandler extends GenericListQueryHandler<User>{
-			UserListQueryHandler(List<User> results){
-				super(results);
-			}
-			@Override
-			protected User create() {
-				return new User();
-			}
+	private static abstract class UserListQueryHandler extends GenericListQueryHandler<User>{
+		UserListQueryHandler(List<User> results){
+			super(results);
 		}
+		@Override
+		protected User create() {
+			return new User();
+		}
+	}
+	private static abstract class BuddyListListQueryHandler extends GenericListQueryHandler<BuddyList>{
+		BuddyListListQueryHandler(List<BuddyList> results){
+			super(results);
+		}
+		@Override
+		protected BuddyList create() {
+			return new BuddyList();
+		}
+	}
+	private static abstract class GroupMembershipsListQueryHandler extends GenericListQueryHandler<GroupMemberships>{
+		GroupMembershipsListQueryHandler(List<GroupMemberships> results){
+			super(results);
+		}
+		@Override
+		protected GroupMemberships create() {
+			return new GroupMemberships();
+		}
+	}
+	private static abstract class BuddyMessagesListQueryHandler extends GenericListQueryHandler<BuddyMessages>{
+		BuddyMessagesListQueryHandler(List<BuddyMessages> results){
+			super(results);
+		}
+		@Override
+		protected BuddyMessages create() {
+			return new BuddyMessages();
+		}
+	}
+	private static abstract class GroupMessagesListQueryHandler extends GenericListQueryHandler<GroupMessages>{
+		GroupMessagesListQueryHandler(List<GroupMessages> results){
+			super(results);
+		}
+		@Override
+		protected GroupMessages create() {
+			return new GroupMessages();
+		}
+	}
+
+	public class Users{
 		
 		public User login(final LoginRequest request) throws SQLException{
 			final List<User> results = new LinkedList<User>();
@@ -58,28 +101,22 @@ public class DAL {
 			}
 		}
 		
-		public List<User> getBuddies(final String ownerEmail) throws SQLException{
-			final List<User> results = new LinkedList<User>();
-			UserListQueryHandler handler = new UserListQueryHandler(results) {
-				@Override
-				public void setVariables(PreparedStatement statement) throws SQLException {
-					statement.setString(1, ownerEmail);
-					statement.setString(2, ownerEmail);
-					statement.setString(3, ownerEmail);
-				}
-				@Override
-				public String getSql() {
-					return "select u.email,u.name,u.picture,u.active,u.last_update from `user` as u join (select g.member_email from group_membership as g join (select group_id from group_membership where member_email=?) as z on g.group_id=z.group_id where g.member_email!=? union select u.email from `user` as u join buddy_list as b on u.email=b.buddy_id where b.owner_email=?) as z on u.email=z.member_email";
-				}
-			};
-			
-			executer.execute(handler);
-			return results;
+		
+	}
+	private static abstract class GroupListQueryHandler extends GenericListQueryHandler<Group>{
+		GroupListQueryHandler(List<Group> results){
+			super(results);
 		}
+		@Override
+		protected Group create() {
+			return new Group();
+		}
+	}
+	public class Groups{
 		
 	}
 	
-	public class GenericData{
+	public class Data{
 		private abstract class CityListQueryHandler extends GenericListQueryHandler<City>{
 			CityListQueryHandler(List<City> results){
 				super(results);
@@ -134,6 +171,106 @@ public class DAL {
 			UserData results = new UserData();
 			results.setCountries(getCountries());
 			results.setCities(getCities());
+			return results;
+		}
+		
+		public List<User> getBuddies(final String ownerEmail) throws SQLException{
+			final List<User> results = new LinkedList<User>();
+			UserListQueryHandler handler = new UserListQueryHandler(results) {
+				@Override
+				public void setVariables(PreparedStatement statement) throws SQLException {
+					statement.setString(1, ownerEmail);
+					statement.setString(2, ownerEmail);
+					statement.setString(3, ownerEmail);
+				}
+				@Override
+				public String getSql() {
+					return "select u.email,u.name,u.picture,u.active,u.last_update from `user` as u join (select g.member_email from group_membership as g join (select group_id from group_membership where member_email=?) as z on g.group_id=z.group_id where g.member_email!=? union select u.email from `user` as u join buddy_list as b on u.email=b.buddy_id where b.owner_email=?) as z on u.email=z.member_email";
+				}
+			};
+			executer.execute(handler);
+			return results;
+		}
+		
+		public List<BuddyList> getBuddyList(final String ownerEmail) throws SQLException{
+			final List<BuddyList> results = new LinkedList<BuddyList>();
+			BuddyListListQueryHandler handler = new BuddyListListQueryHandler(results) {
+				@Override
+				public void setVariables(PreparedStatement statement) throws SQLException {
+					statement.setString(1, ownerEmail);
+				}
+				@Override
+				public String getSql() {
+					return "select owner_email,buddy_id,last_update from buddy_list where owner_email=?";
+				}
+			};
+			executer.execute(handler);
+			return results;
+		}
+
+		public List<GroupMemberships> getGroupList(final String ownerEmail) throws SQLException{
+			final List<GroupMemberships> results = new LinkedList<GroupMemberships>();
+			GroupMembershipsListQueryHandler handler = new GroupMembershipsListQueryHandler(results) {
+				@Override
+				public void setVariables(PreparedStatement statement) throws SQLException {
+					statement.setString(1, ownerEmail);
+				}
+				@Override
+				public String getSql() {
+					return "select group_id,member_email,last_update from group_membership where member_email=?";
+				}
+			};
+			executer.execute(handler);
+			return results;
+		}
+
+		
+		public List<Group> getUserGroups(final String ownerEmail) throws SQLException{
+			final List<Group> results = new LinkedList<Group>();
+			GroupListQueryHandler handler = new GroupListQueryHandler(results) {
+				@Override
+				public void setVariables(PreparedStatement statement) throws SQLException {
+					statement.setString(1, ownerEmail);
+				}
+				@Override
+				public String getSql() {
+					return "select g.group_id,g.name,g.picture,g.last_update,g.description from `group` as g join group_membership as gm on g.group_id=gm.group_id where gm.member_email=?";
+				}
+			};
+			executer.execute(handler);
+			return results;
+		}
+
+		public List<BuddyMessages> getBuddiesMessages(final String ownerEmail) throws SQLException{
+			final List<BuddyMessages> results = new LinkedList<BuddyMessages>();
+			BuddyMessagesListQueryHandler handler = new BuddyMessagesListQueryHandler(results) {
+				@Override
+				public void setVariables(PreparedStatement statement) throws SQLException {
+					statement.setString(1, ownerEmail);
+					statement.setString(2, ownerEmail);
+				}
+				@Override
+				public String getSql() {
+					return "select send_date, sender_id, receiver_id, message, is_attachment_path from buddy_message where (sender_id=? or receiver_id=?) order by send_date";
+				}
+			};
+			executer.execute(handler);
+			return results;
+		}
+
+		public List<GroupMessages> getGroupsMessages(final String ownerEmail) throws SQLException{
+			final List<GroupMessages> results = new LinkedList<GroupMessages>();
+			GroupMessagesListQueryHandler handler = new GroupMessagesListQueryHandler(results) {
+				@Override
+				public void setVariables(PreparedStatement statement) throws SQLException {
+					statement.setString(1, ownerEmail);
+				}
+				@Override
+				public String getSql() {
+					return "select sender_id,receiver_id,send_date,message,is_attachment_path from group_message join (select group_id from group_membership where member_email=?) as gm on gm.group_id=receiver_id order by send_date";
+				}
+			};
+			executer.execute(handler);
 			return results;
 		}
 
