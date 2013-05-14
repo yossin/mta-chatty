@@ -12,6 +12,11 @@ import edu.mta.chatty.contract.LoginRequest;
 import edu.mta.chatty.contract.UserDataResponse;
 import edu.mta.chatty.contract.UserRequest;
 import edu.mta.chatty.dal.DAL;
+import edu.mta.chatty.domain.BuddyList;
+import edu.mta.chatty.domain.BuddyMessages;
+import edu.mta.chatty.domain.Group;
+import edu.mta.chatty.domain.GroupMemberships;
+import edu.mta.chatty.domain.GroupMessages;
 import edu.mta.chatty.domain.User;
 import edu.mta.chatty.domain.UserData;
 
@@ -66,7 +71,7 @@ public class BL {
 				@Override
 				public GenericDataResponse perform(Void t) throws Exception {
 					try {
-						return dal.generic.getGenericData();
+						return dal.data.getGenericData();
 					} catch (SQLException e) {
 						String msg = String.format("unable to get generic data, with error %s", e);
 						logger.severe(msg);
@@ -88,9 +93,20 @@ public class BL {
 				@Override
 				public UserDataResponse perform(UserRequest t) throws Exception {
 					try {
+						String ownerEmail = t.getEmail();
 						UserData userData = new UserData();
-						List<User> users= dal.users.getBuddies(t.getEmail());
+						List<User> users= dal.data.getBuddies(ownerEmail);
+						List<Group> groups = dal.data.getUserGroups(ownerEmail);
+						List<BuddyList> buddyList = dal.data.getBuddyList(ownerEmail);
+						List<GroupMemberships> groupMemberships = dal.data.getGroupList(ownerEmail);
+						List<BuddyMessages> buddyMessages = dal.data.getBuddiesMessages(ownerEmail);
+						List<GroupMessages> groupMessages = dal.data.getGroupsMessages(ownerEmail);
 						userData.setUsers(users);
+						userData.setGroups(groups);
+						userData.setBuddy_list(buddyList);
+						userData.setGroup_memberships(groupMemberships);
+						userData.setBuddy_messages(buddyMessages);
+						userData.setGroup_messages(groupMessages);
 						return userData;
 					} catch (SQLException e) {
 						String msg = String.format("unable to get generic data, with error %s", e);
