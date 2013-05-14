@@ -1,9 +1,19 @@
 package edu.mta.chatty.domain;
 
-public class Group{
+import java.sql.Timestamp;
+
+public class Group extends Updatable{
+	private int group_id;
 	private String name;
 	private String picture;
 	private String description;
+
+	public int getGroup_id() {
+		return group_id;
+	}
+	public void setGroup_id(int group_id) {
+		this.group_id = group_id;
+	}
 	public String getName() {
 		return name;
 	}

@@ -1,6 +1,6 @@
 package edu.mta.chatty.domain;
 
-public class Address{
+public class Address extends Updatable{
 	private String address_id;
 	private String address;
 	private int city_id;
