@@ -1,6 +1,6 @@
 package edu.mta.chatty.domain;
 
-public class BuddyList{
+public class BuddyList extends Updatable{
 	private String buddy_id;
 	private String owner_email;
 	public String getBuddy_id() {

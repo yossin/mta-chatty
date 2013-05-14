@@ -1,6 +1,6 @@
 package edu.mta.chatty.domain;
 
-public class GroupMemberships{
+public class GroupMemberships extends Updatable{
 	private String member_email;
 	private int group_id;
 	public String getMember_email() {

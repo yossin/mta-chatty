@@ -1,6 +1,6 @@
 package edu.mta.chatty.domain;
 
-public class BuddyMessages{
+public class BuddyMessages extends Updatable{
 	private String sender_id;
 	private String receiver_id;
 	private String message;

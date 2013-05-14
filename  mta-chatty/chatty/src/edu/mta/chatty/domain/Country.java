@@ -1,17 +1,9 @@
 package edu.mta.chatty.domain;
 
-import java.sql.Timestamp;
 
-public class Country{
+public class Country extends Updatable{
 	private int country_id;
 	private String country;
-	private Timestamp last_update;
-	public Timestamp getLast_update() {
-		return last_update;
-	}
-	public void setLast_update(Timestamp last_update) {
-		this.last_update = last_update;
-	}
 	public int getCountry_id() {
 		return country_id;
 	}
