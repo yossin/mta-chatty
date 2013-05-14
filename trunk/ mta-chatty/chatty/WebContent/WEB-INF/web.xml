@@ -40,5 +40,17 @@
     <servlet-name>GenericDataService</servlet-name>
     <url-pattern>/services/generic-data</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>UserDataService</display-name>
+    <servlet-name>UserDataService</servlet-name>
+    <servlet-class>edu.mta.chatty.service.UserDataService</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UserDataService</servlet-name>
+    <url-pattern>/services/user-data</url-pattern>
+  </servlet-mapping>
+
   
 </web-app>
