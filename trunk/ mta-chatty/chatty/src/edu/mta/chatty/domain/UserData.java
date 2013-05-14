@@ -2,10 +2,10 @@ package edu.mta.chatty.domain;
 
 import java.util.List;
 
-import edu.mta.chatty.contract.GenericDataResponse;
+import edu.mta.chatty.contract.UserDataResponse;
 
 
-public class UserData implements GenericDataResponse{
+public class UserData implements UserDataResponse{
 	private List<Country> countries;
 	private List<City> cities;
 	private List<Address> addresses;
