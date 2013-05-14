@@ -15,7 +15,7 @@ public class GenericDataService extends BaseService<Void> {
 
 	@Override
 	protected void perform(Writer writer, Void t) throws Exception {
-		GenericDataResponse data = bl.generic.getGenericData();
+		GenericDataResponse data = bl.data.getGenericData();
 		writeJsonResponse(writer, data);
 	}
 
