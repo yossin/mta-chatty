@@ -56,15 +56,18 @@ function BL(onSuccessInit, onError){
 
 
 	this.loginUser=function(email, password, onSuccess, onError){
-		// TODO: create dummy tables - replace with real data from server
+		var url = "/chatty/services/login";
+		var user = {"email":email, "password":password};
 		
-		// TODO: validate user with server
-		dummyLoginUser(email, password, function(user){
-			dal.setLoggedInUserId(user.email);
-			bl.loggedInUser=user;
-			onSuccess();
-		}, onError);
-		// save in local DB
+		$.post(url, user, function(data){
+			if (data != null){
+				dal.setLoggedInUserId(user.email);
+				bl.loggedInUser=user;
+				onSuccess();
+			}
+			else
+				onError();
+		  }, "json"); 
 	};
 
 
@@ -83,6 +86,21 @@ function BL(onSuccessInit, onError){
 	};
 
 	this.getBuddyDetails=function(buddyId, onSuccess, onError){
+		/*
+		var url = "/chatty/services/user-data";
+		var buddy = {"email":buddyId};
+		
+		$.post(url, buddy, function(data){
+			if (data != null){
+				buddy.name    = data.bindings[0]. ?;
+				buddy.picture = data.bindings[0]. ?;
+				onSuccess(buddy);
+			}
+			else
+				onError();
+		  }, "json"); 
+			*/
+			
 		//email, name, picture
 		dal.selectBuddy(buddyId, onSuccess, onError);
 	};
