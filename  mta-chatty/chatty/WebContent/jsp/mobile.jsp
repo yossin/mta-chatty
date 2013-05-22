@@ -11,6 +11,7 @@
 	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 	<script	src="<%=request.getContextPath()%>/js/imported/log4javascript.js"></script>
 	<script	src="<%=request.getContextPath()%>/js/chatty-util.js"></script>
+	<script	src="<%=request.getContextPath()%>/js/chatty-fillData.js"></script>
 	<script	src="<%=request.getContextPath()%>/js/chatty-test.js"></script>
 	<script	src="<%=request.getContextPath()%>/js/chatty-dal.js"></script>
 	<script	src="<%=request.getContextPath()%>/js/chatty-bl.js"></script>
