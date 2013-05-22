@@ -239,7 +239,7 @@ function UI(){
 	};
 	
 	this.startApp=function (){
-		bl.checkUserLoggedIn(ui.navigate.dashboard,ui.navigate.login);
+		bl.checkUserLoggedIn(ui.initDashboard ,ui.navigate.login);
 	};
 
 	this.login=function(){

@@ -30,7 +30,9 @@ function BL(onSuccessInit, onError){
 		if (typeof(userId) == 'undefined' || userId==null){
 			onNoLoggedIn();
 		} else {
-			dal.selectBuddy(userId, 
+			bl.loggedInUser=userId;
+			onLoggedIn(bl.loggedInUser);
+			/*dal.selectBuddy(userId, 
 				function(buddy){
 					bl.loggedInUser=buddy;
 					if (typeof(buddy)=='undefined') {
@@ -42,8 +44,7 @@ function BL(onSuccessInit, onError){
 				function(error){
 					dal.removeLoggedInUserId();
 					onNoLoggedIn(error);
-				});
-			
+				});*/
 		}
 	};
 

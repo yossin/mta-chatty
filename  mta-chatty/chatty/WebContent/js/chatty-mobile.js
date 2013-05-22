@@ -3,14 +3,22 @@ ui.chatroom={buddyRoom:true, id:"name@mail.com"};
 
 
 
+
+function initApp(){
+	initChatty(firstPageNavigation, displayError);
+}
+
+function initChattyPgae(){
+	recreateDB(setChattyPage, displayError);
+};
+
 function firstPageNavigation(){
 	bl.checkUserLoggedIn(
 		function(){
-			//log.debug('user should be redirected to buddies page');
-			$.mobile.changePage("#Buddies");
+			initChattyPgae();
 		},
 		function(){
-			recreateDB(setLoginForm,displayError);
+			setLoginForm();
 		});
 }
 
@@ -24,7 +32,7 @@ function displayError(error){
 }
 
 $(document).ready(function(){
-	initChatty(firstPageNavigation, displayError);
+	$("#Loading").bind("pagebeforeshow", initApp);
 
 	$("#Buddies").bind("pagebeforeshow", function (e) {
 	    updateTab({ "id": "BuddiesTab" });
@@ -80,7 +88,7 @@ $(document).ready(function(){
 		userLoginData.mail = $("#LoginForm .loginUserMailInput").val();
 		userLoginData.pass = $("#LoginForm .loginUserPassInput").val();
 
-		bl.loginUser(userLoginData.mail, userLoginData.pass, login_register_updateProfile_Success, loginFailed);
+		bl.loginUser(userLoginData.mail, userLoginData.pass, initChattyPgae, loginFailed);
 		return true;
 	});
     
@@ -101,7 +109,7 @@ $(document).ready(function(){
 		//regData.cityId = 1; //1=Tel-Aviv
 		//regData.postalCode=undefined; 
 		bl.registerNewUser(regData.email, regData.name, regData.pic, regData.pass, 
-				login_register_updateProfile_Success, registerFailed);
+				initChattyPgae, registerFailed);
         return true;
 	});
 
@@ -116,7 +124,7 @@ $(document).ready(function(){
 		userEditProfileData.pass = $("#EditProfileForm .editProfileUserPassInput").val();
 		userEditProfileData.pic  = $("#EditProfileForm .editProfileUserPicInput" ).val();
         
-		bl.updateUserProfile(userEditProfileData, login_register_updateProfile_Success, updateProfileFailed);
+		bl.updateUserProfile(userEditProfileData, setChattyPage, updateProfileFailed);
         return true;
 	});
 
@@ -345,6 +353,11 @@ function setLoginForm(){
 	$.mobile.changePage("#Login");
 }
 
+function setChattyPage(){
+	log.debug("navigate back to chatty page");
+	$.mobile.changePage("#Buddies");
+}
+
 function addBuddyToSearchResultList(buddy){
 	if (buddy.email == "")
 		return;
@@ -414,10 +427,6 @@ function messageCantAddGroup(){
 	window.alert("Chatty can not add your new group");
 }
 
-function login_register_updateProfile_Success(){
-	$.mobile.changePage("#Buddies");
-}
-
 function loginFailed(){
 	window.alert('Login failed, Please recheck your input');
 }
@@ -432,7 +441,7 @@ function updateProfileFailed(){
 
 function skipLogIn(){
     updateTab({ "id": "BuddiesTab" });
-	$.mobile.changePage("#Buddies");
+    setChattyPage();
 }
 
 function repaintChatRoom(){
