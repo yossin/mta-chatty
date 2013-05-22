@@ -76,3 +76,13 @@ function getFirstResult(results,callback){
     }
 }
 
+function ajaxPost(method, arg, onSuccess, onError){
+	var url = "/chatty/services/" + method;
+	$.post(url, arg, function(data){
+		if (data != null){
+			onSuccess(data);
+		} else{
+			onError();
+		}
+	  }, "json"); 
+}

@@ -230,19 +230,23 @@ function UI(){
 	}
 	this.bind = new Bind();
 	
-	this.initApp=function(){
-		recreateDB(ui.navigate.login,ui.messages.error);
+	this.initApp = function(){
+		initChatty(ui.startApp, ui.messages.error);
+	};
+
+	this.initDashboard=function(){
+		recreateDB(ui.navigate.dashboard,ui.messages.error);
 	};
 	
 	this.startApp=function (){
-		bl.checkUserLoggedIn(ui.navigate.dashboard,ui.initApp);
+		bl.checkUserLoggedIn(ui.navigate.dashboard,ui.navigate.login);
 	};
 
 	this.login=function(){
 		var email = $("#LoginForm .loginUserMailInput").val();
 		var pass = $("#LoginForm .loginUserPassInput").val();
 
-		bl.loginUser(email, pass, ui.navigate.dashboard, ui.messages.loginError);
+		bl.loginUser(email, pass, ui.initDashboard, ui.messages.loginError);
 		return true;
 	};
 	
@@ -387,12 +391,7 @@ function UI(){
 }
 var ui=new UI();
 
-
-
-
 $(document).ready(function(){
-	initChatty(ui.startApp, ui.messages.error);
-	
     $(window).resize(updateMainDivsHeight);
     
     $(document).bind('pagebeforeshow', updateMainDivsHeight);
@@ -409,7 +408,10 @@ $(document).ready(function(){
 	$("#LeaveGroup").bind('pagebeforeshow', ui.leaveGroup);
 	
 	$("#AdminPage").bind("pagebeforeshow", ui.createAdminPageCharts);
+
+	$("#Loading").bind("pagebeforeshow", ui.initApp);
 });
+
 
 
 function updateMainDivsHeight(){

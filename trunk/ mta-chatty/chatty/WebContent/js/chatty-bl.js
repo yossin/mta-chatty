@@ -6,10 +6,16 @@ function initChatty(onSuccess, onError){
 	}
 }
 
+function recreateTestDB(onSuccess, onError){
+	createTestData(onSuccess, onError);
+}
 function recreateDB(onSuccess, onError){
 	tables.recreate(function(){
-		createTestData(onSuccess, onError);
-	}, onError);	
+		ajaxPost("user-data", bl.loggedInUser, function(userData){
+			fillUserData(userData, onSuccess, onError);
+			onSuccess();
+		}, onError);
+	});
 }
 
 
@@ -56,18 +62,12 @@ function BL(onSuccessInit, onError){
 
 
 	this.loginUser=function(email, password, onSuccess, onError){
-		var url = "/chatty/services/login";
 		var user = {"email":email, "password":password};
-		
-		$.post(url, user, function(data){
-			if (data != null){
-				dal.setLoggedInUserId(user.email);
-				bl.loggedInUser=user;
-				onSuccess();
-			}
-			else
-				onError();
-		  }, "json"); 
+		ajaxPost("login", user, function(data){
+			dal.setLoggedInUserId(user.email);
+			bl.loggedInUser=user;
+			onSuccess();
+		}, onError);
 	};
 
 
@@ -86,21 +86,6 @@ function BL(onSuccessInit, onError){
 	};
 
 	this.getBuddyDetails=function(buddyId, onSuccess, onError){
-		/*
-		var url = "/chatty/services/user-data";
-		var buddy = {"email":buddyId};
-		
-		$.post(url, buddy, function(data){
-			if (data != null){
-				buddy.name    = data.bindings[0]. ?;
-				buddy.picture = data.bindings[0]. ?;
-				onSuccess(buddy);
-			}
-			else
-				onError();
-		  }, "json"); 
-			*/
-			
 		//email, name, picture
 		dal.selectBuddy(buddyId, onSuccess, onError);
 	};
