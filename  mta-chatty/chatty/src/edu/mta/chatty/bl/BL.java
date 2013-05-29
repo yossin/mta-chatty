@@ -17,6 +17,7 @@ import edu.mta.chatty.domain.BuddyMessages;
 import edu.mta.chatty.domain.Group;
 import edu.mta.chatty.domain.GroupMemberships;
 import edu.mta.chatty.domain.GroupMessages;
+import edu.mta.chatty.domain.SearchRequest;
 import edu.mta.chatty.domain.User;
 import edu.mta.chatty.domain.UserData;
 
@@ -24,6 +25,7 @@ public class BL {
 	private final static Logger logger = Logger.getLogger(BL.class.getName());
 	private DAL dal;
 	final public Users users = new Users();
+	final public Groups groups = new Groups();
 	final public Data data = new Data();
 
 	public BL(DataSource ds){
@@ -57,6 +59,60 @@ public class BL {
 				}
 			}, request);
 			return user;
+		}
+
+		public List<User> find(SearchRequest request) throws IllegalArgumentException, Exception {
+			BLExecuter<SearchRequest, List<User>> executer = new BLExecuter<SearchRequest, List<User>>();
+
+			List<User> users = executer.execute(new BLRequest<SearchRequest, List<User>>() {
+				@Override
+				public void validate(SearchRequest t) throws IllegalArgumentException {
+					Validator.validateEmail(t.getEmail(), "email");
+					Validator.validateNotEmpty(t.getText(), "text");
+				}
+				
+				@Override
+				public List<User> perform(SearchRequest t) throws Exception {
+					try {
+						return dal.users.find(t);
+					} catch (SQLException e) {
+						String msg = String.format("unable to find users by text %s, with error %s", t, e);
+						logger.severe(msg);
+						logger.log(Level.SEVERE, e.getMessage(), e);
+						throw new Exception (msg, e);
+					}
+				}
+			}, request);
+			return users;
+		}
+	}
+	
+	public class Groups{
+
+
+		public List<Group> find(SearchRequest request) throws IllegalArgumentException, Exception {
+			BLExecuter<SearchRequest, List<Group>> executer = new BLExecuter<SearchRequest, List<Group>>();
+
+			List<Group> groups = executer.execute(new BLRequest<SearchRequest, List<Group>>() {
+				@Override
+				public void validate(SearchRequest t) throws IllegalArgumentException {
+					Validator.validateEmail(t.getEmail(), "email");
+					Validator.validateNotEmpty(t.getText(), "text");
+				}
+				
+				@Override
+				public List<Group> perform(SearchRequest t) throws Exception {
+					try {
+						return dal.groups.find(t);
+					} catch (SQLException e) {
+						String msg = String.format("unable to find groups by text %s, with error %s", t, e);
+						logger.severe(msg);
+						logger.log(Level.SEVERE, e.getMessage(), e);
+						throw new Exception (msg, e);
+					}
+				}
+			}, request);
+			return groups;
 		}
 	}
 	
@@ -118,7 +174,13 @@ public class BL {
 			}, request);
 			return data;
 		}
-		
+		public UserData getCompleteUserData(UserRequest request) throws IllegalArgumentException, Exception{
+			UserData data = (UserData) getUserData(request);
+			GenericDataResponse generic = getGenericData();
+			data.setCities(generic.getCities());
+			data.setCountries(generic.getCountries());
+			return data;
+		}		
 	}
 	
 	

@@ -52,5 +52,37 @@
     <url-pattern>/services/user-data</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <description></description>
+    <display-name>CompleteDataService</display-name>
+    <servlet-name>CompleteDataService</servlet-name>
+    <servlet-class>edu.mta.chatty.service.CompleteDataService</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CompleteDataService</servlet-name>
+    <url-pattern>/services/complete-data</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>FindUsersService</display-name>
+    <servlet-name>FindUsersService</servlet-name>
+    <servlet-class>edu.mta.chatty.service.FindUsersService</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FindUsersService</servlet-name>
+    <url-pattern>/services/find-users</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>FindGroupsService</display-name>
+    <servlet-name>FindGroupsService</servlet-name>
+    <servlet-class>edu.mta.chatty.service.FindGroupsService</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FindGroupsService</servlet-name>
+    <url-pattern>/services/find-groups</url-pattern>
+  </servlet-mapping>
   
 </web-app>
