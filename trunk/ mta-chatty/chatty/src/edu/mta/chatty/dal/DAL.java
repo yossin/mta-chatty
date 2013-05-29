@@ -18,6 +18,7 @@ import edu.mta.chatty.domain.Country;
 import edu.mta.chatty.domain.Group;
 import edu.mta.chatty.domain.GroupMemberships;
 import edu.mta.chatty.domain.GroupMessages;
+import edu.mta.chatty.domain.SearchRequest;
 import edu.mta.chatty.domain.User;
 import edu.mta.chatty.domain.UserData;
 
@@ -100,6 +101,26 @@ public class DAL {
 				return null;
 			}
 		}
+
+		public List<User> find(final SearchRequest request) throws SQLException{
+			final List<User> results = new LinkedList<User>();
+			UserListQueryHandler handler = new UserListQueryHandler(results) {
+				@Override
+				public void setVariables(PreparedStatement statement) throws SQLException {
+					statement.setString(1, '%'+request.getText()+'%');
+					statement.setString(2, '%'+request.getText()+'%');
+					statement.setString(3, request.getEmail());
+				}
+				@Override
+				public String getSql() {
+					return "select u.email, u.name, u.picture from `user` as u left join buddy_list as bl on u.email=bl.buddy_id where (bl.buddy_id is null) and (u.name like ? or u.email like ?) and u.email!=?";
+				}
+			};
+			
+			executer.execute(handler);
+			
+			return results;
+		}
 		
 		
 	}
@@ -113,7 +134,25 @@ public class DAL {
 		}
 	}
 	public class Groups{
-		
+		public List<Group> find(final SearchRequest request) throws SQLException{
+			final List<Group> results = new LinkedList<Group>();
+			GroupListQueryHandler handler = new GroupListQueryHandler(results) {
+				@Override
+				public void setVariables(PreparedStatement statement) throws SQLException {
+					statement.setString(1, '%'+request.getText()+'%');
+					statement.setString(2, request.getEmail());
+				}
+				@Override
+				public String getSql() {
+					return "select g.group_id, g.name, g.picture, g.description from `group` as g  where g.name like ? and g.group_id not in (select gm.group_id from group_membership as gm where gm.member_email=?)";
+				}
+			};
+			
+			executer.execute(handler);
+			
+			return results;
+		}
+	
 	}
 	
 	public class Data{
