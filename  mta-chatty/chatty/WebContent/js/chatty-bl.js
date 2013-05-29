@@ -11,7 +11,7 @@ function recreateTestDB(onSuccess, onError){
 }
 function recreateDB(onSuccess, onError){
 	tables.recreate(function(){
-		ajaxPost("user-data", bl.loggedInUser, function(userData){
+		ajaxPost("complete-data", bl.loggedInUser, function(userData){
 			fillUserData(userData, onSuccess, onError);
 			onSuccess();
 		}, onError);
@@ -30,7 +30,7 @@ function BL(onSuccessInit, onError){
 		if (typeof(userId) == 'undefined' || userId==null){
 			onNoLoggedIn();
 		} else {
-			bl.loggedInUser=userId;
+			bl.loggedInUser = {"email":userId};
 			onLoggedIn(bl.loggedInUser);
 			/*dal.selectBuddy(userId, 
 				function(buddy){

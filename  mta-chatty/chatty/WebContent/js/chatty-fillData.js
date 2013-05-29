@@ -22,23 +22,26 @@ function fillUserData(userData, onSuccess, onError){
 
 
 function genericCreateData(sql, itemName, list, createParams, onSuccess, onError){
-	db.transaction(function(transaction) {
-		var inserted=0;
-		list.forEach( function(item) {
-			var params = createParams(item);
-			transaction.executeSql(sql,params,
-			function (tx,callback){
+	if (list!=null){
+		db.transaction(function(transaction) {
+			var inserted=0;
+			list.forEach( function(item) {
+				var params = createParams(item);
+				transaction.executeSql(sql,params,
+				function (tx,callback){
+					inserted++;
+				},
+				function (tx,error){
+					log.error("unable to insert "+itemName+": "+params+ ". error message is: "+error.message);
+				});
 				inserted++;
-			},
-			function (tx,error){
-				log.error("unable to insert "+itemName+": "+params+ ". error message is: "+error.message);
 			});
-			inserted++;
-		});
-		log.debug("finished inserting "+inserted+" "+itemName+"(s)");
-
-	}, onError, onSuccess);
+			log.debug("finished inserting "+inserted+" "+itemName+"(s)");
 	
+		}, onError, onSuccess);
+	}
+	else 
+		onSuccess();
 }
 
 function createCountriesData(list, onSuccess, onError){
