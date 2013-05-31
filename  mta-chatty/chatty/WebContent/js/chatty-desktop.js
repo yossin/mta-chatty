@@ -237,7 +237,11 @@ function UI(){
 	};
 
 	this.initDashboard=function(){
-		recreateDB(ui.navigate.dashboard,ui.messages.error);
+		recreateDB(function(){
+			ui.loadContacts(); 
+			ui.navigate.dashboard();
+			},
+			ui.messages.error);
 	};
 	
 	this.startApp=function (){
@@ -253,6 +257,7 @@ function UI(){
 	};
 	
 	this.loadContacts=function(){
+		log.debug("loadContacts");
 		var buddies=undefined;
 		function getGroupListRes(groups){
 			ui.draw.buddiesAndGroups(buddies, groups);
