@@ -13,7 +13,6 @@ function recreateDB(onSuccess, onError){
 	tables.recreate(function(){
 		ajaxPost("complete-data", bl.loggedInUser, function(userData){
 			fillUserData(userData, onSuccess, onError);
-			onSuccess();
 		}, onError);
 	});
 }
