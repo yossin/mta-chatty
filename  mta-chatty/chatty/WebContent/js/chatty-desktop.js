@@ -231,7 +231,9 @@ function UI(){
 	this.bind = new Bind();
 	
 	this.initApp = function(){
-		initChatty(ui.startApp, ui.messages.error);
+		setTimeout(function(){
+			initChatty(ui.startApp, ui.messages.error);
+		}, 500);
 	};
 
 	this.initDashboard=function(){
@@ -408,7 +410,7 @@ $(document).ready(function(){
 	$("#LeaveGroup").bind('pagebeforeshow', ui.leaveGroup);
 	
 	$("#AdminPage").bind("pagebeforeshow", ui.createAdminPageCharts);
-
+	
 	$("#Loading").bind("pagebeforeshow", ui.initApp);
 });
 
