@@ -91,7 +91,8 @@ function BL(onSuccessInit, onError){
 	};
 
 	this.searchBuddiesByNameOrID=function(searchText, onSuccess, onError){
-		dal.selectBuddiesByNameOrID(bl.loggedInUser.email, searchText, onSuccess, onError);		
+		var att = {"email":bl.loggedInUser.email, "text":searchText};	
+		ajaxPost("find-users", att, onSuccess, onError);
 	};
 
 	this.addBuddyToList=function(buddyId, onSuccess, onError){
@@ -106,7 +107,8 @@ function BL(onSuccessInit, onError){
 	};
 
 	this.searchGroupsByName=function(searchText, onSuccess, onError){
-		dal.selectGroupsByName(bl.loggedInUser.email, searchText, onSuccess, onError);		
+		var att = {"email":bl.loggedInUser.email, "text":searchText};	
+		ajaxPost("find-groups", att, onSuccess, onError);
 	};
 
 	this.createGroup=function(name, picture, description, onSuccess, onError){
