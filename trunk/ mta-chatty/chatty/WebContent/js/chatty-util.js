@@ -60,9 +60,18 @@ function iterateResults(results,callback){
     if (!results){
 		return;
 	}
-    for (var i=0; i<results.rows.length;i++){
-    	callback(results.rows.item(i));
+    
+    if ($.isArray(results)) {
+        for (var i=0; i<results.length;i++){
+        	callback(results[i]);
+        }
     }
+    else {
+    	for (var i=0; i<results.rows.length;i++){
+        	callback(results.rows.item(i));
+        }
+    }
+    	
 }
 
 function getFirstResult(results,callback){
