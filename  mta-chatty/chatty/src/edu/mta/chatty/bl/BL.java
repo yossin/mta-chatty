@@ -27,6 +27,7 @@ public class BL {
 	final public Users users = new Users();
 	final public Groups groups = new Groups();
 	final public Data data = new Data();
+	final public Messages messages = new Messages();
 
 	public BL(DataSource ds){
 		dal = new DAL(ds);
@@ -85,6 +86,61 @@ public class BL {
 			}, request);
 			return users;
 		}
+		
+		public void addBuddy(BuddyList request) throws IllegalArgumentException, Exception {
+			BLExecuter<BuddyList, Void> executer = new BLExecuter<BuddyList, Void>();
+
+			executer.execute(new BLRequest<BuddyList, Void>() {
+				@Override
+				public void validate(BuddyList t) throws IllegalArgumentException {
+					Validator.validateEmail(t.getOwner_email(), "owner email");
+					Validator.validateEmail(t.getBuddy_id(), "buddy id");
+				}
+				
+				@Override
+				public Void perform(BuddyList t) throws Exception {
+					try {
+						dal.users.addBuddy(t);
+						return null;
+					} catch (SQLException e) {
+						String msg = String.format("unable to add buddyId=%s for memberId=%s, with error %s", t.getBuddy_id(), t.getOwner_email(), e);
+						logger.severe(msg);
+						logger.log(Level.SEVERE, e.getMessage(), e);
+						throw new Exception (msg, e);
+					}
+				}
+			}, request);
+		}
+		
+		public void register(User request) throws IllegalArgumentException, Exception {
+			BLExecuter<User, Void> executer = new BLExecuter<User, Void>();
+
+			executer.execute(new BLRequest<User, Void>() {
+				@Override
+				public void validate(User t) throws IllegalArgumentException {
+					Validator.validateEmail(t.getEmail(), "email");
+					Validator.validateNotEmpty(t.getName(), "name");
+					Validator.validateNotEmpty(t.getPicture(), "picture");
+					Validator.validateNotEmpty(t.getPassword(), "password");
+				}
+				
+				@Override
+				public Void perform(User t) throws Exception {
+					try {
+						dal.users.insertUser(t);
+						return null;
+					} catch (SQLException e) {
+						String msg = String.format("unable to register new user:name=%s, email=%s, picture=%s, password=%s .error %s", 
+								t.getName(), t.getEmail(), t.getPicture(), t.getPassword(), e);
+						logger.severe(msg);
+						logger.log(Level.SEVERE, e.getMessage(), e);
+						throw new Exception (msg, e);
+					}
+				}
+			}, request);
+		}
+		//TODO: remove buddy
+
 	}
 	
 	public class Groups{
@@ -113,6 +169,54 @@ public class BL {
 				}
 			}, request);
 			return groups;
+		}
+		
+		public void joinInto(GroupMemberships request) throws IllegalArgumentException, Exception {
+			BLExecuter<GroupMemberships, Void> executer = new BLExecuter<GroupMemberships, Void>();
+
+			executer.execute(new BLRequest<GroupMemberships, Void>() {
+				@Override
+				public void validate(GroupMemberships t) throws IllegalArgumentException {
+					Validator.validateEmail(t.getMember_email(), "member_email");
+				}
+				
+				@Override
+				public Void perform(GroupMemberships t) throws Exception {
+					try {
+						dal.groups.joinInto(t);
+					} catch (SQLException e) {
+						String msg = String.format("unable to join into groupId=%d & memberId=%s, with error %s", t.getGroup_id(), t.getMember_email(), e);
+						logger.severe(msg);
+						logger.log(Level.SEVERE, e.getMessage(), e);
+						throw new Exception (msg, e);
+					}
+					return null;
+				}
+			}, request);
+		}
+		
+		public void leave(GroupMemberships request) throws IllegalArgumentException, Exception {
+			BLExecuter<GroupMemberships, Void> executer = new BLExecuter<GroupMemberships, Void>();
+
+			executer.execute(new BLRequest<GroupMemberships, Void>() {
+				@Override
+				public void validate(GroupMemberships t) throws IllegalArgumentException {
+					Validator.validateEmail(t.getMember_email(), "member_email");
+				}
+				
+				@Override
+				public Void perform(GroupMemberships t) throws Exception {
+					try {
+						dal.groups.leave(t);
+					} catch (SQLException e) {
+						String msg = String.format("unable to leave groupId=%d & memberId=%s, with error %s", t.getGroup_id(), t.getMember_email(), e);
+						logger.severe(msg);
+						logger.log(Level.SEVERE, e.getMessage(), e);
+						throw new Exception (msg, e);
+					}
+					return null;
+				}
+			}, request);
 		}
 	}
 	
@@ -183,7 +287,10 @@ public class BL {
 		}		
 	}
 	
-	
+	public class Messages{
+		// TODO: send group message
+		// TODO: send buddy message
+	}
 	
 
 }

@@ -76,6 +76,29 @@
 
   <servlet>
     <description></description>
+    <display-name>AddBuddyService</display-name>
+    <servlet-name>AddBuddyService</servlet-name>
+    <servlet-class>edu.mta.chatty.service.AddBuddyService</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddBuddyService</servlet-name>
+    <url-pattern>/services/add-buddy</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>RegisterUserService</display-name>
+    <servlet-name>RegisterUserService</servlet-name>
+    <servlet-class>edu.mta.chatty.service.RegisterUserService</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RegisterUserService</servlet-name>
+    <url-pattern>/services/register-user</url-pattern>
+  </servlet-mapping>
+
+
+  <servlet>
+    <description></description>
     <display-name>FindGroupsService</display-name>
     <servlet-name>FindGroupsService</servlet-name>
     <servlet-class>edu.mta.chatty.service.FindGroupsService</servlet-class>
@@ -83,6 +106,29 @@
   <servlet-mapping>
     <servlet-name>FindGroupsService</servlet-name>
     <url-pattern>/services/find-groups</url-pattern>
+  </servlet-mapping>
+
+
+  <servlet>
+    <description></description>
+    <display-name>JoinGroupService</display-name>
+    <servlet-name>JoinGroupService</servlet-name>
+    <servlet-class>edu.mta.chatty.service.JoinGroupService</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>JoinGroupService</servlet-name>
+    <url-pattern>/services/join-group</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>LeaveGroupService</display-name>
+    <servlet-name>LeaveGroupService</servlet-name>
+    <servlet-class>edu.mta.chatty.service.LeaveGroupService</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LeaveGroupService</servlet-name>
+    <url-pattern>/services/leave-group</url-pattern>
   </servlet-mapping>
   
 </web-app>
