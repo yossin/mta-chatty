@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 import edu.mta.chatty.contract.GenericDataResponse;
 import edu.mta.chatty.contract.LoginRequest;
 import edu.mta.chatty.dal.handlers.GenericListQueryHandler;
+import edu.mta.chatty.dal.handlers.UpdateHandler;
 import edu.mta.chatty.domain.BuddyList;
 import edu.mta.chatty.domain.BuddyMessages;
 import edu.mta.chatty.domain.City;
@@ -122,8 +123,48 @@ public class DAL {
 			return results;
 		}
 		
+		public void addBuddy(final BuddyList request) throws SQLException{
+			UpdateHandler handler = new UpdateHandler() {
+				@Override
+				public void setVariables(PreparedStatement statement) throws SQLException {
+					statement.setString(1,request.getOwner_email());
+					statement.setString(2,request.getBuddy_id());
+				}
+				@Override
+				public String getSql() {
+					return "insert into buddy_list (owner_email, buddy_id) values(?,?)";
+				}
+				
+				@Override
+				public void handleResults(int result) {
+				}
+			};
+			executer.execute(handler);
+		}
+		
+		public void insertUser(final User request) throws SQLException{
+			UpdateHandler handler = new UpdateHandler() {
+				@Override
+				public void setVariables(PreparedStatement statement) throws SQLException {
+					statement.setString(1,request.getEmail());
+					statement.setString(2,request.getName());
+					statement.setString(3,request.getPicture());
+					statement.setString(4,request.getPassword());
+				}
+				@Override
+				public String getSql() {
+					return "insert into `user` (email, name, picture, password) values(?,?,?,?)";
+				}
+				
+				@Override
+				public void handleResults(int result) {
+				}
+			};
+			executer.execute(handler);
+		}
 		
 	}
+	
 	private static abstract class GroupListQueryHandler extends GenericListQueryHandler<Group>{
 		GroupListQueryHandler(List<Group> results){
 			super(results);
@@ -152,8 +193,50 @@ public class DAL {
 			
 			return results;
 		}
+
+		public void joinInto(final GroupMemberships memberships) throws SQLException{
+			UpdateHandler handler = new UpdateHandler() {
+				@Override
+				public void setVariables(PreparedStatement statement) throws SQLException {
+					statement.setString(1,memberships.getMember_email());
+					statement.setInt(2,memberships.getGroup_id());
+				}
+				@Override
+				public String getSql() {
+					return "insert into group_membership (member_email, group_id) values (?,?)";
+				}
+				
+				@Override
+				public void handleResults(int result) {
+				}
+			};
+			executer.execute(handler);
+		}
 	
+		
+		public void leave(final GroupMemberships memberships) throws SQLException{
+			UpdateHandler handler = new UpdateHandler() {
+				@Override
+				public void setVariables(PreparedStatement statement) throws SQLException {
+					statement.setString(1,memberships.getMember_email());
+					statement.setInt(2,memberships.getGroup_id());
+				}
+				@Override
+				public String getSql() {
+					return "delete from group_membership where member_email=? and group_id=?";
+				}
+				
+				@Override
+				public void handleResults(int result) {
+				}
+			};
+			executer.execute(handler);
+		}
+
+		
 	}
+	
+	
 	
 	public class Data{
 		private abstract class CityListQueryHandler extends GenericListQueryHandler<City>{
