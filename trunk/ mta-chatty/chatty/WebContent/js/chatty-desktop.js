@@ -18,6 +18,9 @@ function UI(){
 		this.loginError=function(e){
 			printError('error has occured while login please try again',e);
 		};
+		this.registerError=function(e){
+			printError('error has occured while register please try again',e);
+		};
 		this.getMessagesError=function(e){
 			printError('error has occured while retreiving messages',e);
 		};
@@ -250,10 +253,20 @@ function UI(){
 
 	this.login=function(){
 		var email = $("#LoginForm .loginUserMailInput").val();
-		var pass = $("#LoginForm .loginUserPassInput").val();
+		var pass  = $("#LoginForm .loginUserPassInput").val();
 
 		bl.loginUser(email, pass, ui.initDashboard, ui.messages.loginError);
 		return true;
+	};
+
+	this.register=function(){
+		name  = $("#RegisterForm .registerUserNameInput").val();
+		email = $("#RegisterForm .registerUserMailInput").val();
+		pass  = $("#RegisterForm .registerUserPassInput").val();
+		pic   = $("#RegisterForm .registerUserPicInput" ).val();
+
+		bl.registerNewUser(email, name, pic, pass, ui.initDashboard, ui.messages.registerError);
+        return true;
 	};
 	
 	this.loadContacts=function(){
@@ -404,6 +417,8 @@ $(document).ready(function(){
     $(document).bind('pagebeforeshow', updateMainDivsHeight);
     
 	$("#LoginForm .btnLoginToChatty").click(ui.login);
+
+	$("#RegisterForm .btnRegisterSubmit").click(ui.register);
 
 	$("#Dashboard").bind("pagebeforeshow", ui.loadContacts);
 	$("#Dashboard .sendMessage").bind("click", ui.sendMessage);

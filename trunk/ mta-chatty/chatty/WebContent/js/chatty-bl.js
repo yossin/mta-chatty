@@ -17,7 +17,11 @@ function recreateDB(onSuccess, onError){
 	});
 }
 
-
+function refreshUserData(onSuccess, onError){
+	ajaxPost("user-data", bl.loggedInUser, function(userData){
+			fillUserData(userData, onSuccess, onError);
+	}, onError);
+}
 
 
 function BL(onSuccessInit, onError){
@@ -52,7 +56,15 @@ function BL(onSuccessInit, onError){
 	//TODO: verify
 	// email, name, picture, password, address, cityId, postalCode? **where? must be undefined** 
 	this.registerNewUser=function(email, name, picture, password, onSuccess, onError){
-		dal.insertUser(email, name, picture, password, onSuccess, onError);
+		var att = {"email":email, "name":name, "picture":picture, "password":password};	
+		var user = {"email":email, "password":password};
+		ajaxPost("register-user", att, function(data){
+			dal.setLoggedInUserId(user.email);
+			bl.loggedInUser=user;
+			onSuccess();
+		}, onError);
+		
+		//dal.insertUser(email, name, picture, password, onSuccess, onError);
 	};
 
 	//TODO: implement - do we need all parameters??
@@ -96,7 +108,13 @@ function BL(onSuccessInit, onError){
 	};
 
 	this.addBuddyToList=function(buddyId, onSuccess, onError){
-		dal.addBuddy(bl.loggedInUser.email, buddyId, onSuccess, onError);		
+		var att = {"owner_email":bl.loggedInUser.email, "buddy_id":buddyId};	
+		ajaxPost("add-buddy", att, function(){
+			dal.addBuddy(bl.loggedInUser.email, buddyId, onSuccess, onError);
+		}, onError);
+/*tmp, should be in the callback function*/				
+		dal.addBuddy(bl.loggedInUser.email, buddyId, onSuccess, onError);
+	
 	};
 
 	//----------- GROUPS -------------
@@ -119,14 +137,25 @@ function BL(onSuccessInit, onError){
 	};
 
 	this.joinGroup=function(groupId, onSuccess, onError){
+		var att = {"member_email":bl.loggedInUser.email, "group_id":groupId};	
+		ajaxPost("join-group", att, function(){
+			dal.insertGroupMembership(bl.loggedInUser.email, groupId, onSuccess, onError);
+		}, onError);
+/*tmp, should be in the callback function*/	
 		dal.insertGroupMembership(bl.loggedInUser.email, groupId, onSuccess, onError);
 	};
 
 	this.leaveGroup=function(groupId, onSuccess, onError){
+		var att = {"member_email":bl.loggedInUser.email, "group_id":groupId};	
+		ajaxPost("leave-group", att, function(){
+			dal.deleteGroupMembership(bl.loggedInUser.email, groupId, function(){
+				dal.deleteGroupIfEmpry(groupId, onSuccess, onError);
+			}, onError);
+		}, onError);
+/*tmp, should be in the callback function*/	
 		dal.deleteGroupMembership(bl.loggedInUser.email, groupId, function(){
 			dal.deleteGroupIfEmpry(groupId, onSuccess, onError);
 		}, onError);
-
 	};
 
 	this.getGroupDetails=function(groupId, onSuccess, onError){
