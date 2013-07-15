@@ -131,4 +131,27 @@
     <url-pattern>/services/leave-group</url-pattern>
   </servlet-mapping>
   
+  
+  <servlet>
+    <description></description>
+    <display-name>SendGroupMessageService</display-name>
+    <servlet-name>SendGroupMessageService</servlet-name>
+    <servlet-class>edu.mta.chatty.service.SendGroupMessageService</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SendGroupMessageService</servlet-name>
+    <url-pattern>/services/group-message</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>SendBuddyMessageService</display-name>
+    <servlet-name>SendBuddyMessageService</servlet-name>
+    <servlet-class>edu.mta.chatty.service.SendBuddyMessageService</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SendBuddyMessageService</servlet-name>
+    <url-pattern>/services/buddy-message</url-pattern>
+  </servlet-mapping>
+    
 </web-app>
