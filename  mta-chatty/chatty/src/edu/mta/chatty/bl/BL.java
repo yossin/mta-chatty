@@ -288,8 +288,57 @@ public class BL {
 	}
 	
 	public class Messages{
-		// TODO: send group message
-		// TODO: send buddy message
+		public void send(GroupMessages request) throws IllegalArgumentException, Exception {
+			BLExecuter<GroupMessages, Void> executer = new BLExecuter<GroupMessages, Void>();
+
+			executer.execute(new BLRequest<GroupMessages, Void>() {
+				@Override
+				public void validate(GroupMessages t) throws IllegalArgumentException {
+					Validator.validateEmail(t.getSender_id(), "sender id");
+					Validator.validateNotEmpty(t.getMessage(), "message");
+				}
+				
+				@Override
+				public Void perform(GroupMessages t) throws Exception {
+					try {
+						dal.messages.send(t);
+					} catch (SQLException e) {
+						String msg = String.format("unable to send group-message %s from %s into groupId %d. error %s", t.getMessage(), t.getSender_id(), t.getReceiver_id(),e);
+						logger.severe(msg);
+						logger.log(Level.SEVERE, e.getMessage(), e);
+						throw new Exception (msg, e);
+					}
+					return null;
+				}
+			}, request);
+		}
+		
+		public void send(BuddyMessages request) throws IllegalArgumentException, Exception {
+			BLExecuter<BuddyMessages, Void> executer = new BLExecuter<BuddyMessages, Void>();
+
+			executer.execute(new BLRequest<BuddyMessages, Void>() {
+				@Override
+				public void validate(BuddyMessages t) throws IllegalArgumentException {
+					Validator.validateEmail(t.getSender_id(), "sender id");
+					Validator.validateEmail(t.getReceiver_id(), "receiver id");
+					Validator.validateNotEmpty(t.getMessage(), "message");
+				}
+				
+				@Override
+				public Void perform(BuddyMessages t) throws Exception {
+					try {
+						dal.messages.send(t);
+					} catch (SQLException e) {
+						String msg = String.format("unable to send buddy-message %s from %s into %s. error %s", t.getMessage(), t.getSender_id(), t.getReceiver_id(),e);
+						logger.severe(msg);
+						logger.log(Level.SEVERE, e.getMessage(), e);
+						throw new Exception (msg, e);
+					}
+					return null;
+				}
+			}, request);
+		}
+		
 	}
 	
 
