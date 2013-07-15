@@ -29,6 +29,7 @@ public class DAL {
 	final public Users users = new Users();
 	final public Data data = new Data();
 	final public Groups groups = new Groups();
+	final public Messages messages = new Messages();
 	
 	private static abstract class UserListQueryHandler extends GenericListQueryHandler<User>{
 		UserListQueryHandler(List<User> results){
@@ -394,6 +395,48 @@ public class DAL {
 			};
 			executer.execute(handler);
 			return results;
+		}
+
+	}
+	public class Messages{
+		public void send(final GroupMessages message) throws SQLException{
+			UpdateHandler handler = new UpdateHandler() {
+				@Override
+				public void setVariables(PreparedStatement statement) throws SQLException {
+					statement.setString(1,message.getSender_id());
+					statement.setInt(2,message.getReceiver_id());
+					statement.setString(3, message.getMessage());
+				}
+				@Override
+				public String getSql() {
+					return "insert into group_message (sender_id, receiver_id, message) values(?,?,?)";
+				}
+				
+				@Override
+				public void handleResults(int result) {
+				}
+			};
+			executer.execute(handler);
+		}
+
+		public void send(final BuddyMessages message) throws SQLException{
+			UpdateHandler handler = new UpdateHandler() {
+				@Override
+				public void setVariables(PreparedStatement statement) throws SQLException {
+					statement.setString(1,message.getSender_id());
+					statement.setString(2,message.getReceiver_id());
+					statement.setString(3, message.getMessage());
+				}
+				@Override
+				public String getSql() {
+					return "insert into buddy_message (sender_id, receiver_id, message) values(?,?,?)";
+				}
+				
+				@Override
+				public void handleResults(int result) {
+				}
+			};
+			executer.execute(handler);
 		}
 
 	}

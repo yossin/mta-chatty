@@ -86,7 +86,7 @@ CREATE  TABLE IF NOT EXISTS buddy_message (
   receiver_id VARCHAR(150) NOT NULL ,
   message TEXT NOT NULL ,
   is_attachment_path BOOLEAN NOT NULL DEFAULT FALSE ,
-  PRIMARY KEY (sender_id, receiver_id),
+  PRIMARY KEY (send_date, sender_id, receiver_id),
  INDEX fk_buddy_message_receiver_idx (receiver_id ASC),
  INDEX fk_buddy_message_sender_idx (sender_id ASC),
   CONSTRAINT fk_buddy_message_sender
