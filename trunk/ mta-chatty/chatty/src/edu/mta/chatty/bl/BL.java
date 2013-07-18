@@ -9,8 +9,6 @@ import javax.sql.DataSource;
 
 import edu.mta.chatty.contract.GenericDataResponse;
 import edu.mta.chatty.contract.LoginRequest;
-import edu.mta.chatty.contract.UserDataResponse;
-import edu.mta.chatty.contract.UserRequest;
 import edu.mta.chatty.dal.DAL;
 import edu.mta.chatty.domain.BuddyList;
 import edu.mta.chatty.domain.BuddyMessages;
@@ -18,6 +16,7 @@ import edu.mta.chatty.domain.Group;
 import edu.mta.chatty.domain.GroupMemberships;
 import edu.mta.chatty.domain.GroupMessages;
 import edu.mta.chatty.domain.SearchRequest;
+import edu.mta.chatty.domain.SyncUserRequest;
 import edu.mta.chatty.domain.User;
 import edu.mta.chatty.domain.UserData;
 
@@ -242,16 +241,16 @@ public class BL {
 			}, null);
 			return data;
 		}
-		public UserDataResponse getUserData(UserRequest request) throws IllegalArgumentException, Exception{
-			BLExecuter<UserRequest, UserDataResponse> executer = new BLExecuter<UserRequest, UserDataResponse>();
-			UserDataResponse data = executer.execute(new BLRequest<UserRequest, UserDataResponse>() {
+		public UserData getUserData(SyncUserRequest request) throws IllegalArgumentException, Exception{
+			BLExecuter<SyncUserRequest, UserData> executer = new BLExecuter<SyncUserRequest, UserData>();
+			UserData data = executer.execute(new BLRequest<SyncUserRequest, UserData>() {
 				@Override
-				public void validate(UserRequest t) throws IllegalArgumentException {
+				public void validate(SyncUserRequest t) throws IllegalArgumentException {
 					Validator.validateEmail(t.getEmail(), "email");
 				}
 				
 				@Override
-				public UserDataResponse perform(UserRequest t) throws Exception {
+				public UserData perform(SyncUserRequest t) throws Exception {
 					try {
 						String ownerEmail = t.getEmail();
 						UserData userData = new UserData();
@@ -267,6 +266,7 @@ public class BL {
 						userData.setGroup_memberships(groupMemberships);
 						userData.setBuddy_messages(buddyMessages);
 						userData.setGroup_messages(groupMessages);
+						userData.setSyncSpan(t.getSyncSpan());
 						return userData;
 					} catch (SQLException e) {
 						String msg = String.format("unable to get generic data, with error %s", e);
@@ -278,7 +278,7 @@ public class BL {
 			}, request);
 			return data;
 		}
-		public UserData getCompleteUserData(UserRequest request) throws IllegalArgumentException, Exception{
+		public UserData getCompleteUserData(SyncUserRequest request) throws IllegalArgumentException, Exception{
 			UserData data = (UserData) getUserData(request);
 			GenericDataResponse generic = getGenericData();
 			data.setCities(generic.getCities());

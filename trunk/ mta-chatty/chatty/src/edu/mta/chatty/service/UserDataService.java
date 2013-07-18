@@ -2,11 +2,12 @@ package edu.mta.chatty.service;
 
 import java.io.Writer;
 
-import edu.mta.chatty.contract.UserDataResponse;
 import edu.mta.chatty.contract.UserRequest;
+import edu.mta.chatty.domain.SyncUserRequest;
 import edu.mta.chatty.domain.User;
+import edu.mta.chatty.domain.UserData;
 
-public class UserDataService extends BaseService<UserRequest> {
+public class UserDataService extends BaseSyncService<UserRequest> {
 	private static final long serialVersionUID = 1L;
 
 
@@ -14,10 +15,12 @@ public class UserDataService extends BaseService<UserRequest> {
 	protected UserRequest create() {
 		return new User();
 	}
+	
+	
 
 	@Override
-	protected void perform(Writer writer, UserRequest t) throws Exception {
-		UserDataResponse data = bl.data.getUserData(t);
+	protected void perform(SyncUserRequest request, Writer writer, UserRequest t) throws Exception {
+		UserData data = bl.data.getUserData(request);
 		writeJsonResponse(writer, data);
 	}
 
