@@ -1,6 +1,7 @@
 package edu.mta.chatty.bl;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -230,7 +231,28 @@ public class BL {
 				@Override
 				public GenericDataResponse perform(Void t) throws Exception {
 					try {
-						return dal.data.getGenericData();
+						return dal.data.getGenericData(new Timestamp(0), new Timestamp(System.currentTimeMillis()));
+					} catch (SQLException e) {
+						String msg = String.format("unable to get generic data, with error %s", e);
+						logger.severe(msg);
+						logger.log(Level.SEVERE, e.getMessage(), e);
+						throw new Exception (msg, e);
+					}
+				}
+			}, null);
+			return data;
+		}
+		public GenericDataResponse getGenericData(final SyncUserRequest request) throws IllegalArgumentException, Exception{
+			BLExecuter<Void, GenericDataResponse> executer = new BLExecuter<Void, GenericDataResponse>();
+			GenericDataResponse data = executer.execute(new BLRequest<Void, GenericDataResponse>() {
+				@Override
+				public void validate(Void t) throws IllegalArgumentException {
+				}
+				
+				@Override
+				public GenericDataResponse perform(Void t) throws Exception {
+					try {
+						return dal.data.getGenericData(request.getBeginTS(), request.getEndTS());
 					} catch (SQLException e) {
 						String msg = String.format("unable to get generic data, with error %s", e);
 						logger.severe(msg);
@@ -253,13 +275,16 @@ public class BL {
 				public UserData perform(SyncUserRequest t) throws Exception {
 					try {
 						String ownerEmail = t.getEmail();
+						Timestamp begin = t.getBeginTS();
+						Timestamp end = t.getEndTS();
+						
 						UserData userData = new UserData();
-						List<User> users= dal.data.getBuddies(ownerEmail);
-						List<Group> groups = dal.data.getUserGroups(ownerEmail);
-						List<BuddyList> buddyList = dal.data.getBuddyList(ownerEmail);
-						List<GroupMemberships> groupMemberships = dal.data.getGroupList(ownerEmail);
-						List<BuddyMessages> buddyMessages = dal.data.getBuddiesMessages(ownerEmail);
-						List<GroupMessages> groupMessages = dal.data.getGroupsMessages(ownerEmail);
+						List<User> users= dal.data.getBuddies(ownerEmail, begin, end);
+						List<Group> groups = dal.data.getUserGroups(ownerEmail, begin, end);
+						List<BuddyList> buddyList = dal.data.getBuddyList(ownerEmail, begin, end);
+						List<GroupMemberships> groupMemberships = dal.data.getGroupList(ownerEmail, begin, end);
+						List<BuddyMessages> buddyMessages = dal.data.getBuddiesMessages(ownerEmail, begin, end);
+						List<GroupMessages> groupMessages = dal.data.getGroupsMessages(ownerEmail, begin, end);
 						userData.setUsers(users);
 						userData.setGroups(groups);
 						userData.setBuddy_list(buddyList);
@@ -280,7 +305,7 @@ public class BL {
 		}
 		public UserData getCompleteUserData(SyncUserRequest request) throws IllegalArgumentException, Exception{
 			UserData data = (UserData) getUserData(request);
-			GenericDataResponse generic = getGenericData();
+			GenericDataResponse generic = getGenericData(request);
 			data.setCities(generic.getCities());
 			data.setCountries(generic.getCountries());
 			return data;
