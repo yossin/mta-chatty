@@ -103,10 +103,10 @@ function createGroupsData(list, onSuccess, onError){
 }
 
 function createBuddyMessagesData(list, onSuccess, onError){
-	genericCreateData("insert into buddy_message (sender_id, receiver_id, message) values (?,?,?)", 
+	genericCreateData("insert into buddy_message (send_date, sender_id, receiver_id, message) values (?,?,?,?)", 
 			"buddy_message", list, 
 			function(message){
-				return [message.sender_id, message.receiver_id, message.message];
+				return [message.send_date, message.sender_id, message.receiver_id, message.message];
 			}, onSuccess, onError
 	);
 }
@@ -121,10 +121,10 @@ function createGroupMembershpisData(list, onSuccess, onError){
 }
 
 function createGroupMessagesData(list, onSuccess, onError){
-	genericCreateData("insert into group_message (sender_id, receiver_id, message) values (?,?,?)", 
-			"group_messages", list, 
+	genericCreateData("insert into group_message (send_date, sender_id, receiver_id, message) values (?,?,?,?)", 
+			"group_message", list, 
 			function(message){
-				return [message.sender_id, message.receiver_id, message.message];
+				return [message.send_date, message.sender_id, message.receiver_id, message.message];
 			}, onSuccess, onError
 	);
 }

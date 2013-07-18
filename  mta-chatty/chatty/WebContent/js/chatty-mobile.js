@@ -191,7 +191,7 @@ function addMessageToChatRoom(send_date, sender_id, message, sender_name, sender
     		"' /><label class='messages-text'>" + 
     		message + 
             "</label><label class='messages-time'>" + 
-            send_date + 
+            (new Date(send_date)).toLocaleString() + 
             "</label></li>");
     $("#ChatRoom .messages").append(e).listview('refresh');
 }
@@ -348,14 +348,26 @@ function setEditProfileForm(result){
     
     
 }
+
+var messInterval = 0;
+var contInterval = 0;
+
 function setLoginForm(){
 	log.debug("navigate back to login page");
 	$.mobile.changePage("#Login");
+	
+	if (messInterval != 0)
+		clearInterval(messInterval);
+	if (contInterval != 0)
+		clearInterval(contInterval);
 }
 
 function setChattyPage(){
 	log.debug("navigate back to chatty page");
 	$.mobile.changePage("#Buddies");
+	
+	messInterval = window.setInterval(ui.refreshMessages, 2000);
+	contInterval = window.setInterval(ui.loadContacts   , 2000);
 }
 
 function addBuddyToSearchResultList(buddy){
@@ -380,7 +392,10 @@ function reBindBuddySearchResultClick(){
 	    var anchor = $(this);
 		anchor.bind("click", function () {
 			id = $(this).attr("id");
-            bl.addBuddyToList(id, dummy, printError);
+            bl.addBuddyToList(id, function(){
+            	updateTab({ "id": "BuddiesTab" });
+            	}, 
+            	printError);
 			return true;
 	    });
 	});
@@ -411,7 +426,10 @@ function reBindGroupSearchResultClick(){
 	    var anchor = $(this);
 		anchor.bind("click", function () {
 			id = $(this).attr("id");
-            bl.joinGroup(id, dummy, printError);
+            bl.joinGroup(id, function(){
+        	    updateTab({ "id": "GroupsTab" });
+            }, 
+            printError);
 			return true;
 	    });
 	});

@@ -27,6 +27,5 @@
 			<div class="loginOrRegistrerDiv">
 				<a href="#Register" class="btnRegisterToChatty" data-inline="true" data-role="button">Register</a>
 				<a href="" class="btnLoginToChatty" data-inline="true" data-role="button">Login</a>
-		<%--	<button type="submit" class="btnLoginToChatty" data-inline="true">Login</button> --%>
 			</div>
         </form>		

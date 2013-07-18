@@ -6,10 +6,10 @@
 			<label class="header-label">Please Register to Chatty</label>
 			<img   class="header-image" src="image/Register.png" alt="Register"/>
 		</header>
+
 		
-		<% String nextpage = request.getParameter("device").equals("mobile")?"#Buddies":"#Dashboard"; %>
-		
-		<form id="RegisterForm" class="content" data-role="content" action="<%=nextpage%>">
+		<% String action; if(request.getParameter("device").equals("mobile")) action="#Buddies"; else action="#Dashboard"; %>
+		<form id="RegisterForm" class="content" data-role="content" action="<%=action%>" method="post">
 			<div>
 				<span class="colorRed">*</span>
 				<label class="registerUserMailLable">Email:</label>
@@ -35,7 +35,6 @@
 			</div>
 				
 			<div class="RegistrerDiv">
-				<a href="<%=nextpage%>" class="btnRegisterSubmit" data-inline="true" data-role="button">Register</a>
-			<%--	<button type="submit" class="btnRegisterSubmit" data-inline="true">Register</button> --%>
+				<a href="" class="btnRegisterSubmit" data-inline="true" data-role="button">Register</a>
 			</div>
 		</form>				

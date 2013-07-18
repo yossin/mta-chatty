@@ -25,7 +25,7 @@ CREATE  TABLE IF NOT EXISTS 'user' (
   picture TEXT NOT NULL DEFAULT 'images/defaultUser.jpg',
   active BOOLEAN NOT NULL DEFAULT TRUE ,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
-  password TEXT NOT NULL);
+  password TEXT);
 
   CREATE INDEX idx_last_name ON 'user' (name);
   
