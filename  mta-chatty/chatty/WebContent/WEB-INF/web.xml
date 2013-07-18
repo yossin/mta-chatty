@@ -43,24 +43,24 @@
 
   <servlet>
     <description></description>
-    <display-name>UserDataService</display-name>
-    <servlet-name>UserDataService</servlet-name>
-    <servlet-class>edu.mta.chatty.service.UserDataService</servlet-class>
+    <display-name>SyncSyncCompleteDataService</display-name>
+    <servlet-name>SyncUserDataService</servlet-name>
+    <servlet-class>edu.mta.chatty.service.SyncUserDataService</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>UserDataService</servlet-name>
-    <url-pattern>/services/user-data</url-pattern>
+    <servlet-name>SyncUserDataService</servlet-name>
+    <url-pattern>/services/sync-user-data</url-pattern>
   </servlet-mapping>
 
   <servlet>
     <description></description>
     <display-name>CompleteDataService</display-name>
-    <servlet-name>CompleteDataService</servlet-name>
-    <servlet-class>edu.mta.chatty.service.CompleteDataService</servlet-class>
+    <servlet-name>SyncCompleteDataService</servlet-name>
+    <servlet-class>edu.mta.chatty.service.SyncCompleteDataService</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>CompleteDataService</servlet-name>
-    <url-pattern>/services/complete-data</url-pattern>
+    <servlet-name>SyncCompleteDataService</servlet-name>
+    <url-pattern>/services/sync-complete-data</url-pattern>
   </servlet-mapping>
 
   <servlet>

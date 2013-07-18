@@ -2,6 +2,7 @@ package edu.mta.chatty.dal;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -20,6 +21,7 @@ import edu.mta.chatty.domain.Group;
 import edu.mta.chatty.domain.GroupMemberships;
 import edu.mta.chatty.domain.GroupMessages;
 import edu.mta.chatty.domain.SearchRequest;
+import edu.mta.chatty.domain.SyncTimeStampSpan;
 import edu.mta.chatty.domain.User;
 import edu.mta.chatty.domain.UserData;
 
@@ -258,89 +260,102 @@ public class DAL {
 				return new Country();
 			}
 		}
-		private List<Country> getCountries() throws SQLException{
+		private List<Country> getCountries(final Timestamp begin, final Timestamp end) throws SQLException{
 			final List<Country> results = new LinkedList<Country>();
 			CountryListQueryHandler handler = new CountryListQueryHandler(results) {
 				@Override
 				public void setVariables(PreparedStatement statement) throws SQLException {
-					//no parameters
+					statement.setTimestamp(1, begin);
+					statement.setTimestamp(2, end);
 				}
 				@Override
 				public String getSql() {
-					return "select country_id,country,last_update from country";
+					return "select country_id,country,last_update from country where (last_update >=? and last_update <?)";
 				}
 			};
 			executer.execute(handler);
 			return results;
 		}
 		
-		private List<City> getCities() throws SQLException{
+		private List<City> getCities(final Timestamp begin, final Timestamp end) throws SQLException{
 			final List<City> results = new LinkedList<City>();
 			CityListQueryHandler handler = new CityListQueryHandler(results) {
 				@Override
 				public void setVariables(PreparedStatement statement) throws SQLException {
-					//no parameters
+					statement.setTimestamp(1, begin);
+					statement.setTimestamp(2, end);
 				}
 				@Override
 				public String getSql() {
-					return "select city_id,city,country_id,last_update from city";
+					return "select city_id,city,country_id,last_update from city where (last_update >=? and last_update <?)";
 				}
 			};
 			executer.execute(handler);
 			return results;
 		}
 		
-		public GenericDataResponse getGenericData() throws SQLException{
+		public GenericDataResponse getGenericData(final Timestamp begin, final Timestamp end) throws SQLException{
 			UserData results = new UserData();
-			results.setCountries(getCountries());
-			results.setCities(getCities());
+			results.setCountries(getCountries(begin, end));
+			results.setCities(getCities(begin, end));
 			return results;
 		}
 		
-		public List<User> getBuddies(final String ownerEmail) throws SQLException{
+		public List<User> getBuddies(final String ownerEmail, final Timestamp begin, final Timestamp end) throws SQLException{
 			final List<User> results = new LinkedList<User>();
 			UserListQueryHandler handler = new UserListQueryHandler(results) {
 				@Override
 				public void setVariables(PreparedStatement statement) throws SQLException {
-					statement.setString(1, ownerEmail);
-					statement.setString(2, ownerEmail);
-					statement.setString(3, ownerEmail);
+					int i=1;
+					statement.setString(i++, ownerEmail);
+					statement.setTimestamp(i++, begin);
+					statement.setTimestamp(i++, end);
+					statement.setString(i++, ownerEmail);
+					statement.setTimestamp(i++, begin);
+					statement.setTimestamp(i++, end);
+					statement.setString(i++, ownerEmail);
+					statement.setTimestamp(i++, begin);
+					statement.setTimestamp(i++, end);
 				}
 				@Override
 				public String getSql() {
-					return "select u.email,u.name,u.picture,u.active,u.last_update from `user` as u join (select g.member_email from group_membership as g join (select group_id from group_membership where member_email=?) as z on g.group_id=z.group_id where g.member_email!=? union select u.email from `user` as u join buddy_list as b on u.email=b.buddy_id where b.owner_email=?) as z on u.email=z.member_email";
+					return "select u.email,u.name,u.picture,u.active,u.last_update from `user` as u join (select g.member_email from group_membership as g join (select group_id from group_membership where member_email=? and (last_update >=? and last_update <?)) as z on g.group_id=z.group_id where (g.member_email!=? and (g.last_update >=? and g.last_update <?)) union select u.email from `user` as u join buddy_list as b on u.email=b.buddy_id where (b.owner_email=? and (b.last_update >=? and b.last_update <?))) as z on u.email=z.member_email";
 				}
 			};
 			executer.execute(handler);
 			return results;
 		}
 		
-		public List<BuddyList> getBuddyList(final String ownerEmail) throws SQLException{
+		public List<BuddyList> getBuddyList(final String ownerEmail, final Timestamp begin, final Timestamp end) throws SQLException{
 			final List<BuddyList> results = new LinkedList<BuddyList>();
 			BuddyListListQueryHandler handler = new BuddyListListQueryHandler(results) {
 				@Override
 				public void setVariables(PreparedStatement statement) throws SQLException {
 					statement.setString(1, ownerEmail);
+					statement.setTimestamp(2, begin);
+					statement.setTimestamp(3, end);
 				}
 				@Override
 				public String getSql() {
-					return "select owner_email,buddy_id,last_update from buddy_list where owner_email=?";
+					return "select owner_email,buddy_id,last_update from buddy_list where owner_email=? and (last_update >=? and last_update <?)";
 				}
 			};
 			executer.execute(handler);
 			return results;
 		}
 
-		public List<GroupMemberships> getGroupList(final String ownerEmail) throws SQLException{
+		public List<GroupMemberships> getGroupList(final String ownerEmail, final Timestamp begin, final Timestamp end) throws SQLException{
 			final List<GroupMemberships> results = new LinkedList<GroupMemberships>();
 			GroupMembershipsListQueryHandler handler = new GroupMembershipsListQueryHandler(results) {
 				@Override
 				public void setVariables(PreparedStatement statement) throws SQLException {
 					statement.setString(1, ownerEmail);
+					statement.setTimestamp(2, begin);
+					statement.setTimestamp(3, end);
 				}
 				@Override
 				public String getSql() {
-					return "select group_id,member_email,last_update from group_membership where member_email=?";
+					return "select group_id,member_email,last_update from group_membership where member_email=? and (last_update >=? and last_update <?)";
 				}
 			};
 			executer.execute(handler);
@@ -348,49 +363,55 @@ public class DAL {
 		}
 
 		
-		public List<Group> getUserGroups(final String ownerEmail) throws SQLException{
+		public List<Group> getUserGroups(final String ownerEmail, final Timestamp begin, final Timestamp end) throws SQLException{
 			final List<Group> results = new LinkedList<Group>();
 			GroupListQueryHandler handler = new GroupListQueryHandler(results) {
 				@Override
 				public void setVariables(PreparedStatement statement) throws SQLException {
 					statement.setString(1, ownerEmail);
+					statement.setTimestamp(2, begin);
+					statement.setTimestamp(3, end);
 				}
 				@Override
 				public String getSql() {
-					return "select g.group_id,g.name,g.picture,g.last_update,g.description from `group` as g join group_membership as gm on g.group_id=gm.group_id where gm.member_email=?";
+					return "select g.group_id,g.name,g.picture,g.last_update,g.description from `group` as g join group_membership as gm on g.group_id=gm.group_id where gm.member_email=? and (gm.last_update >=? and gm.last_update <?)";
 				}
 			};
 			executer.execute(handler);
 			return results;
 		}
 
-		public List<BuddyMessages> getBuddiesMessages(final String ownerEmail) throws SQLException{
+		public List<BuddyMessages> getBuddiesMessages(final String ownerEmail, final Timestamp begin, final Timestamp end) throws SQLException{
 			final List<BuddyMessages> results = new LinkedList<BuddyMessages>();
 			BuddyMessagesListQueryHandler handler = new BuddyMessagesListQueryHandler(results) {
 				@Override
 				public void setVariables(PreparedStatement statement) throws SQLException {
 					statement.setString(1, ownerEmail);
 					statement.setString(2, ownerEmail);
+					statement.setTimestamp(3, begin);
+					statement.setTimestamp(4, end);
 				}
 				@Override
 				public String getSql() {
-					return "select send_date, sender_id, receiver_id, message, is_attachment_path from buddy_message where (sender_id=? or receiver_id=?) order by send_date";
+					return "select send_date, sender_id, receiver_id, message, is_attachment_path from buddy_message where ((sender_id=? or receiver_id=?) and (send_date >=? and send_date <?)) order by send_date";
 				}
 			};
 			executer.execute(handler);
 			return results;
 		}
 
-		public List<GroupMessages> getGroupsMessages(final String ownerEmail) throws SQLException{
+		public List<GroupMessages> getGroupsMessages(final String ownerEmail, final Timestamp begin, final Timestamp end) throws SQLException{
 			final List<GroupMessages> results = new LinkedList<GroupMessages>();
 			GroupMessagesListQueryHandler handler = new GroupMessagesListQueryHandler(results) {
 				@Override
 				public void setVariables(PreparedStatement statement) throws SQLException {
 					statement.setString(1, ownerEmail);
+					statement.setTimestamp(2, begin);
+					statement.setTimestamp(3, end);
 				}
 				@Override
 				public String getSql() {
-					return "select sender_id,receiver_id,send_date,message,is_attachment_path from group_message join (select group_id from group_membership where member_email=?) as gm on gm.group_id=receiver_id order by send_date";
+					return "select sender_id,receiver_id,send_date,message,is_attachment_path from group_message join (select group_id from group_membership where member_email=?) as gm on gm.group_id=receiver_id where (send_date >=? and send_date <?) order by send_date";
 				}
 			};
 			executer.execute(handler);
