@@ -5,12 +5,10 @@ function UI(){
 	function Messages(){
 		function printError(msg,e){
 			log.error(e);
-			//TODO: replace with dialog
 			alert(msg+':'+e);
 		}
 		function printMessage(msg){
 			log.info(msg);
-			//alert(msg);
 		}
 		this.error=function(e){
 			printError('error has occured',e);
@@ -60,13 +58,24 @@ function UI(){
 	this.messages=new Messages();
 	
 	function Navigate(){
+		var messInterval = 0;
+		var contInterval = 0;
+		
 		this.login=function(){
 			log.debug("navigate into login page");
 			$.mobile.changePage("#Login");
+
+			if (messInterval != 0)
+				clearInterval(messInterval);
+			if (contInterval != 0)
+				clearInterval(contInterval);
 		};
 		this.dashboard=function(){
 			log.debug("navigate into dashboard page");
 			$.mobile.changePage("#Dashboard");
+			
+			messInterval = window.setInterval(ui.refreshMessages, 2000);
+			contInterval = window.setInterval(ui.loadContacts   , 2000);
 		};
 	}
 	this.navigate=new Navigate();
@@ -81,7 +90,7 @@ function UI(){
 			    		+name+'</label></li>');
 			    $(contractsRef).append(e);
 			}
-			function appendContract(clsid,id,name,img){
+			function appendContact(clsid,id,name,img){
 			    var e = $('<li class="'+clsid+
 			    		'"><a href="#ChatRoom-'+clsid+'" id="'+id+
 			    		'"><label class="row-label">'+name+
@@ -90,10 +99,10 @@ function UI(){
 			    $(contractsRef).append(e);
 			}
 			function appendBuddy(b){
-				appendContract("buddy",b.email,b.name,b.picture);
+				appendContact("buddy",b.email,b.name,b.picture);
 			}
 			function appendGroup(g){
-				appendContract("group",g.group_id,g.name,g.picture);
+				appendContact("group",g.group_id,g.name,g.picture);
 			}
 			$(contractsRef).empty();
 			
@@ -164,7 +173,7 @@ function UI(){
 			    		'<label class="messages-senderName">'+sender_name+
 			    		'</label><img   class="messages-senderImg" src="'+sender_picture+'" alt="'+sender_name+
 			    		'" /><label class="messages-text">'+message+
-			    		'</label><label class="messages-time">'+send_date+
+			    		'</label><label class="messages-time">'+(new Date(send_date)).toLocaleString()+
 			    		'</label></li>');
 			    $(msgRef).append(e);
 			}
@@ -319,7 +328,6 @@ function UI(){
 				} else if (context.lastSelected.type=='group'){
 					bl.sendGroupMessage(context.lastSelected.id, message, ui.refreshMessages, ui.messages.sendMessagesError);
 				}
-				ui.refreshMessages();
 			} else {
 				log.debug("no message is going to be sent. user must write something..");
 			}
@@ -422,6 +430,7 @@ $(document).ready(function(){
 
 	$("#Dashboard").bind("pagebeforeshow", ui.loadContacts);
 	$("#Dashboard .sendMessage").bind("click", ui.sendMessage);
+	$("#Dashboard .logoutBtn").bind("click", ui.navigate.login);
 
 	$("#SearchBuddy .searchBuddiesBtn").bind("click", ui.searchBuddies);
 	$("#SearchGroup .searchGroupsBtn").bind("click", ui.searchGroups);
