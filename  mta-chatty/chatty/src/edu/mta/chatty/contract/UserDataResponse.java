@@ -8,6 +8,7 @@ import edu.mta.chatty.domain.BuddyMessages;
 import edu.mta.chatty.domain.Group;
 import edu.mta.chatty.domain.GroupMemberships;
 import edu.mta.chatty.domain.GroupMessages;
+import edu.mta.chatty.domain.SyncTimeStampSpan;
 import edu.mta.chatty.domain.User;
 
 public interface UserDataResponse extends GenericDataResponse{
@@ -18,4 +19,5 @@ public interface UserDataResponse extends GenericDataResponse{
 	List<BuddyMessages> getBuddy_messages();
 	List<GroupMemberships> getGroup_memberships();
 	List<GroupMessages> getGroup_messages();
+	SyncTimeStampSpan getSyncSpan();
 }

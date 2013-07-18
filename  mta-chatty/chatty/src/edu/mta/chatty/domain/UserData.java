@@ -15,6 +15,7 @@ public class UserData implements UserDataResponse{
 	private List<BuddyMessages> buddy_messages;
 	private List<GroupMemberships> group_memberships;
 	private List<GroupMessages> group_messages;
+	private SyncTimeStampSpan syncSpan;
 	
 	
 	public List<Country> getCountries() {
@@ -71,6 +72,10 @@ public class UserData implements UserDataResponse{
 	public void setGroup_messages(List<GroupMessages> group_messages) {
 		this.group_messages = group_messages;
 	}
-	
-	
+	public SyncTimeStampSpan getSyncSpan() {
+		return syncSpan;
+	}
+	public void setSyncSpan(SyncTimeStampSpan syncSpan) {
+		this.syncSpan = syncSpan;
+	}
 }

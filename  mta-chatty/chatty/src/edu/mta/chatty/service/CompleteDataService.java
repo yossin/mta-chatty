@@ -3,10 +3,11 @@ package edu.mta.chatty.service;
 import java.io.Writer;
 
 import edu.mta.chatty.contract.UserRequest;
+import edu.mta.chatty.domain.SyncUserRequest;
 import edu.mta.chatty.domain.User;
 import edu.mta.chatty.domain.UserData;
 
-public class CompleteDataService extends BaseService<UserRequest> {
+public class CompleteDataService extends BaseSyncService<UserRequest> {
 	private static final long serialVersionUID = 1L;
 
 
@@ -16,9 +17,10 @@ public class CompleteDataService extends BaseService<UserRequest> {
 	}
 
 	@Override
-	protected void perform(Writer writer, UserRequest t) throws Exception {
-		UserData data = bl.data.getCompleteUserData(t);
+	protected void perform(SyncUserRequest syncUserRequest, Writer writer, UserRequest t) throws Exception {
+		UserData data = bl.data.getCompleteUserData(syncUserRequest);
 		writeJsonResponse(writer, data);
-	}
+		
+	}	
 
 }
