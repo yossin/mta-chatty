@@ -21,7 +21,6 @@ import edu.mta.chatty.domain.Group;
 import edu.mta.chatty.domain.GroupMemberships;
 import edu.mta.chatty.domain.GroupMessages;
 import edu.mta.chatty.domain.SearchRequest;
-import edu.mta.chatty.domain.SyncTimeStampSpan;
 import edu.mta.chatty.domain.User;
 import edu.mta.chatty.domain.UserData;
 
@@ -301,7 +300,7 @@ public class DAL {
 			return results;
 		}
 		
-		public List<User> getBuddies(final String ownerEmail, final Timestamp begin, final Timestamp end) throws SQLException{
+		public List<User> getUsers(final String ownerEmail, final Timestamp begin, final Timestamp end) throws SQLException{
 			final List<User> results = new LinkedList<User>();
 			UserListQueryHandler handler = new UserListQueryHandler(results) {
 				@Override
@@ -310,7 +309,6 @@ public class DAL {
 					statement.setString(i++, ownerEmail);
 					statement.setTimestamp(i++, begin);
 					statement.setTimestamp(i++, end);
-					statement.setString(i++, ownerEmail);
 					statement.setTimestamp(i++, begin);
 					statement.setTimestamp(i++, end);
 					statement.setString(i++, ownerEmail);
@@ -319,7 +317,7 @@ public class DAL {
 				}
 				@Override
 				public String getSql() {
-					return "select u.email,u.name,u.picture,u.active,u.last_update from `user` as u join (select g.member_email from group_membership as g join (select group_id from group_membership where member_email=? and (last_update >=? and last_update <?)) as z on g.group_id=z.group_id where (g.member_email!=? and (g.last_update >=? and g.last_update <?)) union select u.email from `user` as u join buddy_list as b on u.email=b.buddy_id where (b.owner_email=? and (b.last_update >=? and b.last_update <?))) as z on u.email=z.member_email";
+					return "select u.email,u.name,u.picture,u.active,u.last_update from `user` as u join (select g.member_email from group_membership as g join (select group_id from group_membership where member_email=? and (last_update >=? and last_update <?)) as z on g.group_id=z.group_id where (g.last_update >=? and g.last_update <?) union select u.email from `user` as u join buddy_list as b on u.email=b.buddy_id where (b.owner_email=? and (b.last_update >=? and b.last_update <?))) as z on u.email=z.member_email";
 				}
 			};
 			executer.execute(handler);

@@ -279,7 +279,7 @@ public class BL {
 						Timestamp end = t.getEndTS();
 						
 						UserData userData = new UserData();
-						List<User> users= dal.data.getBuddies(ownerEmail, begin, end);
+						List<User> users= dal.data.getUsers(ownerEmail, begin, end);
 						List<Group> groups = dal.data.getUserGroups(ownerEmail, begin, end);
 						List<BuddyList> buddyList = dal.data.getBuddyList(ownerEmail, begin, end);
 						List<GroupMemberships> groupMemberships = dal.data.getGroupList(ownerEmail, begin, end);
