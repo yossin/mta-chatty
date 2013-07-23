@@ -109,7 +109,7 @@ $(document).ready(function(){
 		//regData.cityId = 1; //1=Tel-Aviv
 		//regData.postalCode=undefined; 
 		bl.registerNewUser(regData.email, regData.name, regData.pic, regData.pass, 
-				initChattyPgae, registerFailed);
+				dummy, registerFailed);
         return true;
 	});
 

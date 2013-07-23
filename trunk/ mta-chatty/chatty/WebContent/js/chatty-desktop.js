@@ -53,7 +53,9 @@ function UI(){
 		this.leaveGroupError=function(e){
 			printError('error has occured while leaving a group',e);
 		};
-
+		this.adminError=function(e){
+			printError('error has occured while retrieving admin data',e);
+		};
 	}
 	this.messages=new Messages();
 	
@@ -274,7 +276,7 @@ function UI(){
 		pass  = $("#RegisterForm .registerUserPassInput").val();
 		pic   = $("#RegisterForm .registerUserPicInput" ).val();
 
-		bl.registerNewUser(email, name, pic, pass, ui.initDashboard, ui.messages.registerError);
+		bl.registerNewUser(email, name, pic, pass, ui.navigate.login, ui.messages.registerError);
         return true;
 	};
 	
@@ -373,19 +375,7 @@ function UI(){
 		return true;
 	};
 	
-	this.createAdminPageCharts=function(){
-		var dataSetBudies   = []; 
-		var dataSetGroups   = []; 
-		var dataSetMessages = []; 
-		
-		var start = 1354586000000;
-		for (var i = 0; i < 10; i += 0.5){
-			dataSetBudies.push([start, Math.tan(i)]); 
-			dataSetGroups.push([start, Math.sin(i)]); 
-			dataSetMessages.push([start, Math.cos(i)]); 
-	        start+= 100000;
-			} 
-		
+	this.setAdminPageChartsValues=function(dataSetBudies, dataSetGroups, dataSetMessages){
 		var grid_options = { 
 				series: { lines: { fill: false } }, 
 				grid:  	{ backgroundColor: { colors: ["#D1D1D1", "#7A7A7A"] } }, 
@@ -415,6 +405,10 @@ function UI(){
 		
 		$.plot($("#flot_buddies_groups"  ), dataBG , grid_options );
 		$.plot($("#flot_messages_per_day"), dataM  , grid_options );
+	};
+	
+	this.createAdminPageCharts=function(){
+		bl.getAdminDataSets(setAdminPageChartsValues, ui.messages.adminError);
 	};
 }
 var ui=new UI();
