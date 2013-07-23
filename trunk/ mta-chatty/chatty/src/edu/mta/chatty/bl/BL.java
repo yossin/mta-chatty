@@ -13,6 +13,7 @@ import edu.mta.chatty.contract.LoginRequest;
 import edu.mta.chatty.dal.DAL;
 import edu.mta.chatty.domain.BuddyList;
 import edu.mta.chatty.domain.BuddyMessages;
+import edu.mta.chatty.domain.CreateGroupRequest;
 import edu.mta.chatty.domain.Group;
 import edu.mta.chatty.domain.GroupMemberships;
 import edu.mta.chatty.domain.GroupMessages;
@@ -170,6 +171,43 @@ public class BL {
 			}, request);
 			return groups;
 		}
+		
+		public void create(CreateGroupRequest request) throws IllegalArgumentException, Exception {
+			BLExecuter<CreateGroupRequest, Void> executer = new BLExecuter<CreateGroupRequest, Void>();
+
+			executer.execute(new BLRequest<CreateGroupRequest, Void>() {
+				@Override
+				public void validate(CreateGroupRequest t) throws IllegalArgumentException {
+					GroupMemberships memberships = t.getMemberships();
+					Group group = t.getGroup();
+					Validator.validateEmail(memberships.getMember_email(), "member_email");
+					Validator.validateNotEmpty(group.getName(), "group name");
+					Validator.validateNotEmpty(group.getDescription(), "group description");
+					Validator.validateNotEmpty(group.getPicture(), "group picture");
+				}
+				
+				private void createGroup(CreateGroupRequest t) throws Exception{
+					Group group = t.getGroup();
+					try {
+						dal.groups.create(group);
+						t.getMemberships().setGroup_id(group.getGroup_id());
+					} catch (SQLException e) {
+						String msg = String.format("unable to create group name=%d description=%s, with error %s", group.getName(), group.getDescription(), e);
+						logger.severe(msg);
+						logger.log(Level.SEVERE, e.getMessage(), e);
+						throw new Exception (msg, e);
+					}
+				}
+				
+				@Override
+				public Void perform(CreateGroupRequest t) throws Exception {
+					createGroup(t);
+					joinInto(t.getMemberships());
+					return null;
+				}
+			}, request);
+		}
+		
 		
 		public void joinInto(GroupMemberships request) throws IllegalArgumentException, Exception {
 			BLExecuter<GroupMemberships, Void> executer = new BLExecuter<GroupMemberships, Void>();

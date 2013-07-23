@@ -1,6 +1,7 @@
 package edu.mta.chatty.dal;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.LinkedList;
@@ -12,6 +13,7 @@ import javax.sql.DataSource;
 import edu.mta.chatty.contract.GenericDataResponse;
 import edu.mta.chatty.contract.LoginRequest;
 import edu.mta.chatty.dal.handlers.GenericListQueryHandler;
+import edu.mta.chatty.dal.handlers.InsertHandler;
 import edu.mta.chatty.dal.handlers.UpdateHandler;
 import edu.mta.chatty.domain.BuddyList;
 import edu.mta.chatty.domain.BuddyMessages;
@@ -230,6 +232,32 @@ public class DAL {
 				
 				@Override
 				public void handleResults(int result) {
+				}
+			};
+			executer.execute(handler);
+		}
+
+		public void create(final Group group) throws SQLException{
+			InsertHandler handler = new InsertHandler() {
+				@Override
+				public void setVariables(PreparedStatement statement) throws SQLException {
+					statement.setString(1,group.getName());
+					statement.setString(2,group.getPicture());
+					statement.setString(3,group.getDescription());
+				}
+				@Override
+				public String getSql() {
+					return "insert into `group` (name, picture, description) values (?,?,?)";
+				}
+				
+				@Override
+				public void handleResults(ResultSet generatedKeys) throws SQLException{
+			        if (generatedKeys.next()) {
+			            group.setGroup_id(generatedKeys.getInt(1));
+			        } else {
+			            throw new SQLException("Creating group failed, no generated key obtained.");
+			        }
+
 				}
 			};
 			executer.execute(handler);

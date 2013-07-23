@@ -111,6 +111,17 @@
 
   <servlet>
     <description></description>
+    <display-name>CreateGroupService</display-name>
+    <servlet-name>CreateGroupService</servlet-name>
+    <servlet-class>edu.mta.chatty.service.CreateGroupService</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CreateGroupService</servlet-name>
+    <url-pattern>/services/create-group</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
     <display-name>JoinGroupService</display-name>
     <servlet-name>JoinGroupService</servlet-name>
     <servlet-class>edu.mta.chatty.service.JoinGroupService</servlet-class>
