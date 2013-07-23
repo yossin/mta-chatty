@@ -8,6 +8,7 @@
 	// out.print(userAgent);
 	if (userAgent.matches(".*Android.*") || userAgent.matches(".*iPhone.*") || userAgent.matches(".*iPad.*")) 
 		mobile = true;
+
 %>
 
 <% 	if (mobile){ %>

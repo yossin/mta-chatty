@@ -44,18 +44,15 @@ function BL(onSuccessInit, onError){
 
 	// ----------- USER -------------
 	
-	//TODO: verify
-	// email, name, picture, password, address, cityId, postalCode? **where? must be undefined** 
 	this.registerNewUser=function(email, name, picture, password, onSuccess, onError){
 		var att = {"email":email, "name":name, "picture":picture, "password":password};	
 		ajaxPost("register-user", att, function(data){
-			loginUser(email, password, onSuccess, onError);
+//			loginUser(email, password, onSuccess, onError);
 		}, onError);
-		
+		onSuccess();	
 		//dal.insertUser(email, name, picture, password, onSuccess, onError);
 	};
 
-	//TODO: implement - do we need all parameters??
 	this.updateUserProfile=function(todo_add_params, onSuccess, onError){
 
 	};
@@ -106,14 +103,19 @@ function BL(onSuccessInit, onError){
 	};
 
 	this.createGroup=function(name, picture, description, onSuccess, onError){
-		// create group
+		var att = {"name":name, "description":description, "picture":picture};
+		ajaxPost("create-group", att, function(){
+		}, onError);
+		refreshUserData(onSuccess, onError);
+		
+			
 		dal.insertGroup(name, picture, description, function(groupId){
 			dal.insertGroupMembership(bl.loggedInUser.email, groupId, onSuccess, onError);
 		}, onError);		
 	};
 
 	this.joinGroup=function(groupId, onSuccess, onError){
-		var att = {"member_email":bl.loggedInUser.email, "group_id":groupId};	
+		var att = {"member_email":bl.loggedInUser.email, "group_id":groupId};
 		ajaxPost("join-group", att, function(){
 		}, onError);
 		refreshUserData(onSuccess, onError);
@@ -159,6 +161,24 @@ function BL(onSuccessInit, onError){
 		refreshUserData(onSuccess, onError);
 		
 //		dal.insertGroupMessage(bl.loggedInUser.email, groupId, message, onSuccess, onError);
+	};
+	
+	//----------- ADMIN -------------
+
+	this.getAdminDataSets=function (setAdminPageChartsValues, onError){
+		var dataSetBudies   = []; 
+		var dataSetGroups   = []; 
+		var dataSetMessages = []; 
+		
+		var start = 1354586000000;
+		for (var i = 0; i < 10; i += 0.5){
+			dataSetBudies.push([start, Math.tan(i)]); 
+			dataSetGroups.push([start, Math.sin(i)]); 
+			dataSetMessages.push([start, Math.cos(i)]); 
+	        start+= 100000;
+			}
+		
+		setAdminPageChartsValues(dataSetBudies, dataSetGroups, dataSetMessages);
 	};
 }
 
