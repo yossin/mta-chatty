@@ -2,6 +2,7 @@ package edu.mta.chatty.dal;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
@@ -11,6 +12,7 @@ import javax.sql.DataSource;
 
 import edu.mta.chatty.dal.handlers.BatchHandler;
 import edu.mta.chatty.dal.handlers.Handler;
+import edu.mta.chatty.dal.handlers.InsertHandler;
 import edu.mta.chatty.dal.handlers.QueryHandler;
 import edu.mta.chatty.dal.handlers.SafeBatchInsert;
 import edu.mta.chatty.dal.handlers.UpdateHandler;
@@ -35,7 +37,7 @@ public class PreparedStatementExecuter {
 		}
 		@Override
 		public PreparedStatement prepareStatement(Connection connection) throws SQLException {
-			PreparedStatement statement  = connection.prepareStatement(handler.getSql());
+			PreparedStatement statement  = connection.prepareStatement(handler.getSql(),Statement.RETURN_GENERATED_KEYS);
 			handler.setVariables(statement);
 			return statement;
 		}
@@ -67,6 +69,18 @@ public class PreparedStatementExecuter {
 		}
 	}
 
+	private static void close(ResultSet results){
+		if (results!=null){
+			try {
+				results.close();
+			} catch (SQLException e) {
+				logger.warning("unable to close result set"+e);
+			}
+		}
+	}
+
+
+	
 	private void execute(Handler handler, Executer executer) throws SQLException{
 		SinglePreparedCommand command = new SinglePreparedCommand(handler,executer){};
 		execute(command);
@@ -92,7 +106,12 @@ public class PreparedStatementExecuter {
 			@Override
 			public void execute(PreparedStatement statement)
 					throws SQLException {
-				handler.handleResults(statement.executeQuery());
+				ResultSet results = statement.executeQuery();
+				try {
+					handler.handleResults(results);
+				} finally{
+					close(results);
+				}
 			}
 		});
 	}
@@ -105,6 +124,26 @@ public class PreparedStatementExecuter {
 			}
 		});
 	}
+
+	public void execute(final InsertHandler handler) throws SQLException{
+		execute(handler, new Executer() {
+			@Override
+			public void execute(PreparedStatement statement)
+					throws SQLException {
+				int affectedRows = statement.executeUpdate();
+				if (affectedRows<1){
+		            throw new SQLException("Insert statement failed, no rows affected.");
+				}
+				ResultSet generatedKeys = statement.getGeneratedKeys();
+				try {
+					handler.handleResults(generatedKeys);
+				} finally{
+					close(generatedKeys);
+				}
+			}
+		});
+	}
+
 	
 	public <T>void execute(final SafeBatchInsert<T> handler) throws SQLException{
 		Executer executer = new Executer(){
