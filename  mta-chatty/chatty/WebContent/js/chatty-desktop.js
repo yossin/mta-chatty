@@ -408,7 +408,7 @@ function UI(){
 	};
 	
 	this.createAdminPageCharts=function(){
-		bl.getAdminDataSets(setAdminPageChartsValues, ui.messages.adminError);
+		bl.getAdminDataSets(ui.setAdminPageChartsValues, ui.messages.adminError);
 	};
 }
 var ui=new UI();
