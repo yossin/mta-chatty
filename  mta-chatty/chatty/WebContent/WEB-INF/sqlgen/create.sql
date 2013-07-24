@@ -132,8 +132,13 @@ CREATE  TABLE IF NOT EXISTS group_message (
  INDEX fk_group_message_sender_idx (sender_id ASC),
  INDEX fk_group_message_receiver_idx (receiver_id ASC),
   CONSTRAINT fk_group_message_sender
-    FOREIGN KEY (sender_id,receiver_id )
-    REFERENCES group_membership (member_email,group_id)
+    FOREIGN KEY (sender_id )
+    REFERENCES `user` (email )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_group_message_receiver
+    FOREIGN KEY (receiver_id )
+    REFERENCES `group` (group_id )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
    DEFAULT CHARACTER SET = utf8;
