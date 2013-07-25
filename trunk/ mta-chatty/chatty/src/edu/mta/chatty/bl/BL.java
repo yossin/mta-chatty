@@ -21,6 +21,8 @@ import edu.mta.chatty.domain.SearchRequest;
 import edu.mta.chatty.domain.SyncUserRequest;
 import edu.mta.chatty.domain.User;
 import edu.mta.chatty.domain.UserData;
+import edu.mta.chatty.domain.admin.CountStatistics;
+import edu.mta.chatty.domain.admin.DateRangeRequest;
 
 public class BL {
 	private final static Logger logger = Logger.getLogger(BL.class.getName());
@@ -29,6 +31,7 @@ public class BL {
 	final public Groups groups = new Groups();
 	final public Data data = new Data();
 	final public Messages messages = new Messages();
+	final public Admin admin = new Admin();
 
 	public BL(DataSource ds){
 		dal = new DAL(ds);
@@ -404,5 +407,31 @@ public class BL {
 		
 	}
 	
+	public class Admin{
+		public CountStatistics getCountStatistics(DateRangeRequest request) throws IllegalArgumentException, Exception{
+			BLExecuter<DateRangeRequest, CountStatistics> executer = new BLExecuter<DateRangeRequest, CountStatistics>();
+			CountStatistics data = executer.execute(new BLRequest<DateRangeRequest, CountStatistics>() {
+				@Override
+				public void validate(DateRangeRequest t) throws IllegalArgumentException {
+					//Validator.validateEmail(t.getEmail(), "email");
+				}
+				
+				@Override
+				public CountStatistics perform(DateRangeRequest t) throws Exception {
+					try {
+						return dal.admin.getCountStatistics(t);
+
+					} catch (SQLException e) {
+						String msg = String.format("unable to get statistics, with error %s", e);
+						logger.severe(msg);
+						logger.log(Level.SEVERE, e.getMessage(), e);
+						throw new Exception (msg, e);
+					}
+				}
+			}, request);
+			return data;
+		}
+	}
+
 
 }

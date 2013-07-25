@@ -14,8 +14,8 @@
         <div class="adnimContent" data-role="content">
 
 			<div>
-				<jsp:useBean id="admin_bean" scope="page" class="edu.mta.chatty.bl.Admin" />
-				
+				<jsp:useBean id="admin_bean" scope="page" class="edu.mta.chatty.domain.admin.CountStatistics" />
+				<!-- TODO: will fail.. we need to iterate statistics. display them as table for each category-->
 				<h1>Buddies:  <jsp:getProperty name="admin_bean" property="numBuddies" /></h1>
 				<h1>Groups:   <jsp:getProperty name="admin_bean" property="numGroups" /></h1>
 				<div id="flot_buddies_groups" style="width: 600px !important;height:150px !important; text-align: center; margin:0 auto;"> </div>

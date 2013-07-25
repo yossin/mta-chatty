@@ -25,6 +25,9 @@ import edu.mta.chatty.domain.GroupMessages;
 import edu.mta.chatty.domain.SearchRequest;
 import edu.mta.chatty.domain.User;
 import edu.mta.chatty.domain.UserData;
+import edu.mta.chatty.domain.admin.CountStatistics;
+import edu.mta.chatty.domain.admin.DailyCountStatistic;
+import edu.mta.chatty.domain.admin.DateRangeRequest;
 
 public class DAL {
 	private final static Logger logger = Logger.getLogger(DAL.class.getName());
@@ -33,6 +36,7 @@ public class DAL {
 	final public Data data = new Data();
 	final public Groups groups = new Groups();
 	final public Messages messages = new Messages();
+	final public Admin admin = new Admin();
 	
 	private static abstract class UserListQueryHandler extends GenericListQueryHandler<User>{
 		UserListQueryHandler(List<User> results){
@@ -77,6 +81,15 @@ public class DAL {
 		@Override
 		protected GroupMessages create() {
 			return new GroupMessages();
+		}
+	}
+	private static abstract class CountStatisticListQueryHandler extends GenericListQueryHandler<DailyCountStatistic>{
+		CountStatisticListQueryHandler(List<DailyCountStatistic> results){
+			super(results);
+		}
+		@Override
+		protected DailyCountStatistic create() {
+			return new DailyCountStatistic();
 		}
 	}
 
@@ -345,7 +358,7 @@ public class DAL {
 				}
 				@Override
 				public String getSql() {
-					return "select u.email,u.name,u.picture,u.active,u.last_update from `user` as u join (select g.member_email from group_membership as g join (select group_id from group_membership where member_email=? and (last_update >=? and last_update <?)) as z on g.group_id=z.group_id where (g.last_update >=? and g.last_update <?) union select u.email from `user` as u join buddy_list as b on u.email=b.buddy_id where (b.owner_email=? and (b.last_update >=? and b.last_update <?))) as z on u.email=z.member_email";
+					return "select u.email,u.name,u.picture,u.active,u.last_update,u.creation_timestamp from `user` as u join (select g.member_email from group_membership as g join (select group_id from group_membership where member_email=? and (last_update >=? and last_update <?)) as z on g.group_id=z.group_id where (g.last_update >=? and g.last_update <?) union select u.email from `user` as u join buddy_list as b on u.email=b.buddy_id where (b.owner_email=? and (b.last_update >=? and b.last_update <?))) as z on u.email=z.member_email";
 				}
 			};
 			executer.execute(handler);
@@ -400,7 +413,7 @@ public class DAL {
 				}
 				@Override
 				public String getSql() {
-					return "select g.group_id,g.name,g.picture,g.last_update,g.description from `group` as g join group_membership as gm on g.group_id=gm.group_id where gm.member_email=? and (gm.last_update >=? and gm.last_update <?)";
+					return "select g.group_id,g.name,g.picture,g.last_update,g.creation_timestamp,g.description from `group` as g join group_membership as gm on g.group_id=gm.group_id where gm.member_email=? and (gm.last_update >=? and gm.last_update <?)";
 				}
 			};
 			executer.execute(handler);
@@ -465,7 +478,7 @@ public class DAL {
 			};
 			executer.execute(handler);
 		}
-
+		
 		public void send(final BuddyMessages message) throws SQLException{
 			UpdateHandler handler = new UpdateHandler() {
 				@Override
@@ -488,6 +501,64 @@ public class DAL {
 
 	}
 	
+	public class Admin{
+		private List<DailyCountStatistic> getUserStatistics(final DateRangeRequest request) throws SQLException{
+			return getGenericCreationDateStatistics(request, "user");
+		}
+		private List<DailyCountStatistic> getGroupStatistics(final DateRangeRequest request) throws SQLException{
+			return getGenericCreationDateStatistics(request, "group");
+		}
+
+		private List<DailyCountStatistic> getGenericCreationDateStatistics(final DateRangeRequest request, final String tableName) throws SQLException{
+			final List<DailyCountStatistic> results = new LinkedList<DailyCountStatistic>();
+			CountStatisticListQueryHandler handler = new CountStatisticListQueryHandler(results) {
+				@Override
+				public void setVariables(PreparedStatement statement) throws SQLException {
+					statement.setDate(1, request.getStart());
+					statement.setDate(2, request.getEnd());
+				}
+				@Override
+				public String getSql() {
+					return String.format("SELECT count(creation_timestamp) as `count` ,date(creation_timestamp) as `day` FROM `%s` where creation_timestamp>= ? and creation_timestamp <= ? group by date(creation_timestamp)",tableName);
+				}
+			};
+			executer.execute(handler);
+			return results;
+		}
+
+		private List<DailyCountStatistic> getGenericSendDateStatistics(final DateRangeRequest request, final String tableName) throws SQLException{
+			final List<DailyCountStatistic> results = new LinkedList<DailyCountStatistic>();
+			CountStatisticListQueryHandler handler = new CountStatisticListQueryHandler(results) {
+				@Override
+				public void setVariables(PreparedStatement statement) throws SQLException {
+					statement.setDate(1, request.getStart());
+					statement.setDate(2, request.getEnd());
+				}
+				@Override
+				public String getSql() {
+					return String.format("SELECT count(send_date) as `count` ,date(send_date) as `day` FROM `%s` where send_date>= ? and send_date <= ? group by date(send_date)",tableName);
+				}
+			};
+			executer.execute(handler);
+			return results;
+		}
+		private List<DailyCountStatistic> getUserMessageStatistics(final DateRangeRequest request) throws SQLException{
+			return getGenericSendDateStatistics(request, "buddy_message");
+		}
+		private List<DailyCountStatistic> getGroupMessageStatistics(final DateRangeRequest request) throws SQLException{
+			return getGenericSendDateStatistics(request, "group_message");
+		}
+
+	
+		public CountStatistics getCountStatistics(final DateRangeRequest request) throws SQLException{
+			CountStatistics statistics = new CountStatistics();
+			statistics.setBuddyStatistics(getUserStatistics(request));
+			statistics.setGroupStatistics(getGroupStatistics(request));
+			statistics.setBuddyMessageStatistics(getUserMessageStatistics(request));
+			statistics.setGroupMessageStatistics(getGroupMessageStatistics(request));
+			return statistics;
+		}
+	}
 	
 	public DAL(DataSource ds){
 		executer=new PreparedStatementExecuter(ds);

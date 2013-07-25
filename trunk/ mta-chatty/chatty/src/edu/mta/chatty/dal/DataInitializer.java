@@ -3,6 +3,7 @@ package edu.mta.chatty.dal;
 import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -128,7 +129,7 @@ public class DataInitializer {
 		batchInsert.execute(new InsertHandler<User>() {
 			@Override
 			public String getSql() {
-				return "insert into `user` (email, name, picture, password) values (?,?,?,?)";
+				return "insert into `user` (email, name, picture, password,creation_timestamp) values (?,?,?,?,?)";
 			}
 
 			@Override
@@ -143,6 +144,7 @@ public class DataInitializer {
 				statement.setString(2, t.getName());
 				statement.setString(3, t.getPicture());
 				statement.setString(4, t.getPassword());
+				statement.setTimestamp(5, t.getCreation_timestamp());
 			}
 
 			@Override
@@ -183,7 +185,7 @@ public class DataInitializer {
 		batchInsert.execute(new InsertHandler<Group>() {
 			@Override
 			public String getSql() {
-				return "insert into `group` (name, picture, description) values (?,?,?)";
+				return "insert into `group` (name, picture, description, creation_timestamp) values (?,?,?,?)";
 			}
 
 			@Override
@@ -197,6 +199,7 @@ public class DataInitializer {
 				statement.setString(1, t.getName());
 				statement.setString(2, t.getPicture());
 				statement.setString(3, t.getDescription());
+				statement.setTimestamp(4, t.getCreation_timestamp());
 			}
 
 			@Override
@@ -211,7 +214,7 @@ public class DataInitializer {
 		batchInsert.execute(new InsertHandler<BuddyMessages>() {
 			@Override
 			public String getSql() {
-				return "insert into buddy_message (sender_id, receiver_id, message) values (?,?,?)";
+				return "insert into buddy_message (sender_id, receiver_id, message, send_date) values (?,?,?,?)";
 			}
 
 			@Override
@@ -225,6 +228,7 @@ public class DataInitializer {
 				statement.setString(1, t.getSender_id());
 				statement.setString(2, t.getReceiver_id());
 				statement.setString(3, t.getMessage());
+				statement.setTimestamp(4, t.getSend_date());
 			}
 
 			@Override
@@ -266,7 +270,7 @@ public class DataInitializer {
 		batchInsert.execute(new InsertHandler<GroupMessages>() {
 			@Override
 			public String getSql() {
-				return "insert into group_message (sender_id, receiver_id, message) values (?,?,?)";
+				return "insert into group_message (sender_id, receiver_id, message, send_date) values (?,?,?,?)";
 			}
 
 			@Override
@@ -280,6 +284,7 @@ public class DataInitializer {
 				statement.setString(1, t.getSender_id());
 				statement.setInt(2, t.getReceiver_id());
 				statement.setString(3, t.getMessage());
+				statement.setTimestamp(4, t.getSend_date());
 			}
 
 			@Override
@@ -304,12 +309,66 @@ public class DataInitializer {
 		insertBuddyMessages(data.getBuddy_messages());
 		insertGroupMessages(data.getGroup_messages());
 	}
+	
+	private static class CreationTimestampGenerator{
+		private static final long dayDiff=86400000;
+		private long currentTimestamp;
+		private final int threshold;
+		private int counter=0;
+		CreationTimestampGenerator(int threshold){
+			this(threshold,System.currentTimeMillis());
+		}
+		CreationTimestampGenerator(int threshold, long startTimestamp){
+			this.threshold=threshold-1;
+			this.currentTimestamp=startTimestamp;
+			this.counter=threshold;
+		}
+		long generate(){
+			if (counter-- == 0) {
+				counter = threshold;
+				currentTimestamp-=dayDiff;
+			}
+			return currentTimestamp;
+		}
+		long getCurrentTimestamp() {
+			return currentTimestamp;
+		}
+		
+	}
+	private void manipulateCreationTimestamp(UserData data){
+		
+		CreationTimestampGenerator msgCTen = new CreationTimestampGenerator(1);
+		for(GroupMessages msg: data.getGroup_messages()){
+			Timestamp creation_timestamp = new Timestamp(msgCTen.generate());
+			msg.setSend_date(creation_timestamp);
+		}
+
+		for(BuddyMessages msg: data.getBuddy_messages()){
+			Timestamp creation_timestamp = new Timestamp(msgCTen.generate());
+			msg.setSend_date(creation_timestamp);
+		}
+
+		
+		CreationTimestampGenerator groupCTen = new CreationTimestampGenerator(1, msgCTen.getCurrentTimestamp());
+		for(Group group: data.getGroups()){
+			Timestamp creation_timestamp = new Timestamp(groupCTen.generate());
+			group.setCreation_timestamp(creation_timestamp);
+		}
+		
+		CreationTimestampGenerator userCTen = new CreationTimestampGenerator(2, groupCTen.getCurrentTimestamp());
+		for(User user: data.getUsers()){
+			Timestamp creation_timestamp = new Timestamp(userCTen.generate());
+			user.setCreation_timestamp(creation_timestamp);
+		}
+
+	}
 
 	public boolean loadInitData(ServletContext context) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			InputStream is = getTestDataResourceFile(context);
 			UserData data = mapper.readValue(is, UserData.class);
+			manipulateCreationTimestamp(data);
 			insertInitData(data);
 			return true;
 		} catch (SQLException e) {
