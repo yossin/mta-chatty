@@ -26,6 +26,7 @@ CREATE  TABLE IF NOT EXISTS `user` (
   picture VARCHAR(150) NOT NULL DEFAULT 'images/defaultUser.jpg',
   active BOOLEAN NOT NULL DEFAULT TRUE ,
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+  creation_timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   password VARCHAR(150) NOT NULL,
   INDEX idx_user_name (name))
  DEFAULT CHARACTER SET = utf8;
@@ -76,6 +77,7 @@ CREATE  TABLE IF NOT EXISTS buddy_list (
   name TEXT NOT NULL ,
   picture VARCHAR(150) NOT NULL DEFAULT 'images/defaultGroup.jpg',
   last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+  creation_timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   description TEXT NULL)
  DEFAULT CHARACTER SET = utf8;
  

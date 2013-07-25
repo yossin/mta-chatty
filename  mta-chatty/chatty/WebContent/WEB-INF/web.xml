@@ -29,7 +29,6 @@
     <servlet-name>LoginService</servlet-name>
     <url-pattern>/services/login</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <description></description>
     <display-name>GenericDataService</display-name>
@@ -40,7 +39,6 @@
     <servlet-name>GenericDataService</servlet-name>
     <url-pattern>/services/generic-data</url-pattern>
   </servlet-mapping>
-
   <servlet>
     <description></description>
     <display-name>SyncSyncCompleteDataService</display-name>
@@ -51,7 +49,6 @@
     <servlet-name>SyncUserDataService</servlet-name>
     <url-pattern>/services/sync-user-data</url-pattern>
   </servlet-mapping>
-
   <servlet>
     <description></description>
     <display-name>CompleteDataService</display-name>
@@ -62,7 +59,6 @@
     <servlet-name>SyncCompleteDataService</servlet-name>
     <url-pattern>/services/sync-complete-data</url-pattern>
   </servlet-mapping>
-
   <servlet>
     <description></description>
     <display-name>FindUsersService</display-name>
@@ -73,7 +69,6 @@
     <servlet-name>FindUsersService</servlet-name>
     <url-pattern>/services/find-users</url-pattern>
   </servlet-mapping>
-
   <servlet>
     <description></description>
     <display-name>AddBuddyService</display-name>
@@ -84,7 +79,6 @@
     <servlet-name>AddBuddyService</servlet-name>
     <url-pattern>/services/add-buddy</url-pattern>
   </servlet-mapping>
-
   <servlet>
     <description></description>
     <display-name>RegisterUserService</display-name>
@@ -95,8 +89,6 @@
     <servlet-name>RegisterUserService</servlet-name>
     <url-pattern>/services/register-user</url-pattern>
   </servlet-mapping>
-
-
   <servlet>
     <description></description>
     <display-name>FindGroupsService</display-name>
@@ -107,8 +99,6 @@
     <servlet-name>FindGroupsService</servlet-name>
     <url-pattern>/services/find-groups</url-pattern>
   </servlet-mapping>
-
-
   <servlet>
     <description></description>
     <display-name>CreateGroupService</display-name>
@@ -119,7 +109,6 @@
     <servlet-name>CreateGroupService</servlet-name>
     <url-pattern>/services/create-group</url-pattern>
   </servlet-mapping>
-
   <servlet>
     <description></description>
     <display-name>JoinGroupService</display-name>
@@ -130,7 +119,6 @@
     <servlet-name>JoinGroupService</servlet-name>
     <url-pattern>/services/join-group</url-pattern>
   </servlet-mapping>
-
   <servlet>
     <description></description>
     <display-name>LeaveGroupService</display-name>
@@ -141,8 +129,6 @@
     <servlet-name>LeaveGroupService</servlet-name>
     <url-pattern>/services/leave-group</url-pattern>
   </servlet-mapping>
-  
-  
   <servlet>
     <description></description>
     <display-name>SendGroupMessageService</display-name>
@@ -153,7 +139,6 @@
     <servlet-name>SendGroupMessageService</servlet-name>
     <url-pattern>/services/group-message</url-pattern>
   </servlet-mapping>
-
   <servlet>
     <description></description>
     <display-name>SendBuddyMessageService</display-name>
@@ -164,5 +149,14 @@
     <servlet-name>SendBuddyMessageService</servlet-name>
     <url-pattern>/services/buddy-message</url-pattern>
   </servlet-mapping>
-    
+  <servlet>
+    <description></description>
+    <display-name>AdminTest</display-name>
+    <servlet-name>AdminTest</servlet-name>
+    <servlet-class>edu.mta.chatty.controller.test.AdminTest</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AdminTest</servlet-name>
+    <url-pattern>/AdminTest</url-pattern>
+  </servlet-mapping>
 </web-app>
