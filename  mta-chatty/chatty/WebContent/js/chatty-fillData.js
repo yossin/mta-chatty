@@ -94,10 +94,10 @@ function createBuddyListData(list, onSuccess, onError){
 
 //TODO: change group id int -> text(creatoremail)+timestamp(creation). add those fields on creation
 function createGroupsData(list, onSuccess, onError){
-	genericCreateData("insert into 'group' (name, picture, description) values (?,?,?)", 
+	genericCreateData("insert into 'group' (group_id, name, picture, description) values (?,?,?,?)", 
 			"group", list, 
 			function(group){
-				return [group.name, group.picture, group.description];
+				return [group.group_id, group.name, group.picture, group.description];
 			}, onSuccess, onError
 	);
 }
