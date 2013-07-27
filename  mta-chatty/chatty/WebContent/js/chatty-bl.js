@@ -49,6 +49,15 @@ function BL(onSuccessInit, onError){
 		ajaxPost("register-user", att, function(data){
 //			loginUser(email, password, onSuccess, onError);
 		}, onError);
+		
+		if (picture != "")
+		{
+			var uploader = new ss.SimpleUpload({
+				button: '#RegisterForm .btnRegisterSubmit', // HTML element used as upload button 
+				url:  "/chatty/services/upload_file", // URL of server-side upload handler
+				name: picture // Parameter name of the uploaded file
+			});
+		}		
 		onSuccess();	
 		//dal.insertUser(email, name, picture, password, onSuccess, onError);
 	};
