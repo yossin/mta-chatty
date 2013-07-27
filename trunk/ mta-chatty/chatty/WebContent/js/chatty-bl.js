@@ -112,15 +112,24 @@ function BL(onSuccessInit, onError){
 	};
 
 	this.createGroup=function(name, picture, description, onSuccess, onError){
-		var att = {"name":name, "description":description, "picture":picture};
+		var att = {"member_email":bl.loggedInUser.email, "name":name, "description":description, "picture":picture};
 		ajaxPost("create-group", att, function(){
 		}, onError);
-		refreshUserData(onSuccess, onError);
 		
-			
-		dal.insertGroup(name, picture, description, function(groupId){
-			dal.insertGroupMembership(bl.loggedInUser.email, groupId, onSuccess, onError);
-		}, onError);		
+		if (picture != "")
+		{
+			var uploader = new ss.SimpleUpload({
+				button: '#CreateGroup .btnCreateGroup', // HTML element used as upload button 
+				url:  "/chatty/services/upload_file", // URL of server-side upload handler
+				name: picture // Parameter name of the uploaded file
+			});
+		}		
+
+		refreshUserData(onSuccess, onError);
+					
+//		dal.insertGroup(name, picture, description, function(groupId){
+//			dal.insertGroupMembership(bl.loggedInUser.email, groupId, onSuccess, onError);
+//		}, onError);		
 	};
 
 	this.joinGroup=function(groupId, onSuccess, onError){
