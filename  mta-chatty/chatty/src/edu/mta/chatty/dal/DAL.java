@@ -296,7 +296,26 @@ public class DAL {
 			executer.execute(handler);
 		}
 
-		
+		public void updateGroupImage(final int groupId, final String imageName) throws SQLException{
+			UpdateHandler handler = new UpdateHandler() {
+				@Override
+				public void setVariables(PreparedStatement statement) throws SQLException {
+					statement.setString(1,imageName);
+					statement.setTimestamp(2,new Timestamp(System.currentTimeMillis()));
+					statement.setInt(3,groupId);
+				}
+				@Override
+				public String getSql() {
+					return "update `group` set picture=?, last_update=? where group_id=?";
+				}
+				
+				@Override
+				public void handleResults(int result) {
+				}
+			};
+			executer.execute(handler);
+		}
+
 	}
 	
 	

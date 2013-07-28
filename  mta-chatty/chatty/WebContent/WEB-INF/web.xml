@@ -179,4 +179,14 @@
     <servlet-name>UploadBuddyImageService</servlet-name>
     <url-pattern>/services/upload-buddy-image/*</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>UploadGroupImageService</display-name>
+    <servlet-name>UploadGroupImageService</servlet-name>
+    <servlet-class>edu.mta.chatty.service.UploadGroupImageService</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UploadGroupImageService</servlet-name>
+    <url-pattern>/services/upload-group-image/*</url-pattern>
+  </servlet-mapping>
 </web-app>
