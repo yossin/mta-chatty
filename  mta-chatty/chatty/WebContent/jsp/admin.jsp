@@ -1,7 +1,7 @@
-<%@page import="edu.mta.chatty.domain.admin.DailyCountStatistic"%>
-
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8" %>
+
+<%@page import="edu.mta.chatty.domain.admin.DailyCountStatistic"%>
 
 <html>
 <head>
@@ -51,8 +51,10 @@
 			return arr;
 		}
 		
-		$(function() {
-			
+		function setCharts(){
+			alert("setCharts");
+			debugger();
+
 			var dataSetBudies   = getDataSetBudies();
 			var dataSetGroups   = getDataSetGroups();
 			var dataSetMessages = getDataSetMessages();
@@ -67,14 +69,13 @@
 			
 			$.plot($("#flot_buddies_groups"  ), dataBG , grid_options );
 			$.plot($("#flot_messages_per_day"), dataM  , grid_options );
-		});
+		}
+		
 	</script>
 </head>
 
-<body>
-	
-
-	
+<body onload="setCharts()">
+		
     <section id="AdminPage" data-role="page" data-add-back-btn="true">
 
 		<header data-role="header" class="adminHeader">
