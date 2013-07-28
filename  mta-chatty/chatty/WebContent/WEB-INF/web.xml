@@ -159,4 +159,24 @@
     <servlet-name>AdminTest</servlet-name>
     <url-pattern>/AdminTest</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AdminStatisticsServlet</display-name>
+    <servlet-name>AdminStatisticsServlet</servlet-name>
+    <servlet-class>edu.mta.chatty.controller.AdminStatisticsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AdminStatisticsServlet</servlet-name>
+    <url-pattern>/admin/statistics</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>UploadService</display-name>
+    <servlet-name>UploadService</servlet-name>
+    <servlet-class>edu.mta.chatty.service.UploadService</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UploadService</servlet-name>
+    <url-pattern>/UploadService</url-pattern>
+  </servlet-mapping>
 </web-app>

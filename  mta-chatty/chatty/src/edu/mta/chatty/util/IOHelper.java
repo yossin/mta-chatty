@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Properties;
 import java.util.logging.Logger;
 
 public class IOHelper {
@@ -28,6 +29,41 @@ public class IOHelper {
 			reader.close();
 		} catch (IOException e) {
 			logger.warning("unable to close buffered reader "+e);
+		}
+	}
+	
+
+	private static InputStream getResource(String name){
+		ClassLoader classLoader = IOHelper.class.getClassLoader();
+		InputStream stream = null;
+		while (classLoader!=null){
+			stream = classLoader.getResourceAsStream(name);
+			if (stream !=null){
+				return stream;
+			}
+			classLoader = classLoader.getParent();
+		}
+		
+		stream =ClassLoader.getSystemResourceAsStream(name);
+		return stream;
+	}
+	
+	public static Properties loadProperties(String fileName) throws Exception{
+		InputStream stream = getResource(fileName);
+		try {
+			Properties properties = new Properties();
+			properties.load(stream);
+			return properties;
+		} finally{
+			close(stream);
+		}
+
+	}
+
+	private static void close(InputStream stream) {
+		try {
+			stream.close();
+		} catch (IOException e) {
 		}
 	}
 }

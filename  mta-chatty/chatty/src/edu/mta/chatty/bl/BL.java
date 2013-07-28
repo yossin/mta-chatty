@@ -419,8 +419,8 @@ public class BL {
 				@Override
 				public CountStatistics perform(DateRangeRequest t) throws Exception {
 					try {
-						return dal.admin.getCountStatistics(t);
-
+						CountStatistics stat = dal.admin.getCountStatistics(t);
+						return stat;
 					} catch (SQLException e) {
 						String msg = String.format("unable to get statistics, with error %s", e);
 						logger.severe(msg);
