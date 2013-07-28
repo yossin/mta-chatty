@@ -66,8 +66,6 @@
                 <a href="#Login"       class="logoutBtn"      data-role="button" data-icon="delete">Logout</a>
                 <a href="#EditProfile" class="editProfileBtn" data-role="button" data-icon="gear">Edit Profile</a>
                 
-                <a href="<%=request.getContextPath()%>/admin/statistics"   class="adminPageBtn"   data-role="button" data-icon="grid">Admin</a>
-                
                 <a href="#SearchGroup" class="searchGroupBtn" data-role="button" data-icon="search">Search Group</a>
                 <a href="#CreateGroup" class="createGroupBtn" data-role="button" data-icon="plus">Create Group</a>
                 <a href="#LeaveGroup"  class="leaveGroupBtn"  data-role="button" data-icon="minus">Leave Group</a>

@@ -23,8 +23,7 @@
 			<%
 			for (DailyCountStatistic day: statistics.getBuddyStatistics()){
 			%>
-			arr.push([new Date(<%=day.getDay().getTime()%>),<%=day.getCount()%>]);
-			//arr.push([<%=day.getDay().getTime()%>,<%=day.getCount()%>]);
+			arr.push([<%=day.getDay().getTime()%>,<%=day.getCount()%>]);
 			<%}%>
 			return arr;
 		}
@@ -34,8 +33,7 @@
 			<%
 			for (DailyCountStatistic day: statistics.getGroupStatistics()){
 			%>
-			arr.push([new Date(<%=day.getDay().getTime()%>),<%=day.getCount()%>]);
-			//arr.push([<%=day.getDay().getTime()%>,<%=day.getCount()%>]);
+			arr.push([<%=day.getDay().getTime()%>,<%=day.getCount()%>]);
 			<%}%>
 			return arr;
 		}
@@ -45,15 +43,12 @@
 			<%
 			for (DailyCountStatistic day: statistics.getBuddyMessageStatistics()){
 			%>
-			arr.push([new Date(<%=day.getDay().getTime()%>),<%=day.getCount()%>]);
-			//arr.push([<%=day.getDay().getTime()%>,<%=day.getCount()%>]);
-			<%}%>s
+			arr.push([<%=day.getDay().getTime()%>,<%=day.getCount()%>]);
+			<%}%>
 			return arr;
 		}
 		
-		function setCharts(){
-			alert("setCharts");
-
+		$(function() {
 			var dataSetBudies   = getDataSetBudies();
 			var dataSetGroups   = getDataSetGroups();
 			var dataSetMessages = getDataSetMessages();
@@ -68,12 +63,12 @@
 			
 			$.plot($("#flot_buddies_groups"  ), dataBG , grid_options );
 			$.plot($("#flot_messages_per_day"), dataM  , grid_options );
-		}
+		});
 		
 	</script>
 </head>
 
-<body onload="setCharts()">
+<body>
 		
     <section id="AdminPage" data-role="page" data-add-back-btn="true">
 
