@@ -36,23 +36,28 @@ public abstract class GenericService<T> extends HttpServlet{
 	
 	protected  T populate(HttpServletRequest req){
 		T t = create();
+		populate(req, t);
+		return t;
+	}
+	
+	protected  void populate(HttpServletRequest req, Object obj){
 		Enumeration<String> names = req.getParameterNames();
 		while (names.hasMoreElements()){
 			String name = names.nextElement();
 			Object value = req.getParameter(name);
 			if (value != null){
 				try {
-					BeanUtils.setProperty(t, name, value);
+					BeanUtils.setProperty(obj, name, value);
 				} catch (Exception e) {
-					String msg = String.format("unable to set parameter %s=%s for class %s", name,value, t.getClass());
+					String msg = String.format("unable to set parameter %s=%s for class %s", name,value, obj.getClass());
 					logger.finer(msg);
 					//throw new IllegalArgumentException(msg, e);
 				}
 			}
 			
 		}
-		return t;
-	}
+	}	
+	
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
