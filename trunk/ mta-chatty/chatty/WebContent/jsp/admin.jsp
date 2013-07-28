@@ -1,69 +1,81 @@
 <%@page import="edu.mta.chatty.domain.admin.DailyCountStatistic"%>
+
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8" %>
-<jsp:useBean id="statistics" scope="request" class="edu.mta.chatty.domain.admin.CountStatistics" />
 
-<script type="text/javascript">
+<html>
+<head>
 
-	function getDataSetBudies(){
-		var arr   = [];
-		<%
-		for (DailyCountStatistic day: statistics.getBuddyStatistics()){
-		%>
-		//arr.push([new Date(<%=day.getDay().getTime()%>),<%=day.getCount()%>]);
-		arr.push([<%=day.getDay().getTime()%>,<%=day.getCount()%>]);
-		<%}%>
-		return arr;
-	}
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<title>Chatty</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
-	function getDataSetGroups(){
-		var arr   = [];
-		<%
-		for (DailyCountStatistic day: statistics.getGroupStatistics()){
-		%>
-		//arr.push([new Date(<%=day.getDay().getTime()%>),<%=day.getCount()%>]);
-		arr.push([<%=day.getDay().getTime()%>,<%=day.getCount()%>]);
-		<%}%>
-		return arr;
-	}
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http://www.pureexample.com/js/flot/excanvas.min.js"></script>
+	<script src="http://www.pureexample.com/js/flot/jquery.flot.min.js"></script>
+  
+	<jsp:useBean id="statistics" scope="request" class="edu.mta.chatty.domain.admin.CountStatistics" />
 	
-	function getDataSetMessages(){
-		var arr   = [];
-		<%
-		for (DailyCountStatistic day: statistics.getBuddyMessageStatistics()){
-		%>
-		//arr.push([new Date(<%=day.getDay().getTime()%>),<%=day.getCount()%>]);
-		arr.push([<%=day.getDay().getTime()%>,<%=day.getCount()%>]);
-		<%}%>
-		return arr;
-	}
+	<script type="text/javascript">
 	
-	$(function() {
+		function getDataSetBudies(){
+			var arr   = [];
+			<%
+			for (DailyCountStatistic day: statistics.getBuddyStatistics()){
+			%>
+			//arr.push([new Date(<%=day.getDay().getTime()%>),<%=day.getCount()%>]);
+			arr.push([<%=day.getDay().getTime()%>,<%=day.getCount()%>]);
+			<%}%>
+			return arr;
+		}
 		
-		var dataSetBudies   = getDataSetBudies();
-		var dataSetGroups   = getDataSetGroups();
-		var dataSetMessages = getDataSetMessages();
+		function getDataSetGroups(){
+			var arr   = [];
+			<%
+			for (DailyCountStatistic day: statistics.getGroupStatistics()){
+			%>
+			//arr.push([new Date(<%=day.getDay().getTime()%>),<%=day.getCount()%>]);
+			arr.push([<%=day.getDay().getTime()%>,<%=day.getCount()%>]);
+			<%}%>
+			return arr;
+		}
+		
+		function getDataSetMessages(){
+			var arr   = [];
+			<%
+			for (DailyCountStatistic day: statistics.getBuddyMessageStatistics()){
+			%>
+			//arr.push([new Date(<%=day.getDay().getTime()%>),<%=day.getCount()%>]);
+			arr.push([<%=day.getDay().getTime()%>,<%=day.getCount()%>]);
+			<%}%>
+			return arr;
+		}
+		
+		$(function() {
+			
+			var dataSetBudies   = getDataSetBudies();
+			var dataSetGroups   = getDataSetGroups();
+			var dataSetMessages = getDataSetMessages();
+	
+			
+			var grid_options = {series:{lines:{fill:false}}, grid:{backgroundColor: {colors: ["#D1D1D1", "#7A7A7A"]}}, xaxis:{mode:"time", timeformat:"%0y/%0d/%0m %H:%0M"}};
+	
+			var dataBG = [ { data: dataSetBudies, label:"Budies", points: {show: true}, lines: {show: true} },
+			               { data: dataSetGroups, label:"Groups", points: {show: true}, lines: {show: true} } ];
+			
+			var dataM = [ { data: dataSetMessages, label:"Messages/Day", points: {show: true}, lines: {show: true} } ];
+			
+			$.plot($("#flot_buddies_groups"  ), dataBG , grid_options );
+			$.plot($("#flot_messages_per_day"), dataM  , grid_options );
+		});
+	</script>
+</head>
 
-		
-		var grid_options = {series:{lines:{fill:false}}, grid:{backgroundColor: {colors: ["#D1D1D1", "#7A7A7A"]}}, xaxis:{mode:"time", timeformat:"%0y/%0d/%0m %H:%0M"}};
-
-		var dataBG = [ { data: dataSetBudies, label:"Budies", points: {show: true}, lines: {show: true} },
-		               { data: dataSetGroups, label:"Groups", points: {show: true}, lines: {show: true} } ];
-		
-		var dataM = [ { data: dataSetMessages, label:"Messages/Day", points: {show: true}, lines: {show: true} } ];
-		
-		$.plot($("#flot_buddies_groups"  ), dataBG , grid_options );
-		$.plot($("#flot_messages_per_day"), dataM  , grid_options );
-	});
-</script>
-
+<body>
 	
 
 	
     <section id="AdminPage" data-role="page" data-add-back-btn="true">
-			
-		<script src="http://www.pureexample.com/js/flot/excanvas.min.js"></script>
-		<script src="http://www.pureexample.com/js/flot/jquery.flot.min.js"></script>
 
 		<header data-role="header" class="adminHeader">
 			<label class="header-label">Chatty Admin</label>
@@ -85,4 +97,6 @@
         </div>		
 
 	</section>
-        
+	
+</body>
+</html>   
