@@ -16,6 +16,7 @@ public class CreateGroupService extends BaseService<CreateGroupRequest> {
 	@Override
 	protected void perform(Writer writer, CreateGroupRequest t) throws Exception {
 		bl.groups.create(t);
+		writeJsonResponse(writer, t);
 	}
 
 }
