@@ -48,7 +48,7 @@
 		</jsp:include>
 	</section>
     
-    <jsp:include page="admin.jsp" />
+<%--     <jsp:include page="admin.jsp" />  --%>
     
     <section id="SearchBuddy" data-role="dialog" data-add-back-btn="true">
 		<jsp:include page="search_buddy.jsp" >
