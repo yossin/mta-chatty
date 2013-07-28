@@ -374,42 +374,7 @@ function UI(){
 		bl.leaveGroup(id, ui.messages.leaveGroup, ui.messages.leaveGroupError);
 		return true;
 	};
-	
-	this.setAdminPageChartsValues=function(dataSetBudies, dataSetGroups, dataSetMessages){
-		var grid_options = { 
-				series: { lines: { fill: false } }, 
-				grid:  	{ backgroundColor: { colors: ["#D1D1D1", "#7A7A7A"] } }, 
-				xaxis: 	{ mode: "time", timeformat: "%0y/%0d/%0m %H:%0M"} 
-				};
 
-		var dataBG = [
-		        { 	data: dataSetBudies,
-		        	label:"Budies",
-		        	points:	{ show: true}, 
-		        	lines: 	{ show: true}
-		        },
-		        { 	data: dataSetGroups,
-		        	label:"Groups",
-		        	points:	{ show: true}, 
-		        	lines: 	{ show: true}
-		        }
-		];
-		
-		var dataM = [
-				        { 	data: dataSetBudies,
-				        	label:"Messages/Day",
-				        	points:	{ show: true}, 
-				        	lines: 	{ show: true}
-				        }
-				];
-		
-		$.plot($("#flot_buddies_groups"  ), dataBG , grid_options );
-		$.plot($("#flot_messages_per_day"), dataM  , grid_options );
-	};
-	
-	this.createAdminPageCharts=function(){
-		bl.getAdminDataSets(ui.setAdminPageChartsValues, ui.messages.adminError);
-	};
 }
 var ui=new UI();
 
@@ -431,8 +396,6 @@ $(document).ready(function(){
 	$("#CreateGroup .btnCreateGroup").bind("click", ui.createGroup);
 	
 	$("#LeaveGroup").bind('pagebeforeshow', ui.leaveGroup);
-	
-	$("#AdminPage").bind("pagebeforeshow", ui.createAdminPageCharts);
 	
 	$("#Loading").bind("pagebeforeshow", ui.initApp);
 });
