@@ -16,6 +16,7 @@ public class RegisterUserService extends BaseService<User> {
 	@Override
 	protected void perform(Writer writer, User t) throws Exception {
 		bl.users.register(t);
+		writeJsonResponse(writer, t);
 	}
 
 }
