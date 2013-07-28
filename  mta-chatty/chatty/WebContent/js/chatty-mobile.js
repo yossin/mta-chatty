@@ -68,22 +68,16 @@ $(document).ready(function(){
         	message.message = textarea.val();
             textarea.val('');
             message.send_date = (new Date()).toLocaleString();
-            // TODO: we might want to retrieve messages from server 2, how do we keep correct order?
             if (ui.chatroom.buddyRoom)
             	bl.sendBuddyMessage(ui.chatroom.id, message.message, repaintChatRoom, printError);
         	else
         		bl.sendGroupMessage(ui.chatroom.id, message.message, repaintChatRoom, printError);
-            // Send message to server...
         });
 	});
 	
 	
 	// Bind the login form
-//	$("#LoginForm").submit(function( event ){
 	$("#LoginForm .btnLoginToChatty").click(function(){
-		// Prevent the default submit.
-//		event.preventDefault();
-		
 		var userLoginData = new Object();
 		userLoginData.mail = $("#LoginForm .loginUserMailInput").val();
 		userLoginData.pass = $("#LoginForm .loginUserPassInput").val();
@@ -93,7 +87,6 @@ $(document).ready(function(){
 	});
     
 	// Bind the register form.
-//	$("#RegisterForm").submit(function( event ){
 	$("#RegisterForm .btnRegisterSubmit").click(function(){
 		// Prevent the default submit.
 		event.preventDefault();
@@ -104,17 +97,12 @@ $(document).ready(function(){
 		regData.pass = $("#RegisterForm .registerUserPassInput").val();
 		regData.pic  = $("#RegisterForm .registerUserPicInput" ).val();
 
-		//TODO: ?load info from user?
-		//regData.address = "Generated Dummy Address From UI";
-		//regData.cityId = 1; //1=Tel-Aviv
-		//regData.postalCode=undefined; 
 		bl.registerNewUser(regData.email, regData.name, regData.pic, regData.pass, 
 				dummy, registerFailed);
         return true;
 	});
 
     // Bind the login form.
-//	$("#EditProfileForm").submit(function( event ){
 	$("#EditProfileForm .btnEditProfileSubmit").click(function(){
 		// Prevent the default submit.
 //		event.preventDefault();
@@ -160,7 +148,6 @@ $(document).ready(function(){
     });
     
     // Bind the login form.
-//	$("#CreateGroupForm").submit(function( event ){
 	$("#CreateGroupForm .btnCreateGroup").click(function(){
 
        	var name = $("#CreateGroupForm .createGroupNameInput").val();
@@ -345,8 +332,6 @@ function setEditProfileForm(result){
     $("#EditProfileForm .editProfileUserNameInput").val(result.name);
     $("#EditProfileForm .editProfileUserMailInput").val(result.email);
 //    $("#EditProfileForm .editProfileUserPicInput ").val(result.picture);
-    
-    
 }
 
 var messInterval = 0;

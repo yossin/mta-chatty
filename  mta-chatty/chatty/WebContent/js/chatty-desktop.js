@@ -333,8 +333,6 @@ function UI(){
 			} else {
 				log.debug("no message is going to be sent. user must write something..");
 			}
-			
-			//bl.getGroupMessages(id, ui.draw.messages.fromGroup, ui.messages.getMessagesError);
 		} else {
 			log.debug("no message is going to be sent. user must select a contract");
 		}

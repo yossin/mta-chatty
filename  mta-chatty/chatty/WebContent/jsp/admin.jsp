@@ -23,8 +23,8 @@
 			<%
 			for (DailyCountStatistic day: statistics.getBuddyStatistics()){
 			%>
-			//arr.push([new Date(<%=day.getDay().getTime()%>),<%=day.getCount()%>]);
-			arr.push([<%=day.getDay().getTime()%>,<%=day.getCount()%>]);
+			arr.push([new Date(<%=day.getDay().getTime()%>),<%=day.getCount()%>]);
+			//arr.push([<%=day.getDay().getTime()%>,<%=day.getCount()%>]);
 			<%}%>
 			return arr;
 		}
@@ -34,8 +34,8 @@
 			<%
 			for (DailyCountStatistic day: statistics.getGroupStatistics()){
 			%>
-			//arr.push([new Date(<%=day.getDay().getTime()%>),<%=day.getCount()%>]);
-			arr.push([<%=day.getDay().getTime()%>,<%=day.getCount()%>]);
+			arr.push([new Date(<%=day.getDay().getTime()%>),<%=day.getCount()%>]);
+			//arr.push([<%=day.getDay().getTime()%>,<%=day.getCount()%>]);
 			<%}%>
 			return arr;
 		}
@@ -45,15 +45,14 @@
 			<%
 			for (DailyCountStatistic day: statistics.getBuddyMessageStatistics()){
 			%>
-			//arr.push([new Date(<%=day.getDay().getTime()%>),<%=day.getCount()%>]);
-			arr.push([<%=day.getDay().getTime()%>,<%=day.getCount()%>]);
-			<%}%>
+			arr.push([new Date(<%=day.getDay().getTime()%>),<%=day.getCount()%>]);
+			//arr.push([<%=day.getDay().getTime()%>,<%=day.getCount()%>]);
+			<%}%>s
 			return arr;
 		}
 		
 		function setCharts(){
 			alert("setCharts");
-			debugger();
 
 			var dataSetBudies   = getDataSetBudies();
 			var dataSetGroups   = getDataSetGroups();
