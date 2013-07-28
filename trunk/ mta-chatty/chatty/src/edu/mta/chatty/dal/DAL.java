@@ -180,6 +180,26 @@ public class DAL {
 			executer.execute(handler);
 		}
 		
+		
+		public void updateUserImage(final String userId, final String imageName) throws SQLException{
+			UpdateHandler handler = new UpdateHandler() {
+				@Override
+				public void setVariables(PreparedStatement statement) throws SQLException {
+					statement.setString(1,imageName);
+					statement.setTimestamp(2,new Timestamp(System.currentTimeMillis()));
+					statement.setString(3,userId);
+				}
+				@Override
+				public String getSql() {
+					return "update `user` set picture=?, last_update=? where email=?";
+				}
+				
+				@Override
+				public void handleResults(int result) {
+				}
+			};
+			executer.execute(handler);
+		}
 	}
 	
 	private static abstract class GroupListQueryHandler extends GenericListQueryHandler<Group>{

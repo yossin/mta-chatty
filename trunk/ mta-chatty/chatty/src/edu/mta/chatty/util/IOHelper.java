@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -59,8 +60,28 @@ public class IOHelper {
 		}
 
 	}
+	public static void copy (InputStream in, OutputStream out) throws IOException{
+		try {
+			
+			byte buffer[] = new byte[1024];
+			int len =0;
+			while ((len = in.read(buffer))>0){
+				out.write(buffer,0,len);
+			}
+		} finally{
+			close(in);
+			close(out);
+		}
+	}
+
 
 	private static void close(InputStream stream) {
+		try {
+			stream.close();
+		} catch (IOException e) {
+		}
+	}
+	private static void close(OutputStream stream) {
 		try {
 			stream.close();
 		} catch (IOException e) {

@@ -143,9 +143,37 @@ public class BL {
 				}
 			}, request);
 		}
+		
+		public void updateImage(final String userId, final String image) throws IllegalArgumentException, Exception {
+			BLExecuter<Void, Void> executer = new BLExecuter<Void, Void>();
+
+			executer.execute(new BLRequest<Void, Void>() {
+				@Override
+				public void validate(Void t) throws IllegalArgumentException {
+					Validator.validateEmail(userId, "buddy");
+					Validator.validateNotEmpty(image, "image");
+				}
+				
+				@Override
+				public Void perform(Void t) throws Exception {
+					try {
+						dal.users.updateUserImage(userId, image);
+						return null;
+					} catch (SQLException e) {
+						String msg = String.format("unable to update image %s for %s.error %s", 
+								image, userId, e);
+						logger.severe(msg);
+						logger.log(Level.SEVERE, e.getMessage(), e);
+						throw new Exception (msg, e);
+					}
+				}
+			}, null);
+		}
 		//TODO: remove buddy
 
 	}
+	
+	
 	
 	public class Groups{
 
