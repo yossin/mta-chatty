@@ -5,7 +5,7 @@
 <%
 	String userAgent = request.getHeader("user-agent");
 	Boolean mobile = false;
-	// out.print(userAgent);
+
 	if (userAgent.matches(".*Android.*") || userAgent.matches(".*iPhone.*") || userAgent.matches(".*iPad.*")) 
 		mobile = true;
 
