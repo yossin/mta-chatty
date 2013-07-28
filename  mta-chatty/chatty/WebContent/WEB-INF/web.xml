@@ -171,12 +171,12 @@
   </servlet-mapping>
   <servlet>
     <description></description>
-    <display-name>UploadService</display-name>
-    <servlet-name>UploadService</servlet-name>
-    <servlet-class>edu.mta.chatty.service.UploadService</servlet-class>
+    <display-name>UploadBuddyImageService</display-name>
+    <servlet-name>UploadBuddyImageService</servlet-name>
+    <servlet-class>edu.mta.chatty.service.UploadBuddyImageService</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>UploadService</servlet-name>
-    <url-pattern>/UploadService</url-pattern>
+    <servlet-name>UploadBuddyImageService</servlet-name>
+    <url-pattern>/services/upload-buddy-image/*</url-pattern>
   </servlet-mapping>
 </web-app>
