@@ -81,7 +81,7 @@ public class CloudFoundryContext {
 			String user=service.credentials.username;
 			String pass=service.credentials.password;
 			
-			logger.info("setting datasource configuration with clould foundry definitions");
+			logger.info(String.format("setting datasource configuration with cloud foundry definitions. url=%s, user=%s, pass=%s",url,user,pass));
 			invoke(ds, "setUrl", url);
 			invoke(ds, "setUsername", user);
 			invoke(ds, "setPassword", pass);
