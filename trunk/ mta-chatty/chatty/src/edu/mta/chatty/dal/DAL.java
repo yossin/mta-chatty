@@ -38,6 +38,11 @@ public class DAL {
 	final public Messages messages = new Messages();
 	final public Admin admin = new Admin();
 	
+	
+	private static void setLastUpdate(PreparedStatement statement, int index) throws SQLException{
+		statement.setTimestamp(index, new Timestamp(System.currentTimeMillis()));
+	}
+	
 	private static abstract class UserListQueryHandler extends GenericListQueryHandler<User>{
 		UserListQueryHandler(List<User> results){
 			super(results);
@@ -146,10 +151,11 @@ public class DAL {
 				public void setVariables(PreparedStatement statement) throws SQLException {
 					statement.setString(1,request.getOwner_email());
 					statement.setString(2,request.getBuddy_id());
+					setLastUpdate(statement, 3);
 				}
 				@Override
 				public String getSql() {
-					return "insert into buddy_list (owner_email, buddy_id) values(?,?)";
+					return "insert into buddy_list (owner_email, buddy_id,last_update) values (?,?,?)";
 				}
 				
 				@Override
@@ -167,10 +173,12 @@ public class DAL {
 					statement.setString(2,request.getName());
 					statement.setString(3,request.getPicture());
 					statement.setString(4,request.getPassword());
+					setLastUpdate(statement, 5);
+
 				}
 				@Override
 				public String getSql() {
-					return "insert into `user` (email, name, picture, password) values(?,?,?,?)";
+					return "insert into `user` (email, name, picture, password,last_update) values (?,?,?,?,?)";
 				}
 				
 				@Override
@@ -237,10 +245,11 @@ public class DAL {
 				public void setVariables(PreparedStatement statement) throws SQLException {
 					statement.setString(1,memberships.getMember_email());
 					statement.setInt(2,memberships.getGroup_id());
+					setLastUpdate(statement, 3);
 				}
 				@Override
 				public String getSql() {
-					return "insert into group_membership (member_email, group_id) values (?,?)";
+					return "insert into group_membership (member_email, group_id,last_update) values (?,?,?)";
 				}
 				
 				@Override
@@ -277,10 +286,12 @@ public class DAL {
 					statement.setString(1,group.getName());
 					statement.setString(2,group.getPicture());
 					statement.setString(3,group.getDescription());
+					setLastUpdate(statement, 4);
+
 				}
 				@Override
 				public String getSql() {
-					return "insert into `group` (name, picture, description) values (?,?,?)";
+					return "insert into `group` (name, picture, description,last_update) values (?,?,?,?)";
 				}
 				
 				@Override
