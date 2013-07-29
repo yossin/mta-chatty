@@ -53,7 +53,7 @@ function BL(onSuccessInit, onError){
 			{
 				var uploader = new ss.SimpleUpload({
 					button: '#RegisterForm .btnRegisterSubmit', // HTML element used as upload button 
-					url:  "/chatty/services/upload-buddy-image/" + email, // URL of server-side upload handler
+					url:  CHATTY_APP_CTX+"/services/upload-buddy-image/" + email, // URL of server-side upload handler
 					name: picture // Parameter name of the uploaded file
 				});
 			}		
@@ -111,7 +111,7 @@ function BL(onSuccessInit, onError){
 			if (picture != "")
 			{
 				var new_group_id = data.groups[0].group_id;
-				var service_name = "/chatty/services/upload-group-image/" + new_group_id;
+				var service_name = CHATTY_APP_CTX+"/services/upload-group-image/" + new_group_id;
 				var uploader = new ss.SimpleUpload({
 					button: '#CreateGroup .btnCreateGroup', // HTML element used as upload button 
 					url:    service_name, // URL of server-side upload handler

@@ -86,7 +86,7 @@ function getFirstResult(results,callback){
 }
 
 function ajaxPost(method, arg, onSuccess, onError){
-	var url = "/chatty/services/" + method;
+	var url = CHATTY_APP_CTX+"/services/" + method;
 	$.post(url, arg, function(data){
 		if (data != null){
 			onSuccess(data);
