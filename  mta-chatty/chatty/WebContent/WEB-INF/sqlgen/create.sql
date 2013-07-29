@@ -1,7 +1,7 @@
 CREATE  TABLE IF NOT EXISTS country (
   country_id INTEGER NOT NULL,
   country TEXT NOT NULL,
-  last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  last_update TIMESTAMP NOT NULL ,
   PRIMARY KEY (country_id))
  DEFAULT CHARACTER SET = utf8;
 
@@ -10,7 +10,7 @@ CREATE  TABLE IF NOT EXISTS city (
   city_id INTEGER NOT NULL PRIMARY KEY,
   city TEXT NOT NULL ,
   country_id INTEGER NOT NULL ,
-  last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+  last_update TIMESTAMP NOT NULL  ,
   INDEX idx_fk_country_id  (country_id ASC),
   CONSTRAINT fk_city_country
     FOREIGN KEY (country_id)
@@ -25,8 +25,8 @@ CREATE  TABLE IF NOT EXISTS `user` (
   name VARCHAR(150) NOT NULL ,
   picture VARCHAR(150) NOT NULL DEFAULT 'images/defaultUser.jpg',
   active BOOLEAN NOT NULL DEFAULT TRUE ,
-  last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
-  creation_timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+  last_update TIMESTAMP NOT NULL  ,
+  creation_timestamp TIMESTAMP NOT NULL  ,
   password VARCHAR(150) NOT NULL,
   INDEX idx_user_name (name))
  DEFAULT CHARACTER SET = utf8;
@@ -37,7 +37,7 @@ CREATE  TABLE IF NOT EXISTS address (
   address TEXT NOT NULL ,
   city_id INTEGER NOT NULL ,
   postal_code TEXT NULL DEFAULT NULL ,
-  last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+  last_update TIMESTAMP NOT NULL  ,
  INDEX idx_fk_city_id (city_id),
  INDEX idx_fk_address_id (address_id),
   CONSTRAINT fk_address_city
@@ -55,7 +55,7 @@ CREATE  TABLE IF NOT EXISTS address (
 
 CREATE  TABLE IF NOT EXISTS buddy_list (
   buddy_id VARCHAR(150) NOT NULL ,
-  last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+  last_update TIMESTAMP NOT NULL  ,
   owner_email VARCHAR(150) NOT NULL,
   PRIMARY KEY (owner_email, buddy_id),
   INDEX fk_buddy_list_user2_idx (buddy_id ASC),
@@ -76,14 +76,14 @@ CREATE  TABLE IF NOT EXISTS buddy_list (
   group_id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT ,
   name TEXT NOT NULL ,
   picture VARCHAR(150) NOT NULL DEFAULT 'images/defaultGroup.jpg',
-  last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
-  creation_timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+  last_update TIMESTAMP NOT NULL  ,
+  creation_timestamp TIMESTAMP NOT NULL  ,
   description TEXT NULL)
  DEFAULT CHARACTER SET = utf8;
  
  
 CREATE  TABLE IF NOT EXISTS buddy_message (
-  send_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+  send_date TIMESTAMP NOT NULL  ,
   sender_id VARCHAR(150) NOT NULL ,
   receiver_id VARCHAR(150) NOT NULL ,
   message TEXT NOT NULL ,
@@ -107,7 +107,7 @@ CREATE  TABLE IF NOT EXISTS buddy_message (
  CREATE  TABLE IF NOT EXISTS group_membership (
   member_email VARCHAR(150) NOT NULL ,
   group_id INTEGER NOT NULL,
-  last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+  last_update TIMESTAMP NOT NULL  ,
   PRIMARY KEY (member_email, group_id) ,
  INDEX fk_user_has_group_group1_idx (group_id ASC),
  INDEX fk_user_has_group_user1_idx (member_email ASC),
@@ -125,7 +125,7 @@ CREATE  TABLE IF NOT EXISTS buddy_message (
 
 
 CREATE  TABLE IF NOT EXISTS group_message (
-  send_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+  send_date TIMESTAMP NOT NULL  ,
   sender_id VARCHAR(150) NOT NULL ,
   receiver_id INTEGER NOT NULL ,
   message TEXT NOT NULL ,

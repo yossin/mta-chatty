@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -22,6 +23,7 @@ import edu.mta.chatty.domain.Country;
 import edu.mta.chatty.domain.Group;
 import edu.mta.chatty.domain.GroupMemberships;
 import edu.mta.chatty.domain.GroupMessages;
+import edu.mta.chatty.domain.Updatable;
 import edu.mta.chatty.domain.UserData;
 import edu.mta.chatty.domain.User;
 
@@ -49,7 +51,7 @@ public class DataInitializer {
 		batchInsert.execute(new InsertHandler<Country>() {
 			@Override
 			public String getSql() {
-				return "insert into country (country_id,country) values (?,?)";
+				return "insert into country (country_id,country,last_update) values (?,?,?)";
 			}
 
 			@Override
@@ -62,6 +64,7 @@ public class DataInitializer {
 					throws SQLException {
 				statement.setInt(1, t.getCountry_id());
 				statement.setString(2, t.getCountry());
+				statement.setTimestamp(3, t.getLast_update());
 			}
 
 			@Override
@@ -75,7 +78,7 @@ public class DataInitializer {
 		batchInsert.execute(new InsertHandler<City>() {
 			@Override
 			public String getSql() {
-				return "insert into city (city_id, city, country_id) values (?,?,?)";
+				return "insert into city (city_id, city, country_id,last_update) values (?,?,?,?)";
 			}
 
 			@Override
@@ -89,6 +92,8 @@ public class DataInitializer {
 				statement.setInt(1, t.getCity_id());
 				statement.setString(2, t.getCity());
 				statement.setInt(3, t.getCountry_id());
+				statement.setTimestamp(4, t.getLast_update());
+
 			}
 
 			@Override
@@ -102,7 +107,7 @@ public class DataInitializer {
 		batchInsert.execute(new InsertHandler<Address>() {
 			@Override
 			public String getSql() {
-				return "insert into address (address_id, address, city_id) values (?,?,?)";
+				return "insert into address (address_id, address, city_id,last_update) values (?,?,?,?)";
 			}
 
 			@Override
@@ -116,6 +121,8 @@ public class DataInitializer {
 				statement.setString(1, t.getAddress_id());
 				statement.setString(2, t.getAddress());
 				statement.setInt(3, t.getCity_id());
+				statement.setTimestamp(4, t.getLast_update());
+
 			}
 
 			@Override
@@ -129,7 +136,7 @@ public class DataInitializer {
 		batchInsert.execute(new InsertHandler<User>() {
 			@Override
 			public String getSql() {
-				return "insert into `user` (email, name, picture, password,creation_timestamp) values (?,?,?,?,?)";
+				return "insert into `user` (email, name, picture, password,creation_timestamp,last_update) values (?,?,?,?,?,?)";
 			}
 
 			@Override
@@ -145,6 +152,8 @@ public class DataInitializer {
 				statement.setString(3, t.getPicture());
 				statement.setString(4, t.getPassword());
 				statement.setTimestamp(5, t.getCreation_timestamp());
+				statement.setTimestamp(6, t.getLast_update());
+
 			}
 
 			@Override
@@ -159,7 +168,7 @@ public class DataInitializer {
 		batchInsert.execute(new InsertHandler<BuddyList>() {
 			@Override
 			public String getSql() {
-				return "insert into buddy_list (buddy_id, owner_email) values (?,?)";
+				return "insert into buddy_list (buddy_id, owner_email,last_update) values (?,?,?)";
 			}
 
 			@Override
@@ -172,6 +181,7 @@ public class DataInitializer {
 					throws SQLException {
 				statement.setString(1, t.getBuddy_id());
 				statement.setString(2, t.getOwner_email());
+				statement.setTimestamp(3, t.getLast_update());
 			}
 
 			@Override
@@ -185,7 +195,7 @@ public class DataInitializer {
 		batchInsert.execute(new InsertHandler<Group>() {
 			@Override
 			public String getSql() {
-				return "insert into `group` (name, picture, description, creation_timestamp) values (?,?,?,?)";
+				return "insert into `group` (name, picture, description, creation_timestamp,last_update) values (?,?,?,?,?)";
 			}
 
 			@Override
@@ -200,6 +210,7 @@ public class DataInitializer {
 				statement.setString(2, t.getPicture());
 				statement.setString(3, t.getDescription());
 				statement.setTimestamp(4, t.getCreation_timestamp());
+				statement.setTimestamp(5, t.getLast_update());
 			}
 
 			@Override
@@ -243,7 +254,7 @@ public class DataInitializer {
 		batchInsert.execute(new InsertHandler<GroupMemberships>() {
 			@Override
 			public String getSql() {
-				return "insert into group_membership (member_email, group_id) values (?,?)";
+				return "insert into group_membership (member_email, group_id,last_update) values (?,?,?)";
 			}
 
 			@Override
@@ -256,6 +267,7 @@ public class DataInitializer {
 					GroupMemberships t) throws SQLException {
 				statement.setString(1, t.getMember_email());
 				statement.setInt(2, t.getGroup_id());
+				statement.setTimestamp(3, t.getLast_update());
 			}
 
 			@Override
@@ -335,7 +347,23 @@ public class DataInitializer {
 		}
 		
 	}
-	private void manipulateCreationTimestamp(UserData data){
+	private static void setLastUpdate(Timestamp ts, List<Updatable> list){
+		for (Updatable u : list){
+			u.setLast_update(ts);
+		}
+	}
+	
+	private void manipulateTimestamp(UserData data){
+		Timestamp lastUpdate = new Timestamp(System.currentTimeMillis());
+
+		setLastUpdate(lastUpdate, new LinkedList<Updatable>(data.getAddresses()));
+		setLastUpdate(lastUpdate, new LinkedList<Updatable>(data.getBuddy_list()));
+		setLastUpdate(lastUpdate, new LinkedList<Updatable>(data.getCities()));
+		setLastUpdate(lastUpdate, new LinkedList<Updatable>(data.getCountries()));
+		setLastUpdate(lastUpdate, new LinkedList<Updatable>(data.getGroup_memberships()));
+		setLastUpdate(lastUpdate, new LinkedList<Updatable>(data.getGroups()));
+		setLastUpdate(lastUpdate, new LinkedList<Updatable>(data.getUsers()));
+		
 		
 		CreationTimestampGenerator msgCTen = new CreationTimestampGenerator(1);
 		for(GroupMessages msg: data.getGroup_messages()){
@@ -368,7 +396,7 @@ public class DataInitializer {
 		try {
 			InputStream is = getTestDataResourceFile(context);
 			UserData data = mapper.readValue(is, UserData.class);
-			manipulateCreationTimestamp(data);
+			manipulateTimestamp(data);
 			insertInitData(data);
 			return true;
 		} catch (SQLException e) {
